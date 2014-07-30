@@ -6,6 +6,7 @@ This is Redmine plugin which exports issue list to XLSX format file.
 
 Project Health
 ==============
+[![Build Status](https://travis-ci.org/two-pack/redmine_xlsx_format_issue_exporter.svg?branch=master)](https://travis-ci.org/two-pack/redmine_xlsx_format_issue_exporter) [![Code Climate](https://codeclimate.com/github/two-pack/redmine_xlsx_format_issue_exporter.png)](https://codeclimate.com/github/two-pack/redmine_xlsx_format_issue_exporter)
 
 Requirements
 ============
