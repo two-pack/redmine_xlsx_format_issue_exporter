@@ -1,0 +1,127 @@
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+
+class IssuesPageTest < ActionController::IntegrationTest
+  fixtures :projects, :trackers, :issue_statuses, :issues,
+           :enumerations, :users, :issue_categories, :queries,
+           :projects_trackers, :issue_relations, :watchers,
+           :roles, :journals, :journal_details, :attachments,
+           :member_roles, :members, :enabled_modules, :workflows,
+           :custom_values, :custom_fields, :custom_fields_projects, :custom_fields_trackers,
+           :versions, :time_entries
+
+  def setup
+    login_with_user
+
+    visit '/projects/ecookbook/issues'
+    assert_not_nil page
+  end
+
+  def teardown
+    logout
+  end
+
+  def test_that_the_page_has_XLSX_link
+    screenshot_and_save_page
+    assert has_selector?("p.other-formats span a.xlsx")
+    assert has_link?("XLSX")
+  end
+
+  def test_that_dialog_is_shown_when_the_link_is_clicked
+    click_link("XLSX")
+
+    assert find("div#xlsx-export-options", :visible => true)
+  end
+
+  def test_that_dialog_is_closed_when_cancel_is_clicked
+    click_link("XLSX")
+    find("div#xlsx-export-options").click_button("Cancel")
+
+    assert find("div#xlsx-export-options", :visible => false)
+  end
+
+  def test_that_warning_is_NOT_shown_when_issues_count_is_less_setting
+    click_link("XLSX")
+
+    assert has_no_selector?("p.icon-warning")
+  end
+
+  def test_that_warning_is_shown_when_issues_count_is_over_setting
+    limit = Setting.issues_export_limit
+    Setting.issues_export_limit = 1
+    Setting.issues_export_limit.to_i  # updates setting immediately
+
+    visit '/projects/ecookbook/issues'
+    click_link("XLSX")
+
+    assert has_selector?("p.icon-warning")
+
+    Setting.issues_export_limit = limit
+    Setting.issues_export_limit.to_i    # updates setting immediately
+  end
+
+  def test_that_export_with_selected_columns
+    click_link("XLSX")
+    find("div#xlsx-export-options").click_button("Export")
+  end
+
+  def test_to_export_with_all_columns
+    click_link("XLSX")
+    find("div#xlsx-export-options").choose("All Columns")
+
+    find("div#xlsx-export-options").click_button("Export")
+  end
+
+  def test_to_export_with_description
+    click_link("XLSX")
+    find("div#xlsx-export-options").check("Description")
+
+    find("div#xlsx-export-options").click_button("Export")
+  end
+
+  def test_to_export_with_description_and_all_columns
+    click_link("XLSX")
+    find("div#xlsx-export-options").choose("All Columns")
+    find("div#xlsx-export-options").check("Description")
+
+    find("div#xlsx-export-options").click_button("Export")
+  end
+
+  def test_to_export_all_projects
+    visit '/issues'
+    click_link("XLSX")
+    find("div#xlsx-export-options").choose("All Columns")
+    find("div#xlsx-export-options").check("Description")
+
+    find("div#xlsx-export-options").click_button("Export")
+  end
+
+  def test_to_export_small_project
+    visit '/projects/onlinestore/issues'
+    click_link("XLSX")
+    find("div#xlsx-export-options").choose("All Columns")
+    find("div#xlsx-export-options").check("Description")
+
+    find("div#xlsx-export-options").click_button("Export")
+  end
+
+  def test_to_export_with_query
+    page.select("is")
+    page.select("Assigned")
+    click_link("Apply")
+    click_link("XLSX")
+
+    find("div#xlsx-export-options").click_button("Export")
+  end
+
+  def test_to_export_all_projects_with_query
+    visit '/issues'
+    uncheck("Status")
+    click_link("Apply")
+    click_link("XLSX")
+    find("div#xlsx-export-options").choose("All Columns")
+    find("div#xlsx-export-options").check("Description")
+
+    find("div#xlsx-export-options").click_button("Export")
+  end
+
+end
