@@ -6,6 +6,7 @@ env:
   - REDMINE_VERSION=2.5.2 VERBOSE=yes
   - REDMINE_VERSION=2.4.6 VERBOSE=yes
   - REDMINE_VERSION=2.3.4 VERBOSE=yes
+  - REDMINE_VERSION=master VERBOSE=yes
 script:
   - export PLUGIN=redmine_xlsx_format_issue_exporter
   - export WORKSPACE=$(pwd)/workspace
