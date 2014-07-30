@@ -10,14 +10,14 @@ class IssuesPageTest < ActionController::IntegrationTest
            :versions, :time_entries
 
   def setup
-    login_with_user
+    page.driver.headers = { "Accept-Language" => "en-US" }
 
     visit '/projects/ecookbook/issues'
     assert_not_nil page
   end
 
   def teardown
-    logout
+
   end
 
   def test_that_the_page_has_XLSX_link
@@ -96,12 +96,15 @@ class IssuesPageTest < ActionController::IntegrationTest
   end
 
   def test_to_export_small_project
+    login_with_user
     visit '/projects/onlinestore/issues'
     click_link("XLSX")
     find("div#xlsx-export-options").choose("All Columns")
     find("div#xlsx-export-options").check("Description")
 
     find("div#xlsx-export-options").click_button("Export")
+
+    logout
   end
 
   def test_to_export_with_query
