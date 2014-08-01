@@ -62,6 +62,8 @@ class IssuesPageTest < ActionController::IntegrationTest
   def test_that_export_with_selected_columns
     click_link("XLSX")
     find("div#xlsx-export-options").click_button("Export")
+
+    assert_equal 200, page.status_code
   end
 
   def test_to_export_with_all_columns
@@ -69,6 +71,8 @@ class IssuesPageTest < ActionController::IntegrationTest
     find("div#xlsx-export-options").choose("All Columns")
 
     find("div#xlsx-export-options").click_button("Export")
+
+    assert_equal 200, page.status_code
   end
 
   def test_to_export_with_description
@@ -76,6 +80,8 @@ class IssuesPageTest < ActionController::IntegrationTest
     find("div#xlsx-export-options").check("Description")
 
     find("div#xlsx-export-options").click_button("Export")
+
+    assert_equal 200, page.status_code
   end
 
   def test_to_export_with_description_and_all_columns
@@ -84,6 +90,8 @@ class IssuesPageTest < ActionController::IntegrationTest
     find("div#xlsx-export-options").check("Description")
 
     find("div#xlsx-export-options").click_button("Export")
+
+    assert_equal 200, page.status_code
   end
 
   def test_to_export_all_projects
@@ -93,6 +101,8 @@ class IssuesPageTest < ActionController::IntegrationTest
     find("div#xlsx-export-options").check("Description")
 
     find("div#xlsx-export-options").click_button("Export")
+
+    assert_equal 200, page.status_code
   end
 
   def test_to_export_small_project
@@ -104,6 +114,8 @@ class IssuesPageTest < ActionController::IntegrationTest
 
     find("div#xlsx-export-options").click_button("Export")
 
+    assert_equal 200, page.status_code
+
     logout
   end
 
@@ -114,6 +126,8 @@ class IssuesPageTest < ActionController::IntegrationTest
     click_link("XLSX")
 
     find("div#xlsx-export-options").click_button("Export")
+
+    assert_equal 200, page.status_code
   end
 
   def test_to_export_all_projects_with_query
@@ -125,6 +139,8 @@ class IssuesPageTest < ActionController::IntegrationTest
     find("div#xlsx-export-options").check("Description")
 
     find("div#xlsx-export-options").click_button("Export")
+
+    assert_equal 200, page.status_code
   end
 
 end
