@@ -19,19 +19,20 @@ module XlsxExportHelper
 
     worksheet.freeze_panes(1, 1)  # Freeze header row and # column.
 
-    header_format = create_header_format(workbook)
-    cell_format = create_cell_format(workbook)
-
     columns_width = []
-
-    # header fields
-    columns.each_with_index do |c, index|
-      value = c.caption.to_s
-      worksheet.write(0, index, value, header_format)
-      columns_width << get_column_width(value)
+    write_header_row(workbook, worksheet, columns, columns_width)
+    write_item_rows(workbook, worksheet, columns, items, columns_width)
+    columns.size.times do |index|
+      worksheet.set_column(index, index, columns_width[index])
     end
 
-    # item rows
+    workbook.close
+
+    stream.string
+  end
+
+  def write_item_rows(workbook, worksheet, columns, items, columns_width)
+    cell_format = create_cell_format(workbook)
     items.each_with_index do |item, item_index|
       columns.each_with_index do |c, column_index|
         value = xlsx_content(c, item)
@@ -41,15 +42,15 @@ module XlsxExportHelper
         columns_width[column_index] = width if columns_width[column_index] < width
       end
     end
+  end
 
-    # set width of columns
-    columns.size.times do |index|
-      worksheet.set_column(index, index, columns_width[index])
+  def write_header_row(workbook, worksheet, columns, columns_width)
+    header_format = create_header_format(workbook)
+    columns.each_with_index do |c, index|
+      value = c.caption.to_s
+      worksheet.write(0, index, value, header_format)
+      columns_width << get_column_width(value)
     end
-
-    workbook.close
-
-    stream.string
   end
 
   def xlsx_content(column, issue)
