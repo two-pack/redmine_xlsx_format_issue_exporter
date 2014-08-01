@@ -39,6 +39,13 @@ class IssuesPageTest < ActionController::IntegrationTest
     assert find("div#xlsx-export-options", :visible => false)
   end
 
+  def test_that_dialog_has_files_option
+    click_link("XLSX")
+
+    assert find("input#files")
+    assert_equal false, has_checked_field?("Files")
+  end
+
   def test_that_warning_is_NOT_shown_when_issues_count_is_less_setting
     click_link("XLSX")
 
@@ -88,6 +95,15 @@ class IssuesPageTest < ActionController::IntegrationTest
     click_link("XLSX")
     find("div#xlsx-export-options").choose("All Columns")
     find("div#xlsx-export-options").check("Description")
+
+    find("div#xlsx-export-options").click_button("Export")
+
+    assert_equal 200, page.status_code
+  end
+
+  def test_to_export_with_files
+    click_link("XLSX")
+    find("div#xlsx-export-options").check("Files")
 
     find("div#xlsx-export-options").click_button("Export")
 

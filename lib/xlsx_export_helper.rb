@@ -3,13 +3,24 @@ require 'write_xlsx'
 module XlsxExportHelper
 
   def query_to_xlsx(items, query, options={})
+    columns = create_columns_list(query, options)
+    export_to_xlsx(items, columns)
+  end
+
+  def create_columns_list(query, options)
     columns = (options[:columns] == 'all' ? query.available_inline_columns : query.inline_columns)
-    query.available_block_columns.each do |column|
+
+    query.available_block_columns.each do |column|  # Some versions have description in query.
       if options[column.name].present?
         columns << column
       end
     end
-    export_to_xlsx(items, columns)
+
+    if options['files'].present?
+      columns << FilesQueryColumn.new(:files)
+    end
+
+    columns
   end
 
   def export_to_xlsx(items, columns)

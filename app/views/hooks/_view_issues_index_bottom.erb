@@ -18,6 +18,7 @@ $('p.other-formats').first().append('' +
       </p>
       <p>
         <label><%= check_box_tag 'description', '1', @query.has_column?(:description) %> <%= l(:field_description) %></label>
+        <label><%= check_box_tag 'files', '1', false %> <%= l(:label_attachment_plural) %></label>
       </p>
       <% if @issue_count > Setting.issues_export_limit.to_i %>
           <p class="icon icon-warning">
