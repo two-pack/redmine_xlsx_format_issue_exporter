@@ -9,7 +9,7 @@ module XlsxExportHelper
         columns << column
       end
     end
-    return export_to_xlsx(items, columns)
+    export_to_xlsx(items, columns)
   end
 
   def export_to_xlsx(items, columns)
@@ -49,7 +49,7 @@ module XlsxExportHelper
 
     workbook.close
 
-    return stream.string
+    stream.string
   end
 
   def xlsx_content(column, issue)
@@ -100,7 +100,7 @@ module XlsxExportHelper
 
   def get_column_width(value)
     width = (value.length + value.chars.reject(&:ascii_only?).length) * 1.1  # 1.1: margin
-    return width > 30 ? 30 : width  # 30: max width
+    width > 30 ? 30 : width  # 30: max width
   end
 
 end
