@@ -32,15 +32,25 @@ module XlsxExportHelper
   end
 
   def write_item_rows(workbook, worksheet, columns, items, columns_width)
+    hyperlink_format = create_hyperlink_format(workbook)
     cell_format = create_cell_format(workbook)
     items.each_with_index do |item, item_index|
       columns.each_with_index do |c, column_index|
         value = xlsx_content(c, item)
-        worksheet.write(item_index + 1, column_index, value, cell_format)
+        write_item(worksheet, value, item_index, column_index, cell_format, c, item.id, hyperlink_format)
 
         width = get_column_width(value)
         columns_width[column_index] = width if columns_width[column_index] < width
       end
+    end
+  end
+
+  def write_item(worksheet, value, row_index, column_index, cell_format, column, id, hyperlink_format)
+    if column.name == :id
+      issue_url = url_for(:controller => 'issues', :action => 'show', :id => id)
+      worksheet.write(row_index + 1, column_index, issue_url, hyperlink_format, value)
+    else
+      worksheet.write(row_index + 1, column_index, value, cell_format)
     end
   end
 
@@ -97,6 +107,14 @@ module XlsxExportHelper
     workbook.add_format(:border => 1,
                         :text_wrap => 1,
                         :valign => 'top')
+  end
+
+  def create_hyperlink_format(workbook)
+    workbook.add_format(:border => 1,
+                        :text_wrap => 1,
+                        :valign => 'top',
+                        :color => 'blue',
+                        :underline => 1)
   end
 
   def get_column_width(value)
