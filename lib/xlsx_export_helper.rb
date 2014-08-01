@@ -43,7 +43,7 @@ module XlsxExportHelper
     end
 
     # set width of columns
-    columns.each_with_index do |c, index|
+    columns.size.times do |index|
       worksheet.set_column(index, index, columns_width[index])
     end
 
@@ -55,13 +55,13 @@ module XlsxExportHelper
   def xlsx_content(column, issue)
     value = column.value(issue)
     if value.is_a?(Array)
-      value.collect {|v| xlsx_value(column, issue, v)}.compact.join(', ')
+      value.collect {|v| xlsx_value(issue, v)}.compact.join(', ')
     else
-      xlsx_value(column, issue, value)
+      xlsx_value(issue, value)
     end
   end
 
-  def xlsx_value(column, issue, value)
+  def xlsx_value(issue, value)
     case value.class.name
       when 'Time'
         format_time(value)
