@@ -159,4 +159,17 @@ class IssuesPageTest < ActionController::IntegrationTest
     assert_equal 200, page.status_code
   end
 
+  def test_to_export_private_issue_which_is_TrueClass
+    login_with_admin
+    visit '/projects/subproject1/issues'
+    click_link("XLSX")
+    find("div#xlsx-export-options").choose("All Columns")
+
+    find("div#xlsx-export-options").click_button("Export")
+
+    assert_equal 200, page.status_code
+
+    logout
+  end
+
 end
