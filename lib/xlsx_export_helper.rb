@@ -42,6 +42,15 @@ module XlsxExportHelper
     stream.string
   end
 
+  def write_header_row(workbook, worksheet, columns, columns_width)
+    header_format = create_header_format(workbook)
+    columns.each_with_index do |c, index|
+      value = c.caption.to_s
+      worksheet.write(0, index, value, header_format)
+      columns_width << get_column_width(value)
+    end
+  end
+
   def write_item_rows(workbook, worksheet, columns, items, columns_width)
     hyperlink_format = create_hyperlink_format(workbook)
     cell_format = create_cell_format(workbook)
@@ -53,24 +62,6 @@ module XlsxExportHelper
         width = get_column_width(value)
         columns_width[column_index] = width if columns_width[column_index] < width
       end
-    end
-  end
-
-  def write_item(worksheet, value, row_index, column_index, cell_format, column, id, hyperlink_format)
-    if column.name == :id
-      issue_url = url_for(:controller => 'issues', :action => 'show', :id => id)
-      worksheet.write(row_index + 1, column_index, issue_url, hyperlink_format, value)
-    else
-      worksheet.write(row_index + 1, column_index, value, cell_format)
-    end
-  end
-
-  def write_header_row(workbook, worksheet, columns, columns_width)
-    header_format = create_header_format(workbook)
-    columns.each_with_index do |c, index|
-      value = c.caption.to_s
-      worksheet.write(0, index, value, header_format)
-      columns_width << get_column_width(value)
     end
   end
 
@@ -105,6 +96,20 @@ module XlsxExportHelper
     end
   end
 
+  def write_item(worksheet, value, row_index, column_index, cell_format, column, id, hyperlink_format)
+    if column.name == :id
+      issue_url = url_for(:controller => 'issues', :action => 'show', :id => id)
+      worksheet.write(row_index + 1, column_index, issue_url, hyperlink_format, value)
+    else
+      worksheet.write(row_index + 1, column_index, value, cell_format)
+    end
+  end
+
+  def get_column_width(value)
+    width = (value.length + value.chars.reject(&:ascii_only?).length) * 1.1  # 1.1: margin
+    width > 30 ? 30 : width  # 30: max width
+  end
+
   def create_header_format(workbook)
     workbook.add_format(:bold => 1,
                         :border => 1,
@@ -126,11 +131,6 @@ module XlsxExportHelper
                         :valign => 'top',
                         :color => 'blue',
                         :underline => 1)
-  end
-
-  def get_column_width(value)
-    width = (value.length + value.chars.reject(&:ascii_only?).length) * 1.1  # 1.1: margin
-    width > 30 ? 30 : width  # 30: max width
   end
 
 end
