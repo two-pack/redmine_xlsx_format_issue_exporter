@@ -16,11 +16,14 @@ Requirements
 Installation
 ============
 
+In Redmine folder,
 ```
+$ cd plugins
 $ git clone https://github.com/two-pack/redmine_xlsx_format_issue_exporter.git
-$ cd redmine_xlsx_format_issue_exporter
+$ cd ..
 $ bundle install --without test
 ```
+Finally restart Redmine.
 
 Usage
 =====
