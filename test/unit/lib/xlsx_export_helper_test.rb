@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
-class XlsxExportHelperTest < Test::Unit::TestCase
+class XlsxExportHelperTest < ActiveSupport::TestCase
 
   include XlsxExportHelper
 
