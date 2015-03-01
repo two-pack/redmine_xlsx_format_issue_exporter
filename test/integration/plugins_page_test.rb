@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class PluginsPageTest < ActionController::IntegrationTest
+class PluginsPageTest < ActionDispatch::IntegrationTest
   fixtures :members
 
   def setup

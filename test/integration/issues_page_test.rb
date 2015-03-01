@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class IssuesPageTest < ActionController::IntegrationTest
+class IssuesPageTest < ActionDispatch::IntegrationTest
   fixtures :projects, :trackers, :issue_statuses, :issues,
            :enumerations, :users, :issue_categories, :queries,
            :projects_trackers, :issue_relations, :watchers,
