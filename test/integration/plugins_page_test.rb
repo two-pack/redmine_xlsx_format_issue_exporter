@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class PluginsPageTest < ActionDispatch::IntegrationTest
-  fixtures :members
+  fixtures :members, :users
 
   def setup
     login_with_admin
