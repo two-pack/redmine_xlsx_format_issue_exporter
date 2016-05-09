@@ -18,8 +18,7 @@ class XlsxExportController < ApplicationController
       @query.column_names = @query.available_inline_columns.map(&:name)
     end
 
-    @issue_count = @query.issue_count
-    @issue_pages = Paginator.new @issue_count, @limit, params['page']
+    @issue_pages = Paginator.new @query.issue_count, @limit, params['page']
     @offset ||= @issue_pages.offset
     @issues = @query.issues(:include => [:assigned_to, :tracker, :priority, :category, :fixed_version],
                             :order => sort_clause,

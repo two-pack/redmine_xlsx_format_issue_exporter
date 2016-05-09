@@ -172,4 +172,12 @@ class IssuesPageTest < ActionDispatch::IntegrationTest
     logout
   end
 
+  def test_to_set_status_filter_without_value
+    login_with_admin
+    visit '/projects/subproject1/issues?utf8=%E2%9C%93&set_filter=1&f%5B%5D=status_id&op%5Bstatus_id%5D=%3D'
+
+    assert_equal 200, page.status_code
+
+    logout
+  end
 end
