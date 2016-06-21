@@ -1,17 +1,15 @@
 <script type="text/javascript">
 //<![CDATA[
 $('p.other-formats').first().append('' +
-        '<span>' +
-        '<a class="xlsx" rel="nofollow" ' +
-        'onclick="showModal(&#x27;xlsx-export-options&#x27;, &#x27;350px&#x27;); return false;" ' +
-        'href="xlsx_export">XLSX</a>' +
-        '</span>');
+         <% builder = Redmine::Views::OtherFormatsBuilder.new(self) %>
+        '<%= builder.link_to 'XLSX', :url => params, :onclick => "showModal('xlsx-export-options', '350px'); return false;" %>'
+);
 //]]>
 </script>
 
 <div id="xlsx-export-options" style="display:none;">
   <h3 class="title"><%= l(:label_export_options, :export_format => 'XLSX') %></h3>
-  <%= form_tag("xlsx_export", :method => :get, :id => 'xlsx-export-form') do %>
+  <%= form_tag(_project_issues_path(@project, :format => 'xlsx'), :method => :get, :id => 'xlsx-export-form') do %>
       <p>
         <label><%= radio_button_tag 'columns', '', true %> <%= l(:description_selected_columns) %></label><br />
         <label><%= radio_button_tag 'columns', 'all' %> <%= l(:description_all_columns) %></label>
