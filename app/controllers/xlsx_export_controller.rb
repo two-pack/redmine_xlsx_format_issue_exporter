@@ -9,6 +9,7 @@ class XlsxExportController < ApplicationController
     @project = Project.find(params[:project_id]) unless params[:project_id].blank?
 
     retrieve_query
+    params[:sort]=session['issues_index_sort'] if params[:sort].nil? && !session['issues_index_sort'].nil?
     sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
     sort_update(@query.sortable_columns)
     @query.sort_criteria = sort_criteria.to_a
