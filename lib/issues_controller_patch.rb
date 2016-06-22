@@ -41,4 +41,8 @@ module IssuesControllerPatch
   end
 end
 
-IssuesController.include IssuesControllerPatch
+ActionDispatch::Reloader.to_prepare do
+  unless IssuesController.included_modules.include?(IssuesControllerPatch)
+    IssuesController.send(:include, IssuesControllerPatch)
+  end
+end
