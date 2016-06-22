@@ -180,4 +180,16 @@ class IssuesPageTest < ActionDispatch::IntegrationTest
 
     logout
   end
+
+  def test_to_export_with_sort
+    login_with_admin
+
+    visit '/projects/subproject1/issues?sort=id'
+    assert_equal 200, page.status_code
+
+    find(:xpath, "//a[@href='/projects/subproject1/issues.xlsx?sort=id']").click
+    assert_equal 200, page.status_code
+
+    logout
+  end
 end
