@@ -5,9 +5,9 @@ rvm:
   - 2.0.0
   - 1.9.3
 env:
-  - REDMINE_VERSION=3.2.2 VERBOSE=yes
-  - REDMINE_VERSION=3.1.5 VERBOSE=yes
-  - REDMINE_VERSION=2.6.10 VERBOSE=no
+  - REDMINE_VERSION=3.3.0 VERBOSE=yes
+  - REDMINE_VERSION=3.2.3 VERBOSE=yes
+  - REDMINE_VERSION=3.1.6 VERBOSE=yes
 install:
   - true
 script:

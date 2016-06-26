@@ -46,26 +46,6 @@ class IssuesPageTest < ActionDispatch::IntegrationTest
     assert_equal false, has_checked_field?("Files")
   end
 
-  def test_that_warning_is_NOT_shown_when_issues_count_is_less_setting
-    click_link("XLSX")
-
-    assert has_no_selector?("p.icon-warning")
-  end
-
-  def test_that_warning_is_shown_when_issues_count_is_over_setting
-    limit = Setting.issues_export_limit
-    Setting.issues_export_limit = 1
-    Setting.issues_export_limit.to_i  # updates setting immediately
-
-    visit '/projects/ecookbook/issues'
-    click_link("XLSX")
-
-    assert has_selector?("p.icon-warning")
-
-    Setting.issues_export_limit = limit
-    Setting.issues_export_limit.to_i    # updates setting immediately
-  end
-
   def test_that_export_with_selected_columns
     click_link("XLSX")
     find("div#xlsx-export-options").click_button("Export")

@@ -8,5 +8,9 @@ Redmine::Plugin.register :redmine_xlsx_format_issue_exporter do
   requires_redmine :version_or_higher => '2.3'
 end
 
+require_dependency 'queries_helper'
+require_dependency 'xlsx_export_helper'
+
 require_dependency 'issues_controller_patch'
+
 require 'issues_page_hooks'
