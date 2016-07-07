@@ -57,7 +57,7 @@ module XlsxExportHelper
     items.each_with_index do |item, item_index|
       columns.each_with_index do |c, column_index|
         value = xlsx_content(c, item)
-        write_item(worksheet, value, item_index, column_index, cell_format, c, item.id, hyperlink_format)
+        write_item(worksheet, value, item_index, column_index, cell_format, (c.name == :id), item.id, hyperlink_format)
 
         width = get_column_width(value)
         columns_width[column_index] = width if columns_width[column_index] < width
@@ -96,13 +96,33 @@ module XlsxExportHelper
     end
   end
 
-  def write_item(worksheet, value, row_index, column_index, cell_format, column, id, hyperlink_format)
-    if column.name == :id
+  # Conditions from worksheet.rb in write_xlsx.
+  def is_transformed_to_hyperlink?(token)
+    # Match http, https or ftp URL
+    if token =~ %r|\A[fh]tt?ps?://|
+      true
+      # Match mailto:
+    elsif token =~ %r|\Amailto:|
+      true
+      # Match internal or external sheet link
+    elsif token =~ %r!\A(?:in|ex)ternal:!
+      true
+    end
+  end
+
+  def write_item(worksheet, value, row_index, column_index, cell_format, is_id_column, id, hyperlink_format)
+    if is_id_column
       issue_url = url_for(:controller => 'issues', :action => 'show', :id => id)
       worksheet.write(row_index + 1, column_index, issue_url, hyperlink_format, value)
-    else
-      worksheet.write(row_index + 1, column_index, value, cell_format)
+      return
     end
+
+    if is_transformed_to_hyperlink?(value)
+      worksheet.write_string(row_index + 1, column_index, value, cell_format)
+      return
+    end
+
+    worksheet.write(row_index + 1, column_index, value, cell_format)
   end
 
   def get_column_width(value)
