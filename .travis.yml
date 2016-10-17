@@ -1,13 +1,19 @@
 language: ruby
 rvm:
+  - 2.3
   - 2.2
   - 2.1
   - 2.0.0
-  - 1.9.3
 env:
-  - REDMINE_VERSION=3.3.0 VERBOSE=yes
-  - REDMINE_VERSION=3.2.3 VERBOSE=yes
-  - REDMINE_VERSION=3.1.6 VERBOSE=yes
+  - REDMINE_VERSION=3.3.1 VERBOSE=yes
+  - REDMINE_VERSION=3.2.4 VERBOSE=yes
+  - REDMINE_VERSION=3.1.7 VERBOSE=yes
+matrix:
+  exclude:
+  - rvm: 2.3
+    env: REDMINE_VERSION=3.2.4 VERBOSE=yes
+  - rvm: 2.3
+    env: REDMINE_VERSION=3.1.7 VERBOSE=yes
 install:
   - true
 script:
