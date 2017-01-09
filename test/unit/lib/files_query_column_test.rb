@@ -39,8 +39,13 @@ class FilesQueryColumnTest < ActiveSupport::TestCase
                  "changeset_iso8859-1.diff\n" +
                  "archive.zip\n" +
                  "changeset_utf8.diff"
-    else
+    elsif (Redmine::VERSION::MAJOR == 3) and (Redmine::VERSION::MINOR <= 1) then
       expected = "error281.txt\n" +
+                 "changeset_iso8859-1.diff\n" +
+                 "archive.zip\n" +
+                 "changeset_utf8.diff"
+    elsif (Redmine::VERSION::MAJOR == 3) and (Redmine::VERSION::MINOR >= 2) then
+      expected = "error281.txt : An attachment\n" +
                  "changeset_iso8859-1.diff\n" +
                  "archive.zip\n" +
                  "changeset_utf8.diff"
