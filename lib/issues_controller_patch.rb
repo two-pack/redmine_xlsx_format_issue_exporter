@@ -12,6 +12,14 @@ module IssuesControllerPatch
   end
 
   module InstanceMethods
+    def query_issues
+      options = {:order => sort_clause, :offset => @offset, :limit => @limit}
+      if (Redmine::VERSION::MAJOR <= 3) && (Redmine::VERSION::MINOR <= 3) && (Redmine::VERSION::BRANCH != 'devel') then
+        options.merge!({:include => [:assigned_to, :tracker, :priority, :category, :fixed_version]})
+      end
+      @query.issues(options)
+    end
+
     def index_with_xlsx
       if params[:format] != 'xlsx'
         return index_without_xlsx
@@ -30,10 +38,7 @@ module IssuesControllerPatch
       @issue_count = @query.issue_count
       @issue_pages = Redmine::Pagination::Paginator.new @issue_count, @limit, params['page']
       @offset ||= @issue_pages.offset
-      @issues = @query.issues(:include => [:assigned_to, :tracker, :priority, :category, :fixed_version],
-                              :order => sort_clause,
-                              :offset => @offset,
-                              :limit => @limit)
+      @issues = query_issues
       @issue_count_by_group = @query.issue_count_by_group
 
       send_data(query_to_xlsx(@issues, @query, params), :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', :filename => 'issues.xlsx')

@@ -87,6 +87,13 @@ class IssuesControllerTest < ActionController::TestCase
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
   end
 
+  def test_index_xlsx_with_group_by
+    get :index, :project_id => 1, :format => 'xlsx', :group_by => 'tracker'
+    assert_response :success
+    assert_not_nil assigns(:issues)
+    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+  end
+
   def test_index_xlsx_with_description
     Issue.generate!(:description => 'test_index_xlsx_with_description')
 
