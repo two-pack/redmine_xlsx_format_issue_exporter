@@ -215,4 +215,12 @@ class IssuesControllerTest < ActionController::TestCase
       assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
     end
   end
+
+  def test_index_xlsx_when_specified_unknown_format
+    begin
+      get :index, :format => 'unknownformat'
+    rescue ActionController::UnknownFormat => e
+      pass
+    end
+  end
 end
