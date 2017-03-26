@@ -8,7 +8,7 @@ module XlsxExportHelper
   end
 
   def create_columns_list(query, options)
-    columns = (options[:columns] == 'all' ? query.available_inline_columns : query.inline_columns)
+    columns = (options[:columns] == 'all_inline' ? query.available_inline_columns : query.inline_columns)
 
     query.available_block_columns.each do |column|  # Some versions have description in query.
       if options[column.name].present?

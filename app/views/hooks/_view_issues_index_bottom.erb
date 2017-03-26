@@ -16,10 +16,13 @@ $('p.other-formats').first().append('' +
       <%= hidden_field_tag 'sort', @sort_criteria.to_param, :id => nil %>
       <p>
         <label><%= radio_button_tag 'columns', '', true %> <%= l(:description_selected_columns) %></label><br />
-        <label><%= radio_button_tag 'columns', 'all' %> <%= l(:description_all_columns) %></label>
+        <label><%= radio_button_tag 'columns', 'all_inline' %> <%= l(:description_all_columns) %></label>
       </p>
       <p>
         <label><%= check_box_tag 'description', '1', @query.has_column?(:description) %> <%= l(:field_description) %></label>
+        <% if @query.available_columns.find { |c| c.name == :last_notes } %>
+          <label><%= check_box_tag 'last_notes', '1', @query.has_column?(:last_notes) %> <%= l(:label_last_notes) %></label>
+        <% end %>
         <label><%= check_box_tag 'files', '1', false %> <%= l(:label_attachment_plural) %></label>
       </p>
       <% if @query.issue_count > Setting.issues_export_limit.to_i %>
