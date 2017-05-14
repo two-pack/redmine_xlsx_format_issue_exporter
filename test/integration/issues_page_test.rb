@@ -39,13 +39,6 @@ class IssuesPageTest < ActionDispatch::IntegrationTest
     assert find("div#xlsx-export-options", :visible => false)
   end
 
-  def test_that_dialog_has_files_option
-    click_link("XLSX")
-
-    assert find("input#files")
-    assert_equal false, has_checked_field?("Files")
-  end
-
   def test_that_export_with_selected_columns
     click_link("XLSX")
     find("div#xlsx-export-options").click_button("Export")
@@ -75,58 +68,6 @@ class IssuesPageTest < ActionDispatch::IntegrationTest
     click_link("XLSX")
     find("div#xlsx-export-options").choose("All Columns")
     find("div#xlsx-export-options").check("Description")
-
-    find("div#xlsx-export-options").click_button("Export")
-
-    assert_equal 200, page.status_code
-  end
-
-  # Last notes is supported in Redmine 3.4.0.
-  if ((Redmine::VERSION::MAJOR == 3) && (Redmine::VERSION::MINOR == 3) && (Redmine::VERSION::BRANCH == 'devel')) or
-     ((Redmine::VERSION::MAJOR == 3) && (Redmine::VERSION::MINOR >= 4)) or
-     ((Redmine::VERSION::MAJOR >= 4)) then
-    def test_to_export_with_last_notes
-      click_link("XLSX")
-      find("div#xlsx-export-options").check("Last notes")
-
-      find("div#xlsx-export-options").click_button("Export")
-
-      assert_equal 200, page.status_code
-    end
-
-    def test_to_export_with_last_notes_and_all_columns
-      click_link("XLSX")
-      find("div#xlsx-export-options").choose("All Columns")
-      find("div#xlsx-export-options").check("Last notes")
-
-      find("div#xlsx-export-options").click_button("Export")
-
-      assert_equal 200, page.status_code
-    end
-
-    def test_to_export_with_all_aditional_options
-      click_link("XLSX")
-      find("div#xlsx-export-options").check("Description")
-      find("div#xlsx-export-options").check("Last notes")
-      find("div#xlsx-export-options").check("Files")
-
-      find("div#xlsx-export-options").click_button("Export")
-
-      assert_equal 200, page.status_code
-    end
-  else
-    def test_that_dialog_has_not_last_notes
-      click_link("XLSX")
-
-      assert_raises(Capybara::ElementNotFound) {
-        find("input#last_notes")
-      }
-    end
-  end
-
-  def test_to_export_with_files
-    click_link("XLSX")
-    find("div#xlsx-export-options").check("Files")
 
     find("div#xlsx-export-options").click_button("Export")
 

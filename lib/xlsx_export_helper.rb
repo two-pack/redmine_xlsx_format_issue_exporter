@@ -68,31 +68,36 @@ module XlsxExportHelper
   def xlsx_content(column, issue)
     value = column.value(issue)
     if value.is_a?(Array)
-      value.collect {|v| xlsx_value(issue, v)}.compact.join(', ')
+      value.collect {|v| xlsx_value(column, issue, v)}.compact.join(', ')
     else
-      xlsx_value(issue, value)
+      xlsx_value(column, issue, value)
     end
   end
 
-  def xlsx_value(issue, value)
-    case value.class.name
-      when 'Time'
-        format_time(value)
-      when 'Date'
-        format_date(value)
-      when 'Float'
-        sprintf("%.2f", value).gsub('.', l(:general_csv_decimal_separator))
-      when 'IssueRelation'
-        other = value.other_issue(issue)
-        l(value.label_for(issue)) + " ##{other.id}"
-      when 'TrueClass'
-        l(:general_text_Yes)
-      when 'FalseClass'
-        l(:general_text_No)
-      when 'String'
-        value.gsub(/\r\n/, "\n")
-      else
-        value.to_s
+  def xlsx_value(column, issue, value)
+    case column.name
+    when :attachments
+      value.to_a.map {|a| a.filename}.join("\n")
+    else
+      case value.class.name
+        when 'Time'
+          format_time(value)
+        when 'Date'
+          format_date(value)
+        when 'Float'
+          sprintf("%.2f", value).gsub('.', l(:general_csv_decimal_separator))
+        when 'IssueRelation'
+          other = value.other_issue(issue)
+          l(value.label_for(issue)) + " ##{other.id}"
+        when 'TrueClass'
+          l(:general_text_Yes)
+        when 'FalseClass'
+          l(:general_text_No)
+        when 'String'
+          value.gsub(/\r\n/, "\n")
+        else
+          value.to_s
+      end
     end
   end
 

@@ -23,7 +23,7 @@ class FilesQueryColumnTest < ActiveSupport::TestCase
     if Redmine::VERSION::MAJOR <= 2 then
       expected = "picture.jpg"
     else
-      expected = "source.rb : This is a Ruby source file\n" +
+      expected = "source.rb\n" +
                  "picture.jpg"
     end
 
@@ -35,7 +35,7 @@ class FilesQueryColumnTest < ActiveSupport::TestCase
     expected = ""
     if Redmine::VERSION::MAJOR <= 2 then
       expected = "error281.txt\n" +
-                 "source.rb : This is a Ruby source file\n" +
+                 "source.rb\n" +
                  "changeset_iso8859-1.diff\n" +
                  "archive.zip\n" +
                  "changeset_utf8.diff"
@@ -45,7 +45,7 @@ class FilesQueryColumnTest < ActiveSupport::TestCase
                  "archive.zip\n" +
                  "changeset_utf8.diff"
     elsif (Redmine::VERSION::MAJOR == 3) and (Redmine::VERSION::MINOR >= 2) then
-      expected = "error281.txt : An attachment\n" +
+      expected = "error281.txt\n" +
                  "changeset_iso8859-1.diff\n" +
                  "archive.zip\n" +
                  "changeset_utf8.diff"
