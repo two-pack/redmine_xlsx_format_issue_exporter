@@ -9,8 +9,8 @@ Redmine::Plugin.register :redmine_xlsx_format_issue_exporter do
 end
 
 require_dependency 'queries_helper'
-require_dependency 'xlsx_export_helper'
+require_dependency 'redmine_xlsx_format_issue_exporter/xlsx_export_helper'
 
-require_dependency 'issues_controller_patch'
+require_dependency 'redmine_xlsx_format_issue_exporter/issues_controller_patch'
 
-require 'issues_page_hooks'
+require 'redmine_xlsx_format_issue_exporter/issues_page_hooks'
