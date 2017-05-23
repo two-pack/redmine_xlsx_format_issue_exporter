@@ -10,7 +10,9 @@ end
 
 require_dependency 'queries_helper'
 require_dependency 'redmine_xlsx_format_issue_exporter/xlsx_export_helper'
+require_dependency 'redmine_xlsx_format_issue_exporter/xlsx_report_helper'
 
 require_dependency 'redmine_xlsx_format_issue_exporter/issues_controller_patch'
+require_dependency 'redmine_xlsx_format_issue_exporter/timelog_controller_patch'
 
-require 'redmine_xlsx_format_issue_exporter/issues_page_hooks'
+require_dependency 'redmine_xlsx_format_issue_exporter/view_layouts_base_body_bottom_hook'

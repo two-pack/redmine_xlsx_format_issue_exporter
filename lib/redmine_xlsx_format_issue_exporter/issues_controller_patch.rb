@@ -4,14 +4,6 @@ module RedmineXlsxFormatIssueExporter
   module IssuesControllerPatch
     include XlsxExportHelper
 
-    def query_issues
-      options = {:order => sort_clause, :offset => @offset, :limit => @limit}
-      if (Redmine::VERSION::MAJOR <= 3) && (Redmine::VERSION::MINOR <= 3) && (Redmine::VERSION::BRANCH != 'devel') then
-        options.merge!({:include => [:assigned_to, :tracker, :priority, :category, :fixed_version]})
-      end
-      @query.issues(options)
-    end
-
     def index
       begin
         return super

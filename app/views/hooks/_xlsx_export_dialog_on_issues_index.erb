@@ -1,11 +1,4 @@
-<script type="text/javascript">
-//<![CDATA[
-$('p.other-formats').first().append('' +
-         <% builder = Redmine::Views::OtherFormatsBuilder.new(self) %>
-        '<%= builder.link_to 'XLSX', :url => params, :onclick => "showModal('xlsx-export-options', '350px'); return false;" %>'
-);
-//]]>
-</script>
+<%= render :partial => "hooks/insert_xlsx_link_for_dialog" %>
 
 <div id="xlsx-export-options" style="display:none;">
   <h3 class="title"><%= l(:label_export_options, :export_format => 'XLSX') %></h3>
@@ -15,8 +8,8 @@ $('p.other-formats').first().append('' +
       <% end %>
       <%= hidden_field_tag 'sort', @sort_criteria.to_param, :id => nil %>
       <p>
-        <label><%= radio_button_tag 'columns', '', true %> <%= l(:description_selected_columns) %></label><br />
-        <label><%= radio_button_tag 'columns', 'all_inline' %> <%= l(:description_all_columns) %></label>
+        <label><%= radio_button_tag 'c[]', '', true %> <%= l(:description_selected_columns) %></label><br />
+        <label><%= radio_button_tag 'c[]', 'all_inline' %> <%= l(:description_all_columns) %></label>
       </p>
       <p>
         <label><%= check_box_tag 'description', '1', @query.has_column?(:description) %> <%= l(:field_description) %></label>

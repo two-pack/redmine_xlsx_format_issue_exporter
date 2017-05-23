@@ -1,0 +1,8 @@
+<script type="text/javascript">
+    //<![CDATA[
+    $('p.other-formats').first().append('' +
+        <% builder = Redmine::Views::OtherFormatsBuilder.new(self) %>
+        '<%= builder.link_to 'XLSX', :url => params, :onclick => "showModal('xlsx-export-options', '350px'); return false;" %>'
+    );
+    //]]>
+</script>
