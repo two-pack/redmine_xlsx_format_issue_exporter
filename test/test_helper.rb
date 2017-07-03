@@ -21,6 +21,7 @@ module RedmineXlsxFormatIssueExporter
 
     Capybara.default_driver = :poltergeist
     Capybara.javascript_driver = :poltergeist
+    Capybara.default_max_wait_time = 10
 
     def login(user, password)
       visit "/login"
