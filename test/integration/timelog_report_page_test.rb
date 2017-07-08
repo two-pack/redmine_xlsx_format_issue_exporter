@@ -19,8 +19,7 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_that_the_page_has_XLSX_link_after_select
-      page.select("Project")
-      wait_for_ajax
+      select_and_wait(page, "Project", :from => "criterias")
 
       assert has_selector?("p.other-formats span a.xlsx")
       assert has_link?("XLSX")
@@ -32,8 +31,7 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_that_dialog_is_not_shown_when_the_link_is_clicked
-      page.select("Project")
-      wait_for_ajax
+      select_and_wait(page, "Project", :from => "criterias")
 
       click_link("XLSX")
 
@@ -44,9 +42,7 @@ module RedmineXlsxFormatIssueExporter
 
     def test_to_export_all_projects
       visit '/time_entries/report'
-      page.find("#query_form_content").select("Project")
-      page.find("#criterias").select("Project")
-      wait_for_ajax
+      select_and_wait(page, "Project", :from => "criterias")
 
       click_link("XLSX")
 
@@ -56,8 +52,7 @@ module RedmineXlsxFormatIssueExporter
     def test_to_export_small_project
       login_with_user
       visit '/projects/ecookbook/time_entries/report'
-      page.select("Project")
-      wait_for_ajax
+      select_and_wait(page, "Project", :from => "criterias")
 
       click_link("XLSX")
 
@@ -67,11 +62,10 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_to_export_with_filter
-      page.find("#add_filter_select").select("User")
-      page.find("#values_user_id_1").select("John Smith")
+      select_and_wait(page, "User", :from => "add_filter_select")
+      select_and_wait(page, "John Smith", :from => "values_user_id_1")
       click_link("Apply")
-      page.select("Status")
-      wait_for_ajax
+      select_and_wait(page, "Status", :from => "criterias")
 
       click_link("XLSX")
 
@@ -90,9 +84,8 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_to_export_with_Project_Yearly
-      page.find("#columns").select("Year")
-      page.find("#criterias").select("Project")
-      wait_for_ajax
+      select_and_wait(page, "Year", :from => "columns")
+      select_and_wait(page, "Project", :from => "criterias")
 
       click_link("XLSX")
 
@@ -100,10 +93,9 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_to_export_with_Project_and_Status_Monthly
-      page.find("#columns").select("Month")
-      page.find("#criterias").select("Project")
-      page.find("#criterias").select("Status")
-      wait_for_ajax
+      select_and_wait(page, "Month", :from => "columns")
+      select_and_wait(page, "Project", :from => "criterias")
+      select_and_wait(page, "Status", :from => "criterias")
 
       click_link("XLSX")
 
@@ -111,11 +103,10 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_to_export_with_Project_and_Status_and_more_Weekly
-      page.find("#columns").select("Week")
-      page.find("#criterias").select("Project")
-      page.find("#criterias").select("Status")
-      page.find("#criterias").select("Version")
-      wait_for_ajax
+      select_and_wait(page, "Week", :from => "columns")
+      select_and_wait(page, "Project", :from => "criterias")
+      select_and_wait(page, "Status", :from => "criterias")
+      select_and_wait(page, "Version", :from => "criterias")
 
       click_link("XLSX")
 
@@ -123,11 +114,10 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_to_export_with_Project_and_Status_and_more_Daily
-      page.find("#columns").select("Days")
-      page.find("#criterias").select("Project")
-      page.find("#criterias").select("Status")
-      page.find("#criterias").select("Category")
-      wait_for_ajax
+      select_and_wait(page, "Days", :from => "columns")
+      select_and_wait(page, "Project", :from => "criterias")
+      select_and_wait(page, "Status", :from => "criterias")
+      select_and_wait(page, "Category", :from => "criterias")
 
       click_link("XLSX")
 

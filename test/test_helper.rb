@@ -58,5 +58,10 @@ module RedmineXlsxFormatIssueExporter
     def finished_all_ajax_requests?
       page.evaluate_script('jQuery.active').zero?
     end
+
+    def select_and_wait(page, value, options = {})
+      page.select(value, options)
+      wait_for_ajax
+    end
   end
 end
