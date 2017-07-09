@@ -9,7 +9,12 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def create_columns_list(query, options)
-      columns = (options[:columns] == 'all_inline' ? query.available_inline_columns : query.inline_columns)
+      if (options[:columns].present? and options[:columns].include?('all_inline')) or
+         (options[:c].present? and options[:c].include?('all_inline'))
+        columns = query.available_inline_columns
+      else
+        columns = query.inline_columns
+      end
 
       query.available_block_columns.each do |column|  # Some versions have description in query.
         if options[column.name].present?
