@@ -1,4 +1,5 @@
 require_dependency 'timelog_controller'
+require_dependency 'redmine_xlsx_format_issue_exporter/reloader'
 
 module RedmineXlsxFormatIssueExporter
   module TimelogControllerPatch
@@ -33,10 +34,10 @@ module RedmineXlsxFormatIssueExporter
       send_data(report_to_xlsx(@report), :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', :filename => 'timelog.xlsx')
     end
   end
-end
 
-ActionDispatch::Reloader.to_prepare do
-  unless TimelogController.included_modules.include?(RedmineXlsxFormatIssueExporter::TimelogControllerPatch)
-    TimelogController.send(:prepend, RedmineXlsxFormatIssueExporter::TimelogControllerPatch)
+  Reloader.to_prepare do
+    unless TimelogController.included_modules.include?(RedmineXlsxFormatIssueExporter::TimelogControllerPatch)
+      TimelogController.send(:prepend, RedmineXlsxFormatIssueExporter::TimelogControllerPatch)
+    end
   end
 end
