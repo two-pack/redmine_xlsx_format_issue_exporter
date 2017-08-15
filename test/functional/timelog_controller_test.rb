@@ -9,18 +9,21 @@ class TimelogControllerTest < ActionController::TestCase
            :custom_fields_projects
 
   include Redmine::I18n
+  include RedmineXlsxFormatIssueExporter
 
   def setup
     Setting.default_language = "en"
   end
 
   def test_index_at_project_level_should_include_xlsx_export_dialog
+    op, v = make_action_controller_permitted_parameters({'spent_on' => '>='}, {'spent_on' => ['2007-04-01']})
+
     get :index,
-        :project_id => 'ecookbook',
-        :f => ['spent_on'],
-        :op => {'spent_on' => '>='},
-        :v => {'spent_on' => ['2007-04-01']},
-        :c => ['spent_on', 'user']
+        :params => {:project_id => 'ecookbook',
+                    :f => ['spent_on'],
+                    :op => op,
+                    :v => v,
+                    :c => ['spent_on', 'user']}
     assert_response :success
 
     assert_select '#xlsx-export-options' do
@@ -49,7 +52,7 @@ class TimelogControllerTest < ActionController::TestCase
 
   def test_index_xlsx_all_projects
     with_settings :date_format => '%m/%d/%Y' do
-      get :index, :format => 'xlsx'
+      get :index, :params => {:format => 'xlsx'}
       assert_response :success
       assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', response.content_type
     end
@@ -57,7 +60,7 @@ class TimelogControllerTest < ActionController::TestCase
 
   def test_index_xlsx
     with_settings :date_format => '%m/%d/%Y' do
-      get :index, :project_id => 1, :format => 'xlsx'
+      get :index, :params => {:project_id => 1, :format => 'xlsx'}
       assert_response :success
       assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', response.content_type
     end
@@ -65,7 +68,7 @@ class TimelogControllerTest < ActionController::TestCase
 
   def test_index_xlsx_when_specified_unknown_format
     begin
-      get :index, :format => 'unknownformat'
+      get :index, :params => {:format => 'unknownformat'}
     rescue ActionController::UnknownFormat => e
       pass
     end
@@ -73,23 +76,23 @@ class TimelogControllerTest < ActionController::TestCase
 
   def test_report_all_projects_xlsx_export
     get :report,
-        :columns => 'month',
-        :from => "2007-01-01",
-        :to => "2007-06-30",
-        :criteria => ["project", "user", "activity"],
-        :format => "xlsx"
+        :params => {:columns => 'month',
+                    :from => "2007-01-01",
+                    :to => "2007-06-30",
+                    :criteria => ["project", "user", "activity"],
+                    :format => "xlsx"}
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
   end
 
   def test_report_xlsx_export
     get :report,
-        :project_id => 1,
-        :columns => 'month',
-        :from => "2007-01-01",
-        :to => "2007-06-30",
-        :criteria => ["project", "user", "activity"],
-        :format => "xlsx"
+        :params => {:project_id => 1,
+                    :columns => 'month',
+                    :from => "2007-01-01",
+                    :to => "2007-06-30",
+                    :criteria => ["project", "user", "activity"],
+                    :format => "xlsx"}
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
   end
@@ -116,12 +119,12 @@ class TimelogControllerTest < ActionController::TestCase
 
     with_settings :default_language => "zh-TW" do
       get :report,
-          :project_id => 1,
-          :columns => 'day',
-          :from => "2011-11-11",
-          :to => "2011-11-11",
-          :criteria => ["user"],
-          :format => "xlsx"
+          :params => {:project_id => 1,
+                      :columns => 'day',
+                      :from => "2011-11-11",
+                      :to => "2011-11-11",
+                      :criteria => ["user"],
+                      :format => "xlsx"}
     end
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
@@ -148,12 +151,12 @@ class TimelogControllerTest < ActionController::TestCase
 
     with_settings :default_language => "zh-TW" do
       get :report,
-          :project_id => 1,
-          :columns => 'day',
-          :from => "2011-11-11",
-          :to => "2011-11-11",
-          :criteria => ["user"],
-          :format => "xlsx"
+          :params => {:project_id => 1,
+                      :columns => 'day',
+                      :from => "2011-11-11",
+                      :to => "2011-11-11",
+                      :criteria => ["user"],
+                      :format => "xlsx"}
     end
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
@@ -176,12 +179,12 @@ class TimelogControllerTest < ActionController::TestCase
       assert_equal 3, te2.user_id
 
       get :report,
-          :project_id => 1,
-          :columns => 'day',
-          :from => "2011-11-11",
-          :to => "2011-11-11",
-          :criteria => ["user"],
-          :format => "xlsx"
+          :params => {:project_id => 1,
+                      :columns => 'day',
+                      :from => "2011-11-11",
+                      :to => "2011-11-11",
+                      :criteria => ["user"],
+                      :format => "xlsx"}
       assert_response :success
       assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
     end
@@ -189,7 +192,7 @@ class TimelogControllerTest < ActionController::TestCase
 
   def test_report_xlsx_when_specified_unknown_format
     begin
-      get :report, :format => 'unknownformat'
+      get :report, :params => {:format => 'unknownformat'}
     rescue ActionController::UnknownFormat => e
       pass
     end
