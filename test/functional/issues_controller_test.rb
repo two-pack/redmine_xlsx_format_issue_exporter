@@ -81,21 +81,18 @@ class IssuesControllerTest < ActionController::TestCase
   def test_index_xlsx
     get :index, :params => {:format => 'xlsx'}
     assert_response :success
-    assert_not_nil assigns(:issues)
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
   end
 
   def test_index_xlsx_with_project
     get :index, :params => {:project_id => 1, :format => 'xlsx'}
     assert_response :success
-    assert_not_nil assigns(:issues)
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
   end
 
   def test_index_xlsx_with_group_by
     get :index, :params => {:project_id => 1, :format => 'xlsx', :group_by => 'tracker'}
     assert_response :success
-    assert_not_nil assigns(:issues)
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
   end
 
@@ -105,7 +102,6 @@ class IssuesControllerTest < ActionController::TestCase
     with_settings :default_language => 'en' do
       get :index, :params => {:format => 'xlsx', :xlsx => {:description => '1'}}
       assert_response :success
-      assert_not_nil assigns(:issues)
     end
 
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', response.content_type
@@ -123,7 +119,6 @@ class IssuesControllerTest < ActionController::TestCase
   def test_index_xlsx_with_all_columns
     get :index, :params => {:format => 'xlsx', :xlsx => {:columns => 'all'}}
     assert_response :success
-    assert_not_nil assigns(:issues)
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
   end
 
