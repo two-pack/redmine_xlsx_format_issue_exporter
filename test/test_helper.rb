@@ -13,6 +13,7 @@ require File.expand_path(File.dirname(__FILE__) + "/../../../test/test_helper")
 
 require "capybara/rails"
 require "capybara/poltergeist"
+require "capybara-screenshot"
 
 module RedmineXlsxFormatIssueExporter
   class ActionDispatch::IntegrationTest
