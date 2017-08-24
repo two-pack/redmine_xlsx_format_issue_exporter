@@ -64,7 +64,7 @@ run_tests() {
     TRACE=--trace
   fi
 
-  script -e -c "RUBYOPT=-W0 bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
+  script -e -c "RUBYOPT=-W0 TESTOPTS=-v bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
 }
 
 uninstall() {
