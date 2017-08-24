@@ -59,7 +59,8 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_that_caption_is_files
-      I18n.default_locale = :en
+      I18n.locale = :en
+
       assert_equal 'Files', @sut.caption
     end
 
