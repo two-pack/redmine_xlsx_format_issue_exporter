@@ -21,7 +21,7 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_that_the_page_has_valid_plguin_name
-      page.has_css?('tr#plugin-redmine_xlsx_format_issue_exporter td.name span.name', text: 'Issues XLS export')
+      assert page.has_css?('tr#plugin-redmine_xlsx_format_issue_exporter td.name span.name', text: 'Redmine XLSX format issue exporter')
     end
 
   end
