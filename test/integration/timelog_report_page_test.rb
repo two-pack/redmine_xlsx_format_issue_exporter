@@ -8,6 +8,8 @@ module RedmineXlsxFormatIssueExporter
              :time_entries
 
     def setup
+      Capybara.reset!
+
       page.driver.headers = { "Accept-Language" => "en-US" }
 
       visit '/projects/ecookbook/time_entries/report'
@@ -18,8 +20,18 @@ module RedmineXlsxFormatIssueExporter
 
     end
 
+    # Select criteria from drop-down.
+    # This method waits selected node is invisible.
+    def select_criteria_and_wait(value, options = {})
+      10.times {
+        select_and_wait(page, value, options)
+        break if page.has_no_selector?('select#criterias option', :text => value)
+      }
+      assert page.has_no_selector?('select#criterias option', :text => value)
+    end
+
     def test_that_the_page_has_XLSX_link_after_select
-      select_and_wait(page, "Project", :from => "criterias")
+      select_criteria_and_wait("Project", :from => "criterias")
 
       assert has_selector?("p.other-formats span a.xlsx")
       assert has_link?("XLSX")
@@ -31,7 +43,7 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_that_dialog_is_not_shown_when_the_link_is_clicked
-      select_and_wait(page, "Project", :from => "criterias")
+      select_criteria_and_wait("Project", :from => "criterias")
 
       click_link("XLSX")
 
@@ -42,7 +54,7 @@ module RedmineXlsxFormatIssueExporter
 
     def test_to_export_all_projects
       visit '/time_entries/report'
-      select_and_wait(page, "Project", :from => "criterias")
+      select_criteria_and_wait("Project", :from => "criterias")
 
       click_link("XLSX")
 
@@ -52,7 +64,7 @@ module RedmineXlsxFormatIssueExporter
     def test_to_export_small_project
       login_with_user
       visit '/projects/ecookbook/time_entries/report'
-      select_and_wait(page, "Project", :from => "criterias")
+      select_criteria_and_wait("Project", :from => "criterias")
 
       click_link("XLSX")
 
@@ -65,7 +77,7 @@ module RedmineXlsxFormatIssueExporter
       select_and_wait(page, "User", :from => "add_filter_select")
       select_and_wait(page, "John Smith", :from => "values_user_id_1")
       click_link("Apply")
-      select_and_wait(page, "Status", :from => "criterias")
+      select_criteria_and_wait("Status", :from => "criterias")
 
       click_link("XLSX")
 
@@ -85,7 +97,7 @@ module RedmineXlsxFormatIssueExporter
 
     def test_to_export_with_Project_Yearly
       select_and_wait(page, "Year", :from => "columns")
-      select_and_wait(page, "Project", :from => "criterias")
+      select_criteria_and_wait("Project", :from => "criterias")
 
       click_link("XLSX")
 
@@ -94,8 +106,8 @@ module RedmineXlsxFormatIssueExporter
 
     def test_to_export_with_Project_and_Status_Monthly
       select_and_wait(page, "Month", :from => "columns")
-      select_and_wait(page, "Project", :from => "criterias")
-      select_and_wait(page, "Status", :from => "criterias")
+      select_criteria_and_wait("Project", :from => "criterias")
+      select_criteria_and_wait("Status", :from => "criterias")
 
       click_link("XLSX")
 
@@ -104,9 +116,9 @@ module RedmineXlsxFormatIssueExporter
 
     def test_to_export_with_Project_and_Status_and_more_Weekly
       select_and_wait(page, "Week", :from => "columns")
-      select_and_wait(page, "Project", :from => "criterias")
-      select_and_wait(page, "Status", :from => "criterias")
-      select_and_wait(page, "Version", :from => "criterias")
+      select_criteria_and_wait("Project", :from => "criterias")
+      select_criteria_and_wait("Status", :from => "criterias")
+      select_criteria_and_wait("Version", :from => "criterias")
 
       click_link("XLSX")
 
@@ -115,9 +127,9 @@ module RedmineXlsxFormatIssueExporter
 
     def test_to_export_with_Project_and_Status_and_more_Daily
       select_and_wait(page, "Days", :from => "columns")
-      select_and_wait(page, "Project", :from => "criterias")
-      select_and_wait(page, "Status", :from => "criterias")
-      select_and_wait(page, "Category", :from => "criterias")
+      select_criteria_and_wait("Project", :from => "criterias")
+      select_criteria_and_wait("Status", :from => "criterias")
+      select_criteria_and_wait("Category", :from => "criterias")
 
       click_link("XLSX")
 
