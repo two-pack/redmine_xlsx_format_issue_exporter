@@ -1,6 +1,3 @@
-require_dependency 'issues_controller'
-require_dependency 'redmine_xlsx_format_issue_exporter/reloader'
-
 module RedmineXlsxFormatIssueExporter
   module IssuesControllerPatch
     include XlsxExportHelper
@@ -18,12 +15,6 @@ module RedmineXlsxFormatIssueExporter
         @issues = @query.issues(:limit => Setting.issues_export_limit.to_i)
       end
       send_data(query_to_xlsx(@issues, @query, params), :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', :filename => 'issues.xlsx')
-    end
-  end
-
-  Reloader.to_prepare do
-    unless IssuesController.included_modules.include?(RedmineXlsxFormatIssueExporter::IssuesControllerPatch)
-      IssuesController.send(:prepend, RedmineXlsxFormatIssueExporter::IssuesControllerPatch)
     end
   end
 end
