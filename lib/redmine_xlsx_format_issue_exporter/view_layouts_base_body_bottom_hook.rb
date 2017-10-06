@@ -2,6 +2,8 @@ module RedmineXlsxFormatIssueExporter
   class ViewLayoutsBaseBodyBootomHook < Redmine::Hook::ViewListener
 
     def view_layouts_base_body_bottom(context={})
+      return unless context[:controller].status == 200
+
       call_from = [context[:controller].controller_name, context[:controller].action_name]
       if call_from == ["issues", "index"]
         layout = 'hooks/xlsx_export_dialog_on_issues_index'

@@ -2,10 +2,14 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 module RedmineXlsxFormatIssueExporter
   class TimelogIndexPageTest < ActionDispatch::IntegrationTest
-    fixtures :projects, :users, :email_addresses, :roles, :members, :member_roles,
+    fixtures :projects, :users, :email_addresses, :members,
              :trackers, :projects_trackers, :enabled_modules, :issue_statuses, :issues,
              :enumerations, :custom_fields, :custom_values, :custom_fields_trackers,
              :time_entries
+
+    ActiveRecord::FixtureSet.create_fixtures(
+        File.dirname(__FILE__) + '/../fixtures/', [:roles, :member_roles])
+
 
     def setup
       page.driver.headers = { "Accept-Language" => "en-US" }
@@ -15,7 +19,18 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def teardown
+      logout
+    end
 
+    def test_not_permitted_index_page
+      login_with_no_permitted_user
+      visit '/projects/ecookbook/time_entries'
+
+      short_wait_time do
+        assert_raises(Capybara::ElementNotFound) {
+          assert find("Spent time", :visible => true)
+        }
+      end
     end
 
     def test_that_the_page_has_XLSX_link
@@ -72,8 +87,6 @@ module RedmineXlsxFormatIssueExporter
       find("div#xlsx-export-options").click_button("Export")
 
       assert_equal 200, page.status_code
-
-      logout
     end
 
     def test_to_export_with_query
@@ -107,8 +120,6 @@ module RedmineXlsxFormatIssueExporter
       find("div#xlsx-export-options").click_button("Export")
 
       assert_equal 200, page.status_code
-
-      logout
     end
 
     def test_to_export_with_sort
@@ -119,8 +130,6 @@ module RedmineXlsxFormatIssueExporter
 
       find(:xpath, "//a[@href='/projects/subproject1/time_entries.xlsx?sort=project']").click
       assert_equal 200, page.status_code
-
-      logout
     end
 
   end

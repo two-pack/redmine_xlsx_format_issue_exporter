@@ -50,6 +50,17 @@ module RedmineXlsxFormatIssueExporter
       login 'jsmith', 'jsmith'
     end
 
+    def login_with_no_permitted_user
+      login 'dlopper', 'foo'
+    end
+
+    def short_wait_time
+      default_wait_time = Capybara.default_max_wait_time
+      Capybara.default_max_wait_time = 1
+      yield
+      Capybara.default_max_wait_time = default_wait_time
+    end
+
     def wait_for_ajax
       Timeout.timeout(Capybara.default_max_wait_time) do
         loop until finished_all_ajax_requests?

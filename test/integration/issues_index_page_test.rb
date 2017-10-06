@@ -5,10 +5,13 @@ module RedmineXlsxFormatIssueExporter
     fixtures :projects, :trackers, :issue_statuses, :issues,
              :enumerations, :users, :issue_categories, :queries,
              :projects_trackers, :issue_relations, :watchers,
-             :roles, :journals, :journal_details, :attachments,
-             :member_roles, :members, :enabled_modules, :workflows,
+             :journals, :journal_details, :attachments,
+             :members, :enabled_modules, :workflows,
              :custom_values, :custom_fields, :custom_fields_projects, :custom_fields_trackers,
              :versions, :time_entries
+
+    ActiveRecord::FixtureSet.create_fixtures(
+        File.dirname(__FILE__) + '/../fixtures/', [:roles, :member_roles])
 
     def setup
       page.driver.headers = { "Accept-Language" => "en-US" }
@@ -18,7 +21,18 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def teardown
+      logout
+    end
 
+    def test_not_permitted_index_page
+      login_with_no_permitted_user
+      visit '/projects/ecookbook/issues'
+
+      short_wait_time do
+        assert_raises(Capybara::ElementNotFound) {
+          assert find("Issues", :visible => true)
+        }
+      end
     end
 
     def test_that_the_page_has_XLSX_link
@@ -96,8 +110,6 @@ module RedmineXlsxFormatIssueExporter
       find("div#xlsx-export-options").click_button("Export")
 
       assert_equal 200, page.status_code
-
-      logout
     end
 
     def test_to_export_with_query
@@ -133,8 +145,6 @@ module RedmineXlsxFormatIssueExporter
       find("div#xlsx-export-options").click_button("Export")
 
       assert_equal 200, page.status_code
-
-      logout
     end
 
     def test_to_set_status_filter_without_value
@@ -142,10 +152,10 @@ module RedmineXlsxFormatIssueExporter
       visit '/projects/subproject1/issues?utf8=%E2%9C%93&set_filter=1&f%5B%5D=status_id&op%5Bstatus_id%5D=%3D'
       assert_equal 200, page.status_code
 
-      assert has_no_selector?("p.other-formats span a.xlsx")
-      assert has_no_link?("XLSX")
-
-      logout
+      short_wait_time do
+        assert has_no_selector?("p.other-formats span a.xlsx")
+        assert has_no_link?("XLSX")
+      end
     end
 
     def test_to_export_with_sort
@@ -156,8 +166,6 @@ module RedmineXlsxFormatIssueExporter
 
       find(:xpath, "//a[@href='/projects/subproject1/issues.xlsx?sort=id']").click
       assert_equal 200, page.status_code
-
-      logout
     end
   end
 end

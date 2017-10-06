@@ -24,9 +24,11 @@ module RedmineXlsxFormatIssueExporter
     def test_that_dialog_has_not_last_notes
       click_link("XLSX")
 
-      assert_raises(Capybara::ElementNotFound) {
-        find("input#last_notes")
-      }
+      short_wait_time do
+        assert_raises(Capybara::ElementNotFound) {
+          find("input#last_notes")
+        }
+      end
     end
 
     def test_that_dialog_has_files_option

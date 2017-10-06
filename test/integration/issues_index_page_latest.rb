@@ -43,9 +43,11 @@ module RedmineXlsxFormatIssueExporter
     def test_that_dialog_has_not_files_option
       click_link("XLSX")
 
-      assert_raises(Capybara::ElementNotFound) {
-        find("input#files")
-      }
+      short_wait_time do
+        assert_raises(Capybara::ElementNotFound) {
+          find("input#files")
+        }
+      end
     end
 
     def test_to_export_with_all_aditional_options
