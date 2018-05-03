@@ -20,6 +20,7 @@ module RedmineXlsxFormatIssueExporter
     # Make the Capybara DSL available in all integration tests
     include Capybara::DSL
 
+    Capybara.server = :webrick
     Capybara.default_driver = :poltergeist
     Capybara.javascript_driver = :poltergeist
     Capybara.default_max_wait_time = 10
