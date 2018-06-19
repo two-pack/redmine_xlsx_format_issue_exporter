@@ -52,7 +52,7 @@ module RedmineXlsxFormatIssueExporter
         hours_for_value = select_hours(hours, criteria[level], value)
         next if hours_for_value.empty?
         row = [''] * level
-        row << format_criteria_value(available_criteria[criteria[level]], value).to_s
+        row << format_criteria_value_str(available_criteria[criteria[level]], value)
         row += [''] * (criteria.length - level - 1)
         total = 0
         periods.each do |period|
@@ -95,5 +95,14 @@ module RedmineXlsxFormatIssueExporter
                           :valign => 'top',
                           :num_format => '0.00')
     end
+
+    def format_criteria_value_str(criteria_options, value)
+      if method(:format_criteria_value).parameters.include?([:opt, :html])
+        format_criteria_value(criteria_options, value, false).to_s
+      else
+        format_criteria_value(criteria_options, value).to_s
+      end
+    end
+
   end
 end
