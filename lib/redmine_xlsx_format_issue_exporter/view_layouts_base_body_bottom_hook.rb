@@ -9,7 +9,7 @@ module RedmineXlsxFormatIssueExporter
         layout = 'hooks/xlsx_export_dialog_on_issues_index'
       elsif call_from == ["timelog", "index"]
         layout ='hooks/xlsx_export_dialog_on_timelog_index'
-      elsif call_from == ["timelog", "report"]
+      elsif (call_from == ["timelog", "report"]) or (call_from == ["users", "index"])
         layout ='hooks/insert_xlsx_link_for_download'
       else
         return
