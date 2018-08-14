@@ -1,11 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 module RedmineXlsxFormatIssueExporter
-  class UsersReportPageTest < ActionDispatch::IntegrationTest
-    fixtures :projects, :users, :email_addresses, :members,
-             :trackers, :projects_trackers, :enabled_modules, :issue_statuses, :issues,
-             :enumerations, :custom_fields, :custom_values, :custom_fields_trackers,
-             :time_entries
+  class UsersIndexPageTest < ActionDispatch::IntegrationTest
+    fixtures :projects, :users, :email_addresses, :members
 
     ActiveRecord::FixtureSet.create_fixtures(
         File.dirname(__FILE__) + '/../fixtures/', [:roles, :member_roles])
@@ -62,6 +59,5 @@ module RedmineXlsxFormatIssueExporter
 
       assert_equal 406, page.status_code
     end
-
   end
 end if Redmine::VERSION::BRANCH == 'devel'

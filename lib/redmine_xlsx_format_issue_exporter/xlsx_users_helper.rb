@@ -21,7 +21,7 @@ module RedmineXlsxFormatIssueExporter
       workbook = WriteXLSX.new(stream)
       worksheet = workbook.add_worksheet
 
-      worksheet.freeze_panes(1, 1)  # Freeze header row and # column.
+      worksheet.freeze_panes(1, 1)  # Freeze header row and Login column.
 
       columns_width = []
       write_header_row(workbook, worksheet, columns.map{|column| l('field_' + column)}, columns_width)
