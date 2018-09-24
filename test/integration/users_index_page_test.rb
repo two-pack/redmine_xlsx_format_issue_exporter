@@ -1,3 +1,7 @@
+if ((Redmine::VERSION::MAJOR <= 3) && (Redmine::VERSION::BRANCH != devel)) then
+  return
+end
+
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 module RedmineXlsxFormatIssueExporter
@@ -60,4 +64,4 @@ module RedmineXlsxFormatIssueExporter
       assert_equal 406, page.status_code
     end
   end
-end if Redmine::VERSION::BRANCH == 'devel'
+end
