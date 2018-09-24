@@ -1,8 +1,8 @@
-if ((Redmine::VERSION::MAJOR <= 3) && (Redmine::VERSION::BRANCH != devel)) then
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+
+if ((Redmine::VERSION::MAJOR <= 3) && (Redmine::VERSION::BRANCH != 'devel')) then
   return
 end
-
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 module RedmineXlsxFormatIssueExporter
   class UsersIndexPageTest < ActionDispatch::IntegrationTest
