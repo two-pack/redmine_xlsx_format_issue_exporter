@@ -13,6 +13,7 @@ require_dependency 'redmine_xlsx_format_issue_exporter/xlsx_export_helper'
 require_dependency 'redmine_xlsx_format_issue_exporter/xlsx_report_helper'
 require_dependency 'redmine_xlsx_format_issue_exporter/xlsx_users_helper'
 
+require_dependency 'redmine_xlsx_format_issue_exporter/other_formats_builder'
 require_dependency 'redmine_xlsx_format_issue_exporter/view_layouts_base_body_bottom_hook'
 
 Rails.configuration.to_prepare do
