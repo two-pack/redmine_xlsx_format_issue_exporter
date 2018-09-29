@@ -5,7 +5,7 @@ Redmine::Plugin.register :redmine_xlsx_format_issue_exporter do
   version '0.1.5'
   url 'https://github.com/two-pack/redmine_xlsx_format_issue_exporter'
   author_url 'mailto:twopackas@gmail.com'
-  requires_redmine :version_or_higher => '2.3'
+  requires_redmine :version_or_higher => '3.2'
 end
 
 require_dependency 'queries_helper'
