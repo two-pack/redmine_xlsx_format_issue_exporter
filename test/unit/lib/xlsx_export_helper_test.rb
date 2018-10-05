@@ -121,5 +121,37 @@ module RedmineXlsxFormatIssueExporter
       assert_equal false, @worksheet.instance_variable_defined?('@hyperlinks')
     end
 
+    def test_write_item_for_value_with_crlf
+      assert_nothing_raised do
+        write_item(@worksheet, "test1\r\ntest2\r\ntest3", 0, 0, @cell_format, false, 1, @hyperlink_format)
+      end
+
+      assert_equal false, @worksheet.instance_variable_defined?('@hyperlinks')
+    end
+
+    def test_crlf_to_lf_with_crlf_string
+      assert_equal "test1\ntest2\ntest3", crlf_to_lf("test1\r\ntest2\r\ntest3")
+    end
+
+    def test_crlf_to_lf_with_lf_string
+      assert_equal "test1\ntest2\ntest3", crlf_to_lf("test1\ntest2\ntest3")
+    end
+
+    def test_crlf_to_lf_with_cr_string
+      assert_equal "test1\ntest2\ntest3", crlf_to_lf("test1\rtest2\rtest3")
+    end
+
+    def test_crlf_to_lf_with_float
+      assert_equal 7.3, crlf_to_lf(7.3)
+    end
+
+    def test_crlf_to_lf_with_array
+      assert_equal [0, 1, 2], crlf_to_lf([0, 1, 2])
+    end
+
+    def test_crlf_to_lf_with_nil
+      assert_nil crlf_to_lf(nil)
+    end
+
   end
 end

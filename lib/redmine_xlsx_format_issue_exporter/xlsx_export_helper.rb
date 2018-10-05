@@ -94,6 +94,10 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
+    def crlf_to_lf(value)
+      value.is_a?(String) ? value.gsub(/\r\n?/, "\n") : value
+    end
+
     def write_item(worksheet, value, row_index, column_index, cell_format, is_id_column, id, hyperlink_format)
       if is_id_column
         issue_url = url_for(:controller => 'issues', :action => 'show', :id => id)
@@ -106,7 +110,7 @@ module RedmineXlsxFormatIssueExporter
         return
       end
 
-      worksheet.write(row_index + 1, column_index, value, cell_format)
+      worksheet.write(row_index + 1, column_index, crlf_to_lf(value), cell_format)
     end
 
     def get_column_width(value)
