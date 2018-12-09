@@ -47,7 +47,8 @@ module RedmineXlsxFormatIssueExporter
                    "changeset_iso8859-1.diff\n" +
                    "archive.zip\n" +
                    "changeset_utf8.diff"
-      elsif (Redmine::VERSION::MAJOR == 3) and (Redmine::VERSION::MINOR >= 2) then
+      elsif ((Redmine::VERSION::MAJOR == 3) and (Redmine::VERSION::MINOR >= 2)) or
+            (Redmine::VERSION::MAJOR == 4) then
         expected = "error281.txt\n" +
                    "changeset_iso8859-1.diff\n" +
                    "archive.zip\n" +
