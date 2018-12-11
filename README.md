@@ -30,6 +30,7 @@ Usage
 * Click **XLSX** link in right-bottom of following pages.
   * Issues
   * Spent time
+  * Users
 
 Acknowledgement
 ===============
