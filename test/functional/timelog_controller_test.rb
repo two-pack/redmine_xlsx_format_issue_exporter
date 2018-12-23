@@ -108,6 +108,7 @@ class TimelogControllerTest < ActionController::TestCase
     te1 = TimeEntry.create(:spent_on => '2011-11-11',
                            :hours    => 7.3,
                            :project  => Project.find(1),
+                           :author   => user,
                            :user     => user,
                            :activity => TimeEntryActivity.find_by_name('Design'),
                            :comments => comments)
@@ -140,6 +141,7 @@ class TimelogControllerTest < ActionController::TestCase
     te1 = TimeEntry.create(:spent_on => '2011-11-11',
                            :hours    => 7.3,
                            :project  => Project.find(1),
+                           :author   => user,
                            :user     => user,
                            :activity => TimeEntryActivity.find_by_name('Design'),
                            :comments => comments)
@@ -169,6 +171,7 @@ class TimelogControllerTest < ActionController::TestCase
       te1 = TimeEntry.create(:spent_on => '2011-11-11',
                              :hours    => 7.3,
                              :project  => Project.find(1),
+                             :author   => user,
                              :user     => user,
                              :activity => TimeEntryActivity.find_by_name('Design'),
                              :comments => str1)
