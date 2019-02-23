@@ -28,7 +28,11 @@ matrix:
   - rvm: 2.4
     env: REDMINE_VERSION=3.2.9 VERBOSE=yes
   - rvm: 2.3
+    env: REDMINE_VERSION=3.3.9 VERBOSE=yes
+  - rvm: 2.3
     env: REDMINE_VERSION=3.2.9 VERBOSE=yes
+  - rvm: 2.2
+    env: REDMINE_VERSION=master VERBOSE=yes
 install:
   - true
 script:
