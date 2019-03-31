@@ -16,7 +16,7 @@ module RedmineXlsxFormatIssueExporter
       scope = scope.like(params[:name]) if params[:name].present?
       scope = scope.in_group(params[:group_id]) if params[:group_id].present?
 
-      send_data(users_to_xlsx(scope.order(sort_clause)), :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', :filename => 'users.xlsx')
+      send_data(users_to_xlsx(scope.order(sort_clause)), :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', :filename => 'users.xlsx')
     end
 
   end

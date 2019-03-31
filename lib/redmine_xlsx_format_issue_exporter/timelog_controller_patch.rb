@@ -16,7 +16,7 @@ module RedmineXlsxFormatIssueExporter
           preload(:issue => [:project, :tracker, :status, :assigned_to, :priority]).
           preload(:project, :user).
           to_a
-      send_data(query_to_xlsx(@entries, @query, params), :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', :filename => 'timelog.xlsx')
+      send_data(query_to_xlsx(@entries, @query, params), :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', :filename => 'timelog.xlsx')
     end
 
     def report
@@ -28,7 +28,7 @@ module RedmineXlsxFormatIssueExporter
         end
       end
 
-      send_data(report_to_xlsx(@report), :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', :filename => 'timelog.xlsx')
+      send_data(report_to_xlsx(@report), :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', :filename => 'timelog.xlsx')
     end
   end
 end

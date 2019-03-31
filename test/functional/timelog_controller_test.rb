@@ -62,7 +62,7 @@ class TimelogControllerTest < ActionController::TestCase
     with_settings :date_format => '%m/%d/%Y' do
       get :index, :params => {:format => 'xlsx'}
       assert_response :success
-      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', response.content_type
+      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', response.content_type
     end
   end
 
@@ -70,7 +70,7 @@ class TimelogControllerTest < ActionController::TestCase
     with_settings :date_format => '%m/%d/%Y' do
       get :index, :params => {:project_id => 1, :format => 'xlsx'}
       assert_response :success
-      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', response.content_type
+      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', response.content_type
     end
   end
 
@@ -90,7 +90,7 @@ class TimelogControllerTest < ActionController::TestCase
                     :criteria => ["project", "user", "activity"],
                     :format => "xlsx"}
     assert_response :success
-    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_report_xlsx_export
@@ -102,7 +102,7 @@ class TimelogControllerTest < ActionController::TestCase
                     :criteria => ["project", "user", "activity"],
                     :format => "xlsx"}
     assert_response :success
-    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_xlsx_big_5
@@ -137,7 +137,7 @@ class TimelogControllerTest < ActionController::TestCase
                       :format => "xlsx"}
     end
     assert_response :success
-    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_xlsx_cannot_convert_should_be_replaced_big_5
@@ -171,7 +171,7 @@ class TimelogControllerTest < ActionController::TestCase
                       :format => "xlsx"}
     end
     assert_response :success
-    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_xlsx_fr
@@ -200,7 +200,7 @@ class TimelogControllerTest < ActionController::TestCase
                       :criteria => ["user"],
                       :format => "xlsx"}
       assert_response :success
-      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
     end
   end
 

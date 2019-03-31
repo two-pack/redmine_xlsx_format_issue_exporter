@@ -91,19 +91,19 @@ class IssuesControllerTest < ActionController::TestCase
   def test_index_xlsx
     get :index, :params => {:format => 'xlsx'}
     assert_response :success
-    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_index_xlsx_with_project
     get :index, :params => {:project_id => 1, :format => 'xlsx'}
     assert_response :success
-    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_index_xlsx_with_group_by
     get :index, :params => {:project_id => 1, :format => 'xlsx', :group_by => 'tracker'}
     assert_response :success
-    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_index_xlsx_with_description
@@ -114,7 +114,7 @@ class IssuesControllerTest < ActionController::TestCase
       assert_response :success
     end
 
-    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', response.content_type
+    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', response.content_type
   end
 
   def test_index_xlsx_with_spent_time_column
@@ -123,13 +123,13 @@ class IssuesControllerTest < ActionController::TestCase
 
     get :index, :params => {:format => 'xlsx', :set_filter => '1', :c => %w(subject spent_hours)}
     assert_response :success
-    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_index_xlsx_with_all_columns
     get :index, :params => {:format => 'xlsx', :xlsx => {:columns => 'all'}}
     assert_response :success
-    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+    assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_index_xlsx_with_multi_column_field
@@ -179,7 +179,7 @@ class IssuesControllerTest < ActionController::TestCase
                               :op => op,
                               :v => v,
                               :format => 'xlsx'}
-      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
     end
   end
 
@@ -196,7 +196,7 @@ class IssuesControllerTest < ActionController::TestCase
                               :c => ['status', 'subject'],
                               :format => 'xlsx',
                               :set_filter => 1}
-      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
     end
   end
 
@@ -213,7 +213,7 @@ class IssuesControllerTest < ActionController::TestCase
                               :c => ['estimated_hours', 'subject'],
                               :format => 'xlsx',
                               :set_filter => 1}
-      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
     end
   end
 
@@ -230,7 +230,7 @@ class IssuesControllerTest < ActionController::TestCase
                               :c => ['estimated_hours', 'subject'],
                               :format => 'xlsx',
                               :set_filter => 1}
-      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;', @response.content_type
+      assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
     end
   end
 
