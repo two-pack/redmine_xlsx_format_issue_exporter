@@ -9,8 +9,6 @@ module RedmineXlsxFormatIssueExporter
 
     def setup
       Capybara.reset!
-
-      page.driver.headers = { "Accept-Language" => "en-US" }
     end
 
     def teardown
@@ -49,7 +47,7 @@ module RedmineXlsxFormatIssueExporter
 
       click_link("XLSX")
 
-      assert_equal 200, page.status_code
+      assert stay_users_index_page?
     end
 
     def test_invalid_format_request
@@ -57,7 +55,7 @@ module RedmineXlsxFormatIssueExporter
 
       visit '/users.test'
 
-      assert_equal 406, page.status_code
+      assert page.has_css?("body > header > h1", :text => "ActionController::UnknownFormat in UsersController#index")
     end
   end
 end

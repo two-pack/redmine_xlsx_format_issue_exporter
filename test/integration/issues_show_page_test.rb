@@ -11,7 +11,7 @@ module RedmineXlsxFormatIssueExporter
              :versions, :time_entries
 
     def setup
-      page.driver.headers = { "Accept-Language" => "en-US" }
+
     end
 
     def teardown
@@ -21,7 +21,7 @@ module RedmineXlsxFormatIssueExporter
     def test_that_not_affect_show_page
       visit '/issues/1'
 
-      assert_equal 200, page.status_code
+      assert stay_issues_index_page?
     end
 
   end

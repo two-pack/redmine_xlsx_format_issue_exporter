@@ -11,8 +11,6 @@ module RedmineXlsxFormatIssueExporter
              :versions, :time_entries
 
     def setup
-      page.driver.headers = { "Accept-Language" => "en-US" }
-
       visit '/projects/ecookbook/issues'
       assert_not_nil page
     end
@@ -27,7 +25,7 @@ module RedmineXlsxFormatIssueExporter
 
       find("div#xlsx-export-options").click_button("Export")
 
-      assert_equal 200, page.status_code
+      assert stay_issues_index_page?
     end
 
     def test_to_export_with_last_notes_and_all_columns
@@ -37,7 +35,7 @@ module RedmineXlsxFormatIssueExporter
 
       find("div#xlsx-export-options").click_button("Export")
 
-      assert_equal 200, page.status_code
+      assert stay_issues_index_page?
     end
 
     def test_that_dialog_has_not_files_option
@@ -57,7 +55,7 @@ module RedmineXlsxFormatIssueExporter
 
       find("div#xlsx-export-options").click_button("Export")
 
-      assert_equal 200, page.status_code
+      assert stay_issues_index_page?
     end
 
   end

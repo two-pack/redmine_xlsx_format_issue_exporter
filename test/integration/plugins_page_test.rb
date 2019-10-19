@@ -16,7 +16,6 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_that_the_page_has_the_plguin
-      screenshot_and_save_page
       assert page.has_selector?('tr#plugin-redmine_xlsx_format_issue_exporter')
     end
 

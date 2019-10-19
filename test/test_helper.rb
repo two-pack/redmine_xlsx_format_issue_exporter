@@ -11,35 +11,58 @@ end
 
 require File.expand_path(File.dirname(__FILE__) + "/../../../test/test_helper")
 
-require "capybara/rails"
-require "capybara/poltergeist"
-require "capybara-screenshot"
+require 'capybara/rails'
+require 'selenium-webdriver'
+
+Capybara.register_driver :headless_chrome do |app|
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+      chromeOptions: { args: %w[headless disable-gpu window-size=1280,800] }
+  )
+
+  if Redmine::VERSION::MAJOR >= 4
+    options = Selenium::WebDriver::Chrome::Options.new
+    options.add_option('w3c', false)
+    options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+    options.add_argument('window-size=1280,800')
+    Capybara::Selenium::Driver.new(
+        app,
+        browser: :chrome,
+        desired_capabilities: capabilities,
+        options: options
+    )
+  else
+    Capybara::Selenium::Driver.new(
+        app,
+        browser: :chrome,
+        desired_capabilities: capabilities,
+        switches: %w[--headless --disable-gpu window-size=1280,800]
+    )
+  end
+end
+
+Capybara.javascript_driver = :headless_chrome
+Capybara.current_driver = :headless_chrome
+Capybara.default_max_wait_time = 10
 
 module RedmineXlsxFormatIssueExporter
   class ActionDispatch::IntegrationTest
     # Make the Capybara DSL available in all integration tests
     include Capybara::DSL
 
-    Capybara.server = :webrick
-    Capybara.default_driver = :poltergeist
-    Capybara.javascript_driver = :poltergeist
-    Capybara.default_max_wait_time = 10
-
     def login(user, password)
-      visit "/login"
-
-      find("a.login").click
-      fill_in "username", with: user
-      fill_in "password", with: password
-      find("input[name=login]").click
-      assert page.find("a.logout")
+      visit '/login'
+      fill_in 'username', with: user
+      fill_in 'password', with: password
+      find('input#login-submit').click
+      assert find('a.logout', visible: :all)
     end
 
     def logout
       visit "/"
       if has_css?("a.logout")
         find("a.logout").click
-        assert find("a.login")
+        assert find('a.login', visible: :all)
       end
     end
 
@@ -75,6 +98,29 @@ module RedmineXlsxFormatIssueExporter
     def select_and_wait(page, value, options = {})
       page.select(value, options)
       wait_for_ajax
+    end
+
+    def stay_page?(selector)
+      assert has_selector?(selector, :visible => true)
+      short_wait_time do
+        assert has_no_selector?("div#xlsx-export-options", :visible => true)
+      end
+    end
+
+    def stay_issues_index_page?
+      stay_page?("body.controller-issues")
+    end
+
+    def stay_timelog_index_page?
+      stay_page?("body.controller-timelog")
+    end
+
+    def stay_timelog_report_page?
+      stay_page?("body.controller-timelog.action-report")
+    end
+
+    def stay_users_index_page?
+      stay_page?("body.controller-users")
     end
   end
 

@@ -54,7 +54,7 @@ clone_redmine() {
   fi
 }
 
-run_tests() {
+run_tests_proc() {
   # exit if tests fail
   set -e
 
@@ -65,6 +65,10 @@ run_tests() {
   fi
 
   script -e -c "RUBYOPT=-W0 TESTOPTS=-v bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
+}
+
+run_tests() {
+  run_tests_proc | grep -E -v "WARN Selenium \[DEPRECATION\] Selenium::WebDriver::Error(.*)ensure the driver supports W3C WebDriver specification"
 }
 
 uninstall() {

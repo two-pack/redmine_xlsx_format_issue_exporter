@@ -11,8 +11,6 @@ module RedmineXlsxFormatIssueExporter
              :versions, :time_entries
 
     def setup
-      page.driver.headers = { "Accept-Language" => "en-US" }
-
       visit '/projects/ecookbook/issues'
       assert_not_nil page
     end

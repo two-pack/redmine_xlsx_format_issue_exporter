@@ -12,8 +12,6 @@ module RedmineXlsxFormatIssueExporter
 
 
     def setup
-      page.driver.headers = { "Accept-Language" => "en-US" }
-
       visit '/projects/ecookbook/time_entries'
       assert_not_nil page
     end
@@ -34,7 +32,6 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_that_the_page_has_XLSX_link
-      screenshot_and_save_page
       assert has_selector?("p.other-formats span a.xlsx")
       assert has_link?("XLSX")
     end
@@ -56,7 +53,7 @@ module RedmineXlsxFormatIssueExporter
       click_link("XLSX")
       find("div#xlsx-export-options").click_button("Export")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_index_page?
     end
 
     def test_to_export_with_all_columns
@@ -65,7 +62,7 @@ module RedmineXlsxFormatIssueExporter
 
       find("div#xlsx-export-options").click_button("Export")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_index_page?
     end
 
     def test_to_export_all_projects
@@ -75,7 +72,7 @@ module RedmineXlsxFormatIssueExporter
 
       find("div#xlsx-export-options").click_button("Export")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_index_page?
     end
 
     def test_to_export_small_project
@@ -86,7 +83,7 @@ module RedmineXlsxFormatIssueExporter
 
       find("div#xlsx-export-options").click_button("Export")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_index_page?
     end
 
     def test_to_export_with_query
@@ -97,7 +94,7 @@ module RedmineXlsxFormatIssueExporter
 
       find("div#xlsx-export-options").click_button("Export")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_index_page?
     end
 
     def test_to_export_all_projects_with_query
@@ -109,7 +106,7 @@ module RedmineXlsxFormatIssueExporter
 
       find("div#xlsx-export-options").click_button("Export")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_index_page?
     end
 
     def test_to_set_status_filter_without_value
@@ -119,17 +116,17 @@ module RedmineXlsxFormatIssueExporter
 
       find("div#xlsx-export-options").click_button("Export")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_index_page?
     end
 
     def test_to_export_with_sort
       login_with_admin
-
       visit '/projects/subproject1/time_entries?sort=project'
-      assert_equal 200, page.status_code
 
-      find(:xpath, "//a[@href='/projects/subproject1/time_entries.xlsx?sort=project']").click
-      assert_equal 200, page.status_code
+      click_link("XLSX")
+      find("div#xlsx-export-options").click_button("Export")
+
+      assert stay_timelog_index_page?
     end
 
   end

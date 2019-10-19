@@ -13,8 +13,6 @@ module RedmineXlsxFormatIssueExporter
     def setup
       Capybara.reset!
 
-      page.driver.headers = { "Accept-Language" => "en-US" }
-
       visit '/projects/ecookbook/time_entries/report'
       assert_not_nil page
     end
@@ -74,7 +72,7 @@ module RedmineXlsxFormatIssueExporter
 
       click_link("XLSX")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_report_page?
     end
 
     def test_to_export_small_project
@@ -84,7 +82,7 @@ module RedmineXlsxFormatIssueExporter
 
       click_link("XLSX")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_report_page?
     end
 
     def test_to_export_with_filter
@@ -95,13 +93,12 @@ module RedmineXlsxFormatIssueExporter
 
       click_link("XLSX")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_report_page?
     end
 
     def test_to_set_status_filter_without_value
       login_with_admin
       visit '/projects/subproject1/time_entries/report?utf8=%E2%9C%93&set_filter=1&f%5B%5D=status_id&op%5Bstatus_id%5D=%3D'
-      assert_equal 200, page.status_code
 
       short_wait_time do
         assert has_no_selector?("p.other-formats span a.xlsx")
@@ -115,7 +112,7 @@ module RedmineXlsxFormatIssueExporter
 
       click_link("XLSX")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_report_page?
     end
 
     def test_to_export_with_Project_and_Status_Monthly
@@ -125,7 +122,7 @@ module RedmineXlsxFormatIssueExporter
 
       click_link("XLSX")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_report_page?
     end
 
     def test_to_export_with_Project_and_Status_and_more_Weekly
@@ -136,7 +133,7 @@ module RedmineXlsxFormatIssueExporter
 
       click_link("XLSX")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_report_page?
     end
 
     def test_to_export_with_Project_and_Status_and_more_Daily
@@ -147,7 +144,7 @@ module RedmineXlsxFormatIssueExporter
 
       click_link("XLSX")
 
-      assert_equal 200, page.status_code
+      assert stay_timelog_report_page?
     end
 
   end
