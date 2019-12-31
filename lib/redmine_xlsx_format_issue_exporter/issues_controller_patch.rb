@@ -6,7 +6,7 @@ module RedmineXlsxFormatIssueExporter
       if params[name.to_sym] == "1"
         params[:c] << name unless params[:c].include?(name.to_sym)
       else
-        params[:c].delete_if {|c| c == name}
+        params[:c].delete_if {|c| c == name} unless params[:c].nil?
       end
     end
 
