@@ -13,7 +13,7 @@ module RedmineXlsxFormatIssueExporter
       columns_width = []
 
       # Column headers
-      headers = report.criteria.collect {|criteria| l(report.available_criteria[criteria][:label]) }
+      headers = report.criteria.collect {|criteria| l_or_humanize(report.available_criteria[criteria][:label]) }
       start_period_index = headers.count
       worksheet.freeze_panes(1, start_period_index)  # Freeze header row and criteria column.
       headers += report.periods
