@@ -2,13 +2,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 module RedmineXlsxFormatIssueExporter
   class TimelogReportPageTest < ActionDispatch::IntegrationTest
-    fixtures :projects, :users, :email_addresses, :members,
+    fixtures :projects, :users, :email_addresses, :members, :roles, :member_roles,
              :trackers, :projects_trackers, :enabled_modules, :issue_statuses, :issues,
              :enumerations, :custom_fields, :custom_values, :custom_fields_trackers,
              :time_entries
-
-    ActiveRecord::FixtureSet.create_fixtures(
-        File.dirname(__FILE__) + '/../fixtures/', [:roles, :member_roles])
 
     def setup
       Capybara.reset!
