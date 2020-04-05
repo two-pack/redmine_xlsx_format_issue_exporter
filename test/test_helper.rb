@@ -117,6 +117,10 @@ module RedmineXlsxFormatIssueExporter
     def stay_users_index_page?
       stay_page?("body.controller-users")
     end
+
+    def stay_projects_index_page?
+      stay_page?("body.controller-projects")
+    end
   end
 
   def make_action_controller_permitted_parameters(op, v)

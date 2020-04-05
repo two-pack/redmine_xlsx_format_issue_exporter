@@ -20,6 +20,7 @@ Rails.configuration.to_prepare do
   require_dependency 'issues_controller'
   require_dependency 'timelog_controller'
   require_dependency 'users_controller'
+  require_dependency 'projects_controller'
 
   unless IssuesController.included_modules.include? RedmineXlsxFormatIssueExporter::IssuesControllerPatch
     IssuesController.send(:prepend, RedmineXlsxFormatIssueExporter::IssuesControllerPatch)
@@ -32,4 +33,8 @@ Rails.configuration.to_prepare do
   unless UsersController.included_modules.include?(RedmineXlsxFormatIssueExporter::UsersControllerPatch)
     UsersController.send(:prepend, RedmineXlsxFormatIssueExporter::UsersControllerPatch)
   end
+
+  unless ProjectsController.included_modules.include?(RedmineXlsxFormatIssueExporter::ProjectsControllerPatch)
+    ProjectsController.send(:prepend, RedmineXlsxFormatIssueExporter::ProjectsControllerPatch)
+    end
 end
