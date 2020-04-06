@@ -42,13 +42,6 @@ module RedmineXlsxFormatIssueExporter
       assert find("div#xlsx-export-options", :visible => true)
     end
 
-    def test_that_dialog_is_closed_when_cancel_is_clicked
-      click_link("XLSX")
-      find("div#xlsx-export-options").click_button("Cancel")
-
-      assert find("div#xlsx-export-options", :visible => false)
-    end
-
     def test_that_export_with_selected_columns
       click_link("XLSX")
       find("div#xlsx-export-options").click_button("Export")
@@ -165,9 +158,10 @@ module RedmineXlsxFormatIssueExporter
   end
 end
 
-if ((Redmine::VERSION::MAJOR == 3) && (Redmine::VERSION::MINOR >= 4)) or
-   (Redmine::VERSION::MAJOR >= 4) then
+if (Redmine::VERSION::MAJOR >= 4) then
   require File.expand_path(File.dirname(__FILE__) + '/issues_index_page_latest')
+elsif (Redmine::VERSION::MAJOR == 3) && (Redmine::VERSION::MINOR == 4) then
+  require File.expand_path(File.dirname(__FILE__) + '/issues_index_page_34x')
 else
   require File.expand_path(File.dirname(__FILE__) + '/issues_index_page_33x')
 end

@@ -33,7 +33,7 @@
           <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
         <% else %>
           <%= submit_tag l(:button_export), :name => nil, :onclick => "hideModal(this);", :data => { :disable_with => false } %>
-          <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button', :data => { :disable_with => false } %>
+          <%= link_to_function l(:button_cancel), "hideModal(this);" %>
         <% end %>
       </p>
   <% end %>

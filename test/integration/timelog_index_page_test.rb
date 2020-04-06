@@ -40,7 +40,7 @@ module RedmineXlsxFormatIssueExporter
 
     def test_that_dialog_is_closed_when_cancel_is_clicked
       click_link("XLSX")
-      find("div#xlsx-export-options").click_button("Cancel")
+      find("div#xlsx-export-options").click_link("Cancel")
 
       assert find("div#xlsx-export-options", :visible => false)
     end
