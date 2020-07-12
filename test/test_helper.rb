@@ -95,6 +95,10 @@ module RedmineXlsxFormatIssueExporter
       wait_for_ajax
     end
 
+    def assert_visit
+      assert has_selector?("div#content")
+    end
+
     def stay_page?(selector)
       assert has_selector?(selector, :visible => true)
       short_wait_time do

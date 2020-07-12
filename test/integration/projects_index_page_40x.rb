@@ -6,7 +6,7 @@ module RedmineXlsxFormatIssueExporter
 
     def setup
       visit '/projects?display_type=list'
-      assert_not_nil page
+      assert_visit
     end
 
     def teardown

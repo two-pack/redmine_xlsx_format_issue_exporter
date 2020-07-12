@@ -1,4 +1,4 @@
-<% if @query.display_type == 'list' %>
+<% if @query && (@query.display_type == 'list') %>
   <%= render :partial => "hooks/insert_xlsx_link_for_dialog" %>
 
   <div id="xlsx-export-options" style="display:none;">

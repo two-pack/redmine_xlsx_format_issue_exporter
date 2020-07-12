@@ -15,7 +15,7 @@ module RedmineXlsxFormatIssueExporter
     def visit_users_page_with_admin
       login_with_admin
       visit '/users'
-      assert_not_nil page
+      assert_visit
     end
 
     def test_not_permitted_users_page

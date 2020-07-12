@@ -9,7 +9,7 @@ module RedmineXlsxFormatIssueExporter
 
     def setup
       visit '/projects/ecookbook/time_entries'
-      assert_not_nil page
+      assert_visit
     end
 
     def teardown

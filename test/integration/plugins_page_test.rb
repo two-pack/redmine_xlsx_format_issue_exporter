@@ -8,7 +8,7 @@ module RedmineXlsxFormatIssueExporter
       login_with_admin
 
       visit '/admin/plugins'
-      assert_not_nil page
+      assert_visit
     end
 
     def teardown
