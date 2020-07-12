@@ -11,7 +11,7 @@ module RedmineXlsxFormatIssueExporter
       Capybara.reset!
 
       visit '/projects/ecookbook/time_entries/report'
-      assert_not_nil page
+      assert_visit
     end
 
     def teardown

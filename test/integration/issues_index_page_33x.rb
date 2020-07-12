@@ -12,7 +12,7 @@ module RedmineXlsxFormatIssueExporter
 
     def setup
       visit '/projects/ecookbook/issues'
-      assert_not_nil page
+      assert_visit
     end
 
     def teardown

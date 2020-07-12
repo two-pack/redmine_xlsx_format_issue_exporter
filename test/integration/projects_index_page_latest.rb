@@ -6,7 +6,7 @@ module RedmineXlsxFormatIssueExporter
 
     def setup
       visit '/projects?display_type=list'
-      assert_not_nil page
+      assert_visit
     end
 
     def teardown
@@ -17,7 +17,7 @@ module RedmineXlsxFormatIssueExporter
       Setting.project_list_display_type = "list"
       visit '/projects'
       Setting.project_list_display_type = "board"
-      assert_not_nil page
+      assert_visit
 
       assert has_selector?("p.other-formats span a.xlsx")
       assert has_link?("XLSX")
