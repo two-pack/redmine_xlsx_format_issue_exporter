@@ -64,11 +64,12 @@ module RedmineXlsxFormatIssueExporter
 
     def write_item_rows(workbook, worksheet, columns, items, columns_width)
       hyperlink_format = create_hyperlink_format(workbook)
+      float_format = create_float_format(workbook)
       cell_format = create_cell_format(workbook)
       items.each_with_index do |item, item_index|
         columns.each_with_index do |c, column_index|
           value = xlsx_content(c, item)
-          write_item(worksheet, value, item_index, column_index, cell_format, (c.name == :id), item.id, hyperlink_format)
+          write_item(worksheet, value, item_index, column_index, cell_format, (c.name == :id), item.id, hyperlink_format,float_format)
 
           width = get_column_width(value)
           columns_width[column_index] = width if columns_width[column_index] < width
@@ -98,7 +99,7 @@ module RedmineXlsxFormatIssueExporter
       value.is_a?(String) ? value.gsub(/\r\n?/, "\n") : value
     end
 
-    def write_item(worksheet, value, row_index, column_index, cell_format, is_id_column, id, hyperlink_format)
+    def write_item(worksheet, value, row_index, column_index, cell_format, is_id_column, id, hyperlink_format, float_format)
       if is_id_column
         issue_url = url_for(:controller => 'issues', :action => 'show', :id => id)
         worksheet.write(row_index + 1, column_index, issue_url, hyperlink_format, value)
@@ -107,6 +108,11 @@ module RedmineXlsxFormatIssueExporter
 
       if is_transformed_to_hyperlink?(value)
         worksheet.write_string(row_index + 1, column_index, value, cell_format)
+        return
+      end
+
+      if value.class.name == 'String' && value[/-?\d+#{Regexp.escape(l(:general_csv_decimal_separator))}\d{2}/] == value
+        worksheet.write(row_index + 1, column_index, value.gsub(l(:general_csv_decimal_separator),".").to_f, float_format)
         return
       end
 
@@ -142,5 +148,10 @@ module RedmineXlsxFormatIssueExporter
                           :underline => 1)
     end
 
+    def create_float_format(workbook)
+      workbook.add_format(:border => 1,
+                          :valign => 'top',
+                          :num_format => '0.00')
+    end
   end
 end
