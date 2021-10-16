@@ -37,8 +37,9 @@ module RedmineXlsxFormatIssueExporter
       worksheet.freeze_panes(1, 1)  # Freeze header row and # column.
 
       columns_width = []
+      cell_format_hash = create_cell_format_hash(workbook);
       write_header_row(workbook, worksheet, columns, columns_width)
-      write_item_rows(workbook, worksheet, columns, items, columns_width)
+      write_item_rows(workbook, worksheet, columns, items, columns_width, cell_format_hash)
       columns.size.times do |index|
         worksheet.set_column(index, index, columns_width[index])
       end
@@ -62,15 +63,12 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
-    def write_item_rows(workbook, worksheet, columns, items, columns_width)
-      hyperlink_format = create_hyperlink_format(workbook)
-      float_format = create_float_format(workbook)
-      cell_format = create_cell_format(workbook)
+    def write_item_rows(workbook, worksheet, columns, items, columns_width, cell_format_hash)
       items.each_with_index do |item, item_index|
         columns.each_with_index do |c, column_index|
           value = xlsx_content(c, item)
-          write_item(worksheet, value, item_index, column_index, cell_format, (c.name == :id), item.id, hyperlink_format,float_format)
-
+          value_type = get_value_type(c, item)
+          write_item(worksheet, value, item_index, column_index, value_type, item.id, cell_format_hash)
           width = get_column_width(value)
           columns_width[column_index] = width if columns_width[column_index] < width
         end
@@ -99,10 +97,12 @@ module RedmineXlsxFormatIssueExporter
       value.is_a?(String) ? value.gsub(/\r\n?/, "\n") : value
     end
 
-    def write_item(worksheet, value, row_index, column_index, cell_format, is_id_column, id, hyperlink_format, float_format)
-      if is_id_column
+    def write_item(worksheet, value, row_index, column_index, value_type, id, cell_format_hash)
+      cell_format = cell_format_hash[value_type]
+
+      if value_type == "id"
         issue_url = url_for(:controller => 'issues', :action => 'show', :id => id)
-        worksheet.write(row_index + 1, column_index, issue_url, hyperlink_format, value)
+        worksheet.write(row_index + 1, column_index, issue_url, cell_format, value)
         return
       end
 
@@ -111,8 +111,8 @@ module RedmineXlsxFormatIssueExporter
         return
       end
 
-      if value.class.name == 'String' && value[/-?\d+#{Regexp.escape(l(:general_csv_decimal_separator))}\d{2}/] == value
-        worksheet.write(row_index + 1, column_index, value.gsub(l(:general_csv_decimal_separator),".").to_f, float_format)
+      if value_type == "Float"
+        worksheet.write(row_index + 1, column_index, value.gsub(l(:general_csv_decimal_separator),".").to_f, cell_format)
         return
       end
 
@@ -125,6 +125,25 @@ module RedmineXlsxFormatIssueExporter
       width > 30 ? 30 : width  # 30: max width
     end
 
+    def get_value_type(column, item)
+      return "id" if column.name == :id
+
+      value = column.value_object(item)
+      case value.class.name
+      when 'CustomValue'
+        column.custom_field.format.name.capitalize
+      else
+        value.class.name
+      end
+    end
+
+    def create_cell_format_hash(workbook)
+      hash = Hash.new(create_default_cell_format(workbook));
+      hash["id"] = create_hyperlink_format(workbook);
+      hash["Float"] = create_float_format(workbook);
+      hash
+    end
+
     def create_header_format(workbook)
       workbook.add_format(:bold => 1,
                           :border => 1,
@@ -134,7 +153,7 @@ module RedmineXlsxFormatIssueExporter
                           :valign => 'top')
     end
 
-    def create_cell_format(workbook)
+    def create_default_cell_format(workbook)
       workbook.add_format(:border => 1,
                           :text_wrap => 1,
                           :valign => 'top')
