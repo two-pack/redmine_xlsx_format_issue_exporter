@@ -9,19 +9,14 @@ Redmine::Plugin.register :redmine_xlsx_format_issue_exporter do
 end
 
 require_dependency 'queries_helper'
-require_dependency 'redmine_xlsx_format_issue_exporter/xlsx_export_helper'
-require_dependency 'redmine_xlsx_format_issue_exporter/xlsx_report_helper'
-require_dependency 'redmine_xlsx_format_issue_exporter/xlsx_users_helper'
+require_dependency 'query'
+require_dependency 'issues_controller'
+require_dependency 'timelog_controller'
+require_dependency 'users_controller'
+require_dependency 'projects_controller'
+Dir[File.dirname(__FILE__) + '/lib/redmine_xlsx_format_issue_exporter/*.rb'].sort.each {|file|  require file }
 
-require_dependency 'redmine_xlsx_format_issue_exporter/other_formats_builder'
-require_dependency 'redmine_xlsx_format_issue_exporter/view_layouts_base_body_bottom_hook'
-
-Rails.configuration.to_prepare do
-  require_dependency 'issues_controller'
-  require_dependency 'timelog_controller'
-  require_dependency 'users_controller'
-  require_dependency 'projects_controller'
-
+def prepend_xlsx_format_issue_exporter_patches
   unless IssuesController.included_modules.include? RedmineXlsxFormatIssueExporter::IssuesControllerPatch
     IssuesController.send(:prepend, RedmineXlsxFormatIssueExporter::IssuesControllerPatch)
   end
@@ -36,5 +31,13 @@ Rails.configuration.to_prepare do
 
   unless ProjectsController.included_modules.include?(RedmineXlsxFormatIssueExporter::ProjectsControllerPatch)
     ProjectsController.send(:prepend, RedmineXlsxFormatIssueExporter::ProjectsControllerPatch)
-    end
+  end
+end
+
+if Rails.version > '6.0' && Rails.autoloaders.zeitwerk_enabled?
+  prepend_xlsx_format_issue_exporter_patches
+else
+  Rails.configuration.to_prepare do
+    prepend_xlsx_format_issue_exporter_patches
+  end
 end

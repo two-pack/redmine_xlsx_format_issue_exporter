@@ -1,5 +1,5 @@
 module RedmineXlsxFormatIssueExporter
-  class ViewLayoutsBaseBodyBootomHook < Redmine::Hook::ViewListener
+  class ViewLayoutsBaseBodyBottomHook < Redmine::Hook::ViewListener
 
     def view_layouts_base_body_bottom(context={})
       return unless context[:controller].status == 200
