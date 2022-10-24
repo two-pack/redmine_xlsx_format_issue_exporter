@@ -13,17 +13,21 @@ module RedmineXlsxFormatIssueExporter
       columns_width = []
 
       # Column headers
-      headers = report.criteria.collect {|criteria| l_or_humanize(report.available_criteria[criteria][:label]) }
-      start_period_index = headers.count
-      worksheet.freeze_panes(1, start_period_index)  # Freeze header row and criteria column.
+      headers =
+        report.criteria.collect do |criteria|
+          l_or_humanize(report.available_criteria[criteria][:label])
+        end
       headers += report.periods
       headers << l(:label_total_time)
-      #csv << headers
+
+      start_period_index = headers.count
+      worksheet.freeze_panes(1, start_period_index)  # Freeze header row and criteria column.
       write_header_row(workbook, worksheet, headers, columns_width)
 
       # Content
       row_index = 0
       row_index = report_criteria_to_xlsx(workbook, worksheet, row_index, start_period_index, columns_width,report.available_criteria, report.columns, report.criteria, report.periods, report.hours)
+
       # Total row
       str_total = l(:label_total_time)
       row = [ str_total ] + [''] * (report.criteria.size - 1)
@@ -34,7 +38,6 @@ module RedmineXlsxFormatIssueExporter
         row << (sum > 0 ? sum : '')
       end
       row << total
-      #csv << row
       write_item_row(workbook, worksheet, row, row_index, start_period_index, columns_width)
       row_index += 1
 
@@ -52,7 +55,7 @@ module RedmineXlsxFormatIssueExporter
         hours_for_value = select_hours(hours, criteria[level], value)
         next if hours_for_value.empty?
         row = [''] * level
-        row << format_criteria_value_str(available_criteria[criteria[level]], value)
+        row << format_criteria_value(available_criteria[criteria[level]], value, false).to_s
         row += [''] * (criteria.length - level - 1)
         total = 0
         periods.each do |period|

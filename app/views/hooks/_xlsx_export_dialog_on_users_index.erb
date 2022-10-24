@@ -1,0 +1,27 @@
+<%= render :partial => "hooks/insert_xlsx_link_for_dialog" %>
+
+<div id="xlsx-export-options" style="display:none;">
+  <h3 class="title"><%= l(:label_export_options, :export_format => 'XLSX') %></h3>
+  <%= form_tag(users_path(format: 'xlsx'), method: :get, id: 'xlsx-export-form') do %>
+  <%= query_as_hidden_field_tags(@query) %>
+  <%= hidden_field_tag('query_name', @query.name) %>
+  <p>
+    <label><%= radio_button_tag 'c[]', '', true %> <%= l(:description_selected_columns) %></label><br />
+    <label><%= radio_button_tag 'c[]', 'all_inline' %> <%= l(:description_all_columns) %></label>
+  </p>
+  <% if @query.available_block_columns.any? %>
+    <fieldset id="xlsx-export-block-columns">
+      <legend>
+        <%= toggle_checkboxes_link('#xlsx-export-block-columns input[type=checkbox]') %>
+      </legend>
+      <% @query.available_block_columns.each do |column| %>
+        <label><%= check_box_tag 'c[]', column.name, @query.has_column?(column), :id => nil %> <%= column.caption %></label>
+      <% end %>
+    </fieldset>
+  <% end %>
+  <p class="buttons">
+    <%= submit_tag l(:button_export), :name => nil, :onclick => "hideModal(this);", :data => { :disable_with => false } %>
+    <%= link_to_function l(:button_cancel), "hideModal(this);" %>
+  </p>
+  <% end %>
+</div>

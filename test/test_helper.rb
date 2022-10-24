@@ -14,30 +14,24 @@ require File.expand_path(File.dirname(__FILE__) + "/../../../test/test_helper")
 require 'capybara/rails'
 require 'selenium-webdriver'
 
-Capybara.register_driver :headless_chrome do |app|
-  if Redmine::VERSION::MAJOR >= 4
-    options = Selenium::WebDriver::Chrome::Options.new
-    options.add_option('w3c', true)
-    options.add_argument('--headless')
-    options.add_argument('--disable-gpu')
-    options.add_argument('--no-sandbox')
-    options.add_argument('window-size=1280,800')
-    Capybara::Selenium::Driver.new(
-        app,
-        browser: :chrome,
-        options: options
-    )
-  else
-    Capybara::Selenium::Driver.new(
-        app,
-        browser: :chrome,
-        switches: %w[--headless --disable-gpu --no-sandbox window-size=1280,800]
-    )
-  end
+Capybara.register_driver :chrome_headless do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.add_option('w3c', false)
+  options.add_argument('--headless')
+  options.add_argument('--disable-gpu')
+  options.add_argument('--no-sandbox')
+  options.add_argument('--allow-insecure-localhost')
+  options.add_argument('--ignore-certificate-errors')
+  options.add_argument('--window-size=1280,800')
+  Capybara::Selenium::Driver.new(
+      app,
+      browser: :chrome,
+      capabilities: options
+  )
 end
 
-Capybara.javascript_driver = :headless_chrome
-Capybara.current_driver = :headless_chrome
+Capybara.javascript_driver = :selenium_chrome_headless
+Capybara.current_driver = :selenium_chrome_headless
 Capybara.default_max_wait_time = 10
 
 module RedmineXlsxFormatIssueExporter
@@ -46,6 +40,7 @@ module RedmineXlsxFormatIssueExporter
     include Capybara::DSL
 
     def login(user, password)
+      Capybara.reset_sessions!
       visit '/login'
       fill_in 'username', with: user
       fill_in 'password', with: password

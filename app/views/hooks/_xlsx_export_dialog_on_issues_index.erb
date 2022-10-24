@@ -3,38 +3,29 @@
 <div id="xlsx-export-options" style="display:none;">
   <h3 class="title"><%= l(:label_export_options, :export_format => 'XLSX') %></h3>
   <%= form_tag(_project_issues_path(@project, :format => 'xlsx'), :method => :get, :id => 'xlsx-export-form') do %>
-      <% if respond_to?(:query_as_hidden_field_tags) %>
-        <%= query_as_hidden_field_tags(@query) %>
-      <% end %>
-      <% if not @sort_criteria.nil? %>
-        <%= hidden_field_tag 'sort', @sort_criteria.to_param, :id => nil %>
-      <% end %>
-      <p>
-        <label><%= radio_button_tag 'c[]', '', true %> <%= l(:description_selected_columns) %></label><br />
-        <label><%= radio_button_tag 'c[]', 'all_inline' %> <%= l(:description_all_columns) %></label>
-      </p>
-      <p>
-        <label><%= check_box_tag 'description', '1', @query.has_column?(:description) %> <%= l(:field_description) %></label>
-        <% if @query.available_columns.find { |c| c.name == :last_notes } %>
-          <label><%= check_box_tag 'last_notes', '1', @query.has_column?(:last_notes) %> <%= l(:label_last_notes) %></label>
+    <%= query_as_hidden_field_tags(@query) %>
+    <p>
+      <label><%= radio_button_tag 'c[]', '', true %> <%= l(:description_selected_columns) %></label><br />
+      <label><%= radio_button_tag 'c[]', 'all_inline' %> <%= l(:description_all_columns) %></label>
+    </p>
+    <% if @query.available_block_columns.any? %>
+      <fieldset id="xlsx-export-block-columns">
+        <legend>
+          <%= toggle_checkboxes_link('#xlsx-export-block-columns input[type=checkbox]') %>
+        </legend>
+        <% @query.available_block_columns.each do |column| %>
+          <label><%= check_box_tag 'c[]', column.name, @query.has_column?(column), :id => nil %> <%= column.caption %></label>
         <% end %>
-        <% if @query.available_columns.select { |c| c.name == :attachments } .empty? %>
-            <label><%= check_box_tag 'files', '1', false %> <%= l(:label_attachment_plural) %></label>
-        <% end %>
-      </p>
-      <% if @query.issue_count > Setting.issues_export_limit.to_i %>
-          <p class="icon icon-warning">
-            <%= l(:setting_issues_export_limit) %>: <%= Setting.issues_export_limit.to_i %>
-          </p>
-      <% end %>
-      <p class="buttons">
-        <% if (Redmine::VERSION::MAJOR == 3) then %>
-          <%= submit_tag l(:button_export), :name => nil, :onclick => "hideModal(this);" %>
-          <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
-        <% else %>
-          <%= submit_tag l(:button_export), :name => nil, :onclick => "hideModal(this);", :data => { :disable_with => false } %>
-          <%= link_to_function l(:button_cancel), "hideModal(this);" %>
-        <% end %>
-      </p>
+      </fieldset>
+    <% end %>
+    <% if @issue_count > Setting.issues_export_limit.to_i %>
+    <p class="icon icon-warning">
+      <%= l(:setting_issues_export_limit) %>: <%= Setting.issues_export_limit.to_i %>
+    </p>
+    <% end %>
+    <p class="buttons">
+      <%= submit_tag l(:button_export), :name => nil, :onclick => "hideModal(this);", :data => { :disable_with => false } %>
+      <%= link_to_function l(:button_cancel), "hideModal(this);" %>
+    </p>
   <% end %>
 </div>

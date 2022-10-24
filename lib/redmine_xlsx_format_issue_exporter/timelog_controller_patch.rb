@@ -12,10 +12,7 @@ module RedmineXlsxFormatIssueExporter
         end
       end
 
-      @entries = time_entry_scope.
-          preload(:issue => [:project, :tracker, :status, :assigned_to, :priority]).
-          preload(:project, :user).
-          to_a
+      @entries = time_entry_scope.to_a
       send_data(query_to_xlsx(@entries, @query, params), :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', :filename => 'timelog.xlsx')
     end
 

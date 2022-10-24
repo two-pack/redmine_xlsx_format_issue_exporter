@@ -4,32 +4,8 @@ module RedmineXlsxFormatIssueExporter
   module XlsxExportHelper
 
     def query_to_xlsx(items, query, options={})
-      columns = create_columns_list(query, options)
-      export_to_xlsx(items, columns)
-    end
+      columns = query.columns
 
-    def create_columns_list(query, options)
-      if (options[:columns].present? and options[:columns].include?('all_inline')) or
-         (options[:c].present? and options[:c].include?('all_inline'))
-        columns = query.available_inline_columns
-      else
-        columns = query.inline_columns
-      end
-
-      query.available_block_columns.each do |column|  # Some versions have description in query.
-        if options[column.name].present?
-          columns << column
-        end
-      end
-
-      if options['files'].present?
-        columns << FilesQueryColumn.new(:files)
-      end
-
-      columns
-    end
-
-    def export_to_xlsx(items, columns)
       stream = StringIO.new('')
       workbook = WriteXLSX.new(stream)
       worksheet = workbook.add_worksheet

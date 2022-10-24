@@ -29,22 +29,41 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
-    def test_that_dialog_is_not_shown_when_the_link_is_clicked
-      visit_users_page_with_admin
+    if (Redmine::VERSION::MAJOR <= 5) && (Redmine::VERSION::BRANCH == "stable")
+      def test_that_dialog_is_not_shown_when_the_link_is_clicked
+          visit_users_page_with_admin
 
-      click_link("XLSX")
+          click_link("XLSX")
 
-      assert_raises(Capybara::ElementNotFound) {
+          assert_raises(Capybara::ElementNotFound) {
+            assert find("div#xlsx-export-options", :visible => true)
+          }
+      end
+
+      def test_to_export
+        visit_users_page_with_admin
+  
+        click_link("XLSX")
+  
+        assert stay_users_index_page?
+      end
+    else
+      def test_that_dialog_is_shown_when_the_link_is_clicked
+        visit_users_page_with_admin
+
+        click_link("XLSX")
+  
         assert find("div#xlsx-export-options", :visible => true)
-      }
-    end
+      end
 
-    def test_to_export
-      visit_users_page_with_admin
-
-      click_link("XLSX")
-
-      assert stay_users_index_page?
+      def test_to_export
+        visit_users_page_with_admin
+  
+        click_link("XLSX")
+        find("div#xlsx-export-options").click_button("Export")
+  
+        assert stay_users_index_page?
+      end
     end
 
     def test_invalid_format_request

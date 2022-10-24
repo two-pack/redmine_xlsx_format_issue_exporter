@@ -7,15 +7,19 @@ module RedmineXlsxFormatIssueExporter
 
     def users_to_xlsx(users)
       columns = [
-          'login',
-          'firstname',
-          'lastname',
-          'mail',
-          'admin',
-          'created_on',
-          'last_login_on',
-          'status'
+        'login',
+        'firstname',
+        'lastname',
+        'mail',
+        'admin',
+        'status',
+        'twofa_scheme',
+        'created_on',
+        'updated_on',
+        'last_login_on',
+        'passwd_changed_on'
       ]
+      user_custom_fields = UserCustomField.sorted
 
       stream = StringIO.new('')
       workbook = WriteXLSX.new(stream)
@@ -24,13 +28,14 @@ module RedmineXlsxFormatIssueExporter
       worksheet.freeze_panes(1, 1)  # Freeze header row and Login column.
 
       columns_width = []
-      write_header_row(workbook, worksheet, columns.map{|column| l('field_' + column)}, columns_width)
+      write_header_row(workbook, worksheet, columns.map{|column| l('field_' + column)} + user_custom_fields.pluck(:name), columns_width)
 
       hyperlink_format = create_hyperlink_format(workbook)
       cell_format = create_cell_format(workbook)
+      users = users.preload(:custom_values)
       users.each_with_index do |user, item_index|
-        columns.each_with_index do |column, column_index|
-          value = get_cell_value(column, user)
+        (columns + user_custom_fields.pluck(:name)).each_with_index do |column, column_index|
+          value = columns.include?(column) ? xlsx_content_users(column, user) : user.custom_value_for(user_custom_fields[column_index - columns.length])
           write_item(worksheet, value, item_index, column_index, cell_format, false, 0, hyperlink_format)
 
           width = get_column_width(value)
@@ -49,11 +54,18 @@ module RedmineXlsxFormatIssueExporter
 
     private
 
-    def get_cell_value(column, user)
-      if column == 'status'
-        l(("status_#{User::LABEL_BY_STATUS[user.status]}"))
+    def xlsx_content_users(column_name, user)
+      case column_name
+      when 'status'
+        l("status_#{User::LABEL_BY_STATUS[user.status]}")
+      when 'twofa_scheme'
+        if user.twofa_active?
+          l("twofa__#{user.twofa_scheme}__name")
+        else
+          l(:label_disabled)
+        end
       else
-        format_object(user.send(column), false)
+        format_object(user.send(column_name), false)
       end
     end
 

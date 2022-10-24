@@ -2,10 +2,10 @@ Redmine::Plugin.register :redmine_xlsx_format_issue_exporter do
   name 'Redmine XLSX format issue exporter'
   author 'Tatsuya Saito'
   description 'This is Redmine plugin which exports XLSX format file.'
-  version '0.1.7'
+  version '0.2.0'
   url 'https://github.com/two-pack/redmine_xlsx_format_issue_exporter'
   author_url 'mailto:twopackas@gmail.com'
-  requires_redmine :version_or_higher => '3.2'
+  requires_redmine :version_or_higher => '4.2'
 end
 
 require_dependency 'queries_helper'
