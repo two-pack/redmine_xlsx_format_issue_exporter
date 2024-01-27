@@ -58,6 +58,7 @@ module RedmineXlsxFormatIssueExporter
 
     # Conditions from worksheet.rb in write_xlsx.
     def is_transformed_to_hyperlink?(token)
+      return if not token.is_a?(String)
       # Match http, https or ftp URL
       if token =~ %r|\A[fh]tt?ps?://|
         true

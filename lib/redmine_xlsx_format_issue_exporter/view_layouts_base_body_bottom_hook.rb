@@ -14,7 +14,7 @@ module RedmineXlsxFormatIssueExporter
       elsif (call_from == ["projects", "index"])
         layout ='hooks/xlsx_export_dialog_on_projects_index'
       elsif (call_from == ["users", "index"])
-        if (Redmine::VERSION::MAJOR <= 5) && (Redmine::VERSION::BRANCH == "stable")
+        if (Redmine::VERSION::MAJOR < 5) || ((Redmine::VERSION::MAJOR == 5) && (Redmine::VERSION::MINOR == 0))
           layout ='hooks/insert_xlsx_link_for_download'
         else
           layout ='hooks/xlsx_export_dialog_on_users_index'

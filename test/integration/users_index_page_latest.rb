@@ -29,7 +29,7 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
-    if (Redmine::VERSION::MAJOR <= 5) && (Redmine::VERSION::BRANCH == "stable")
+    if (Redmine::VERSION::MAJOR < 5) || ((Redmine::VERSION::MAJOR == 5) && (Redmine::VERSION::MINOR == 0))
       def test_that_dialog_is_not_shown_when_the_link_is_clicked
           visit_users_page_with_admin
 

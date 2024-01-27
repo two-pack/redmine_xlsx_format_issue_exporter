@@ -12,8 +12,7 @@ class TimelogControllerTest < ActionController::TestCase
   include RedmineXlsxFormatIssueExporter
 
   def params_for_create(attributes = nil)
-    if (Redmine::VERSION::MAJOR <= 3) or
-       ((Redmine::VERSION::MAJOR == 4) && (Redmine::VERSION::BRANCH != 'devel')) then
+    if (Redmine::VERSION::MAJOR <= 3) or (Redmine::VERSION::MAJOR == 4) then
       attributes.delete(:author)
     end
     attributes
