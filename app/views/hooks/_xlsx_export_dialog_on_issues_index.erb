@@ -18,7 +18,7 @@
         <% end %>
       </fieldset>
     <% end %>
-    <% if @issue_count > Setting.issues_export_limit.to_i %>
+    <% if @issue_count.present? && @issue_count > Setting.issues_export_limit.to_i %>
     <p class="icon icon-warning">
       <%= l(:setting_issues_export_limit) %>: <%= Setting.issues_export_limit.to_i %>
     </p>
