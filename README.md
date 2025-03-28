@@ -23,6 +23,20 @@ $ bundle install --without test
 
 Finally restart Redmine.
 
+## About `nkf` build errors
+
+You may encounter `nkf` build errors during installation. (See [#104](https://github.com/two-pack/redmine_xlsx_format_issue_exporter/issues/104)) If this occurs, please install the necessary build tools before proceeding with the installation steps.
+
+### For Ubuntu
+```bash
+# apt-get update
+# apt-get install build-essential
+```
+### For Alpine
+```bash
+# apk add build-base
+```
+
 # Usage
 
 - Click **XLSX** link in right-bottom of following pages.
