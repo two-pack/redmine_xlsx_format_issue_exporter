@@ -71,6 +71,15 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
+    # Conditions from worksheet.rb in write_xlsx.
+    # Note that ^ matches at the beginning of every line in Ruby, which is
+    # exactly how write_xlsx misdetects multi-line text as a formula.
+    def is_transformed_to_formula?(token)
+      return false if not token.is_a?(String)
+
+      token =~ /^\{?=/ ? true : false
+    end
+
     def crlf_to_lf(value)
       value.is_a?(String) ? value.gsub(/\r\n?/, "\n") : value
     end
@@ -87,7 +96,13 @@ module RedmineXlsxFormatIssueExporter
         return
       end
 
-      worksheet.write(row_index + 1, column_index, crlf_to_lf(value), cell_format)
+      value = crlf_to_lf(value)
+      if is_transformed_to_formula?(value)
+        worksheet.write_string(row_index + 1, column_index, value, cell_format)
+        return
+      end
+
+      worksheet.write(row_index + 1, column_index, value, cell_format)
     end
 
     def get_column_width(value)
