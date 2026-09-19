@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+require 'zip'
 
 class IssuesControllerTest < ActionController::TestCase
   fixtures :projects,
@@ -115,6 +116,30 @@ class IssuesControllerTest < ActionController::TestCase
     end
 
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', response.content_type
+  end
+
+  def test_index_xlsx_should_export_text_containing_line_starting_with_equal_sign_as_string
+    Issue.generate!(:subject => 'formula misdetection test',
+                    :description => "first line\n=line starting with equal sign\nlast line")
+    Issue.generate!(:subject => 'formula misdetection test 2',
+                    :description => "=starts with equal sign")
+
+    with_settings :default_language => 'en' do
+      get :index, :params => {:format => 'xlsx', :set_filter => '1', :c => %w(subject description)}
+      assert_response :success
+    end
+
+    sheet = read_xlsx_entry(response.body, 'xl/worksheets/sheet1.xml')
+    assert_not_include '<f>', sheet
+    shared_strings = read_xlsx_entry(response.body, 'xl/sharedStrings.xml')
+    assert_include '=line starting with equal sign', shared_strings
+    assert_include '=starts with equal sign', shared_strings
+  end
+
+  def read_xlsx_entry(binary, entry_name)
+    Zip::File.open_buffer(StringIO.new(binary)) do |zip|
+      return zip.read(entry_name)
+    end
   end
 
   def test_index_xlsx_with_spent_time_column

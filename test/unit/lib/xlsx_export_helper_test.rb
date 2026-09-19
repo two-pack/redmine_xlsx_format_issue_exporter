@@ -153,5 +153,45 @@ module RedmineXlsxFormatIssueExporter
       assert_nil crlf_to_lf(nil)
     end
 
+    def test_is_transformed_to_formula_with_leading_equal
+      assert_equal true, is_transformed_to_formula?("=SUM(A1:A2)")
+    end
+
+    def test_is_transformed_to_formula_with_leading_brace_and_equal
+      assert_equal true, is_transformed_to_formula?("{=SUM(A1:A2)}")
+    end
+
+    def test_is_transformed_to_formula_with_plain_string
+      assert_equal false, is_transformed_to_formula?("test")
+    end
+
+    def test_is_transformed_to_formula_with_equal_not_at_line_start
+      assert_equal false, is_transformed_to_formula?("a = b")
+    end
+
+    def test_is_transformed_to_formula_with_lf_and_line_starting_with_equal
+      assert_equal true, is_transformed_to_formula?("test1\n=test2\ntest3")
+    end
+
+    def test_is_transformed_to_formula_with_crlf_and_line_starting_with_equal
+      assert_equal true, is_transformed_to_formula?("test1\r\n=test2\r\ntest3")
+    end
+
+    def test_is_transformed_to_formula_with_cr_and_line_starting_with_equal
+      assert_equal true, is_transformed_to_formula?("test1\r=test2\rtest3")
+    end
+
+    def test_is_transformed_to_formula_with_multiline_string_without_equal
+      assert_equal false, is_transformed_to_formula?("test1\r\ntest2\rtest3\ntest4")
+    end
+
+    def test_is_transformed_to_formula_with_float
+      assert_equal false, is_transformed_to_formula?(7.3)
+    end
+
+    def test_is_transformed_to_formula_with_nil
+      assert_equal false, is_transformed_to_formula?(nil)
+    end
+
   end
 end
