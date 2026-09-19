@@ -1,12 +1,14 @@
 require "simplecov"
 SimpleCov.coverage_dir('coverage/redmine_xlsx_format_issue_exporter_test')
+filter_method = SimpleCov.respond_to?(:skip) ? :skip : :add_filter
+group_method = SimpleCov.respond_to?(:group) ? :group : :add_group
 SimpleCov.start "rails" do
-  add_filter do |source_file|
+  send(filter_method) do |source_file|
     # report this plugin only.
     !source_file.filename.include?('plugins/redmine_xlsx_format_issue_exporter') || !source_file.filename.end_with?('.rb')
   end
 
-  add_group "XLSX Exporter", "plugins/redmine_xlsx_format_issue_exporter"
+  send(group_method, "XLSX Exporter", "plugins/redmine_xlsx_format_issue_exporter")
 end
 
 require File.expand_path(File.dirname(__FILE__) + "/../../../test/test_helper")
