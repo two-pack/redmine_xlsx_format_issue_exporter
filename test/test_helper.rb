@@ -50,7 +50,7 @@ module RedmineXlsxFormatIssueExporter
 
     def logout
       visit "/"
-      if has_css?("a.logout")
+      if has_css?("a.logout", wait: 0)
         find("a.logout").click
         assert find('a.login', visible: :all)
       end
