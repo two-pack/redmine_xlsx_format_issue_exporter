@@ -53,5 +53,19 @@ jobs:
       - name: Migrate the test database
         run: bundle exec rails db:create db:migrate redmine:plugins:migrate
 
+      - name: Show the runner environment
+        run: |
+          nproc
+          google-chrome --version || true
+          chromedriver --version || true
+
       - name: Run the tests
         run: bin/rails test "plugins/$PLUGIN/test"
+
+      - name: Upload the failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: failure-artifacts
+          path: redmine/tmp/capybara
+          if-no-files-found: ignore

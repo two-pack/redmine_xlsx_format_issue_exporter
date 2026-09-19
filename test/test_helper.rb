@@ -56,6 +56,35 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
+    def before_teardown
+      save_failure_artifacts if failures.any?
+      super
+    end
+
+    def save_failure_artifacts
+      dir = Rails.root.join('tmp', 'capybara')
+      FileUtils.mkdir_p(dir)
+      base = dir.join("#{self.class.name}-#{name}".gsub(/\W+/, '_'))
+      page.save_screenshot("#{base}.png")
+      File.write("#{base}.html", page.html)
+      File.write("#{base}.txt", [
+        diagnostic('url') { page.current_url },
+        diagnostic('wait time') { Capybara.default_max_wait_time },
+        diagnostic('dialog visible') { page.evaluate_script("jQuery('#xlsx-export-options').is(':visible')") },
+        diagnostic('browser') { page.driver.browser.capabilities.browser_version },
+        diagnostic('chromedriver') { page.driver.browser.capabilities['chrome']['chromedriverVersion'] },
+        diagnostic('console') { page.driver.browser.logs.get(:browser).map(&:message).join("\n") }
+      ].join("\n"))
+    rescue StandardError => e
+      warn "Failed to save the failure artifacts: #{e.class}: #{e.message}"
+    end
+
+    def diagnostic(label)
+      "#{label}: #{yield}"
+    rescue StandardError => e
+      "#{label}: (#{e.class}: #{e.message})"
+    end
+
     def login_with_admin
       login "admin", "admin"
     end
