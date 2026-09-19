@@ -6,7 +6,7 @@ module RedmineXlsxFormatIssueExporter
     include XlsxExportHelper
 
     def report_to_xlsx(report)
-      stream = StringIO.new('')
+      stream = StringIO.new(+'')
       workbook = WriteXLSX.new(stream)
       worksheet = workbook.add_worksheet
 

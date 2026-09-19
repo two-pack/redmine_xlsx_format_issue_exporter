@@ -105,8 +105,8 @@ class TimelogControllerTest < ActionController::TestCase
   end
 
   def test_xlsx_big_5
-    str_utf8  = "\xe4\xb8\x80\xe6\x9c\x88".force_encoding('UTF-8')
-    str_big5  = "\xa4@\xa4\xeb".force_encoding('Big5')
+    str_utf8  = "\xe4\xb8\x80\xe6\x9c\x88".dup.force_encoding('UTF-8')
+    str_big5  = "\xa4@\xa4\xeb".dup.force_encoding('Big5')
     user = User.find_by_id(3)
     user.firstname = str_utf8
     user.lastname  = "test-lastname"
@@ -140,7 +140,7 @@ class TimelogControllerTest < ActionController::TestCase
   end
 
   def test_xlsx_cannot_convert_should_be_replaced_big_5
-    str_utf8  = "\xe4\xbb\xa5\xe5\x86\x85".force_encoding('UTF-8')
+    str_utf8  = "\xe4\xbb\xa5\xe5\x86\x85".dup.force_encoding('UTF-8')
     user = User.find_by_id(3)
     user.firstname = str_utf8
     user.lastname  = "test-lastname"

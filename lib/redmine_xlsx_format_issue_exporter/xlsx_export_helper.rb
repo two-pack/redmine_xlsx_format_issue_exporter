@@ -6,7 +6,7 @@ module RedmineXlsxFormatIssueExporter
     def query_to_xlsx(items, query, options={})
       columns = query.columns
 
-      stream = StringIO.new('')
+      stream = StringIO.new(+'')
       workbook = WriteXLSX.new(stream)
       worksheet = workbook.add_worksheet
 

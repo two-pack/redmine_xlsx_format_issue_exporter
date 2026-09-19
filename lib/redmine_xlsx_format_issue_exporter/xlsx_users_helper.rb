@@ -21,7 +21,7 @@ module RedmineXlsxFormatIssueExporter
       ]
       user_custom_fields = UserCustomField.sorted
 
-      stream = StringIO.new('')
+      stream = StringIO.new(+'')
       workbook = WriteXLSX.new(stream)
       worksheet = workbook.add_worksheet
 
