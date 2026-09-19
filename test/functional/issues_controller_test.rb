@@ -189,13 +189,17 @@ class IssuesControllerTest < ActionController::TestCase
 
     with_settings :default_language => 'en' do
       get :index, :params => {:format => 'xlsx', :c => %w(parent)}
+      assert_response :success
     end
+
+    sheet = read_xlsx_entry(response.body, 'xl/worksheets/sheet1.xml')
+    assert_match %r{<c r="B\d+" s="\d+"><v>#{parent.id}</v></c>}, sheet
   end
 
   def test_index_xlsx_big_5
     with_settings :default_language => "zh-TW" do
-      str_utf8  = "\xe4\xb8\x80\xe6\x9c\x88".force_encoding('UTF-8')
-      str_big5  = "\xa4@\xa4\xeb".force_encoding('Big5')
+      str_utf8  = "\xe4\xb8\x80\xe6\x9c\x88".dup.force_encoding('UTF-8')
+      str_big5  = "\xa4@\xa4\xeb".dup.force_encoding('Big5')
       issue = Issue.generate!(:subject => str_utf8)
       op, v = make_action_controller_permitted_parameters({'subject' => '='}, {'subject' => [str_utf8]})
 
@@ -210,7 +214,7 @@ class IssuesControllerTest < ActionController::TestCase
 
   def test_index_xlsx_cannot_convert_should_be_replaced_big_5
     with_settings :default_language => "zh-TW" do
-      str_utf8  = "\xe4\xbb\xa5\xe5\x86\x85".force_encoding('UTF-8')
+      str_utf8  = "\xe4\xbb\xa5\xe5\x86\x85".dup.force_encoding('UTF-8')
       issue = Issue.generate!(:subject => str_utf8)
       op, v = make_action_controller_permitted_parameters({'subject' => '='}, {'subject' => [str_utf8]})
 

@@ -9,7 +9,7 @@ module RedmineXlsxFormatIssueExporter
 
     def setup
       if @NAME.start_with?('test_write_item_')
-        @stream = StringIO.new('')
+        @stream = StringIO.new(+'')
         @workbook = WriteXLSX.new(@stream)
         @worksheet = @workbook.add_worksheet
         @hyperlink_format = create_hyperlink_format(@workbook)

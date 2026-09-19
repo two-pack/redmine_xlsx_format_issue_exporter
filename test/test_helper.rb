@@ -1,12 +1,14 @@
 require "simplecov"
 SimpleCov.coverage_dir('coverage/redmine_xlsx_format_issue_exporter_test')
+filter_method = SimpleCov.respond_to?(:skip) ? :skip : :add_filter
+group_method = SimpleCov.respond_to?(:group) ? :group : :add_group
 SimpleCov.start "rails" do
-  add_filter do |source_file|
+  send(filter_method) do |source_file|
     # report this plugin only.
     !source_file.filename.include?('plugins/redmine_xlsx_format_issue_exporter') || !source_file.filename.end_with?('.rb')
   end
 
-  add_group "XLSX Exporter", "plugins/redmine_xlsx_format_issue_exporter"
+  send(group_method, "XLSX Exporter", "plugins/redmine_xlsx_format_issue_exporter")
 end
 
 require File.expand_path(File.dirname(__FILE__) + "/../../../test/test_helper")
@@ -28,6 +30,14 @@ Capybara.register_driver :chrome_headless do |app|
       browser: :chrome,
       capabilities: options
   )
+end
+
+Capybara.register_driver :selenium_chrome_headless do |app|
+  options = Selenium::WebDriver::Chrome::Options.new(args: %w[--headless --disable-site-isolation-trials])
+  options.add_preference('credentials_enable_service', false)
+  options.add_preference('profile.password_manager_enabled', false)
+  options.add_preference('profile.password_manager_leak_detection', false)
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 Capybara.javascript_driver = :selenium_chrome_headless
@@ -56,6 +66,35 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
+    def before_teardown
+      save_failure_artifacts if failures.any?
+      super
+    end
+
+    def save_failure_artifacts
+      dir = Rails.root.join('tmp', 'capybara')
+      FileUtils.mkdir_p(dir)
+      base = dir.join("#{self.class.name}-#{name}".gsub(/\W+/, '_'))
+      page.save_screenshot("#{base}.png")
+      File.write("#{base}.html", page.html)
+      File.write("#{base}.txt", [
+        diagnostic('url') { page.current_url },
+        diagnostic('wait time') { Capybara.default_max_wait_time },
+        diagnostic('dialog visible') { page.evaluate_script("jQuery('#xlsx-export-options').is(':visible')") },
+        diagnostic('browser') { page.driver.browser.capabilities.browser_version },
+        diagnostic('chromedriver') { page.driver.browser.capabilities['chrome']['chromedriverVersion'] },
+        diagnostic('console') { page.driver.browser.logs.get(:browser).map(&:message).join("\n") }
+      ].join("\n"))
+    rescue StandardError => e
+      warn "Failed to save the failure artifacts: #{e.class}: #{e.message}"
+    end
+
+    def diagnostic(label)
+      "#{label}: #{yield}"
+    rescue StandardError => e
+      "#{label}: (#{e.class}: #{e.message})"
+    end
+
     def login_with_admin
       login "admin", "admin"
     end
@@ -72,6 +111,7 @@ module RedmineXlsxFormatIssueExporter
       default_wait_time = Capybara.default_max_wait_time
       Capybara.default_max_wait_time = 1
       yield
+    ensure
       Capybara.default_max_wait_time = default_wait_time
     end
 
