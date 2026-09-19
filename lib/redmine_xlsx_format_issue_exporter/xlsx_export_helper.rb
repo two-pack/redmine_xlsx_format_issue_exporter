@@ -77,6 +77,9 @@ module RedmineXlsxFormatIssueExporter
     def is_transformed_to_formula?(token)
       return false if not token.is_a?(String)
 
+      # Ruby's ^ does not treat a bare \r as a line break, so normalize
+      # line endings here rather than relying on callers to do it.
+      token = crlf_to_lf(token)
       token =~ /^\{?=/ ? true : false
     end
 
