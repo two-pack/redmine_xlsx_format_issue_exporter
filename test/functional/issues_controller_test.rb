@@ -189,7 +189,11 @@ class IssuesControllerTest < ActionController::TestCase
 
     with_settings :default_language => 'en' do
       get :index, :params => {:format => 'xlsx', :c => %w(parent)}
+      assert_response :success
     end
+
+    sheet = read_xlsx_entry(response.body, 'xl/worksheets/sheet1.xml')
+    assert_match %r{<c r="B\d+" s="\d+"><v>#{parent.id}</v></c>}, sheet
   end
 
   def test_index_xlsx_big_5
