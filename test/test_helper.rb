@@ -30,6 +30,14 @@ Capybara.register_driver :chrome_headless do |app|
   )
 end
 
+Capybara.register_driver :selenium_chrome_headless do |app|
+  options = Selenium::WebDriver::Chrome::Options.new(args: %w[--headless --disable-site-isolation-trials])
+  options.add_preference('credentials_enable_service', false)
+  options.add_preference('profile.password_manager_enabled', false)
+  options.add_preference('profile.password_manager_leak_detection', false)
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+end
+
 Capybara.javascript_driver = :selenium_chrome_headless
 Capybara.current_driver = :selenium_chrome_headless
 Capybara.default_max_wait_time = 10
@@ -101,6 +109,7 @@ module RedmineXlsxFormatIssueExporter
       default_wait_time = Capybara.default_max_wait_time
       Capybara.default_max_wait_time = 1
       yield
+    ensure
       Capybara.default_max_wait_time = default_wait_time
     end
 
