@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'redmine/views/other_formats_builder'
 
 module RedmineXlsxFormatIssueExporter

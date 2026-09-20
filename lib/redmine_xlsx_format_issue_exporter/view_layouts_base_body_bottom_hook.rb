@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RedmineXlsxFormatIssueExporter
   class ViewLayoutsBaseBodyBottomHook < Redmine::Hook::ViewListener
     def view_layouts_base_body_bottom(context = {})

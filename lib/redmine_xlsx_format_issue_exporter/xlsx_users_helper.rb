@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'write_xlsx'
 
 module RedmineXlsxFormatIssueExporter

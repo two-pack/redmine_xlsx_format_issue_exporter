@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'simplecov'
 SimpleCov.coverage_dir('coverage/redmine_xlsx_format_issue_exporter_test')
 filter_method = SimpleCov.respond_to?(:skip) ? :skip : :add_filter

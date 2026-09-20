@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Redmine::Plugin.register :redmine_xlsx_format_issue_exporter do
   name 'Redmine XLSX format issue exporter'
   author 'Tatsuya Saito'

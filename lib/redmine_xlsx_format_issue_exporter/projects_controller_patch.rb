@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RedmineXlsxFormatIssueExporter
   module ProjectsControllerPatch
     include XlsxExportHelper
