@@ -45,6 +45,25 @@ You may encounter `nkf` build errors during installation. (See [#104](https://gi
   - Users
   - Projects
 
+# Development
+
+Rake tasks to run the jobs of `.github/workflows/ci.yml` in Docker containers on your machine.
+They need Docker, git, bash and Ruby with Rake, and run in the plugin directory (not the Redmine one) without `bundle exec`.
+
+```
+$ cd plugins/redmine_xlsx_format_issue_exporter
+$ rake ci                              # RuboCop and the tests, with the versions in ci.yml
+$ rake ci:lint                         # RuboCop only
+$ rake ci:test                         # the tests only
+$ rake ci:test REDMINE=7.0 RUBY=3.3    # the tests on another Redmine and Ruby
+$ rake ci:clean                        # remove the Docker images built by ci:test
+```
+
+- `REDMINE` is a branch or tag of redmine/redmine. `7.0` means `7.0-stable`.
+- `RUBY` is the tag of the official ruby image.
+- `ci` and `ci:lint` take no versions.
+- When the tests fail, the screenshots are copied to a directory whose path is printed.
+
 # Acknowledgement
 
 This plugin extracts some code from csv export function in [Redmine](http://www.redmine.org/).

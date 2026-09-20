@@ -27,13 +27,10 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@a0102e0972be65f351c307e2d64b9314a57c8073 # v1.324.0
         with:
-          ruby-version: '3.4'
-
-      - name: Install RuboCop
-        run: gem install rubocop -v 1.91.0 --no-document
+          ruby-version: '4.0'
 
       - name: Run RuboCop
-        run: rubocop --format github
+        run: bash .github/scripts/lint.sh
 
   test:
     name: Tests
@@ -61,8 +58,7 @@ jobs:
           persist-credentials: false
 
       - name: Configure the test database
-        run: |
-          printf 'test:\n  adapter: sqlite3\n  database: db/test.sqlite3\n' > config/database.yml
+        run: bash "plugins/$PLUGIN/.github/scripts/configure-database.sh"
 
       - name: Set up Ruby and gems
         uses: ruby/setup-ruby@a0102e0972be65f351c307e2d64b9314a57c8073 # v1.324.0
@@ -71,17 +67,8 @@ jobs:
           bundler-cache: true
           working-directory: redmine
 
-      - name: Migrate the test database
-        run: bundle exec rails db:create db:migrate redmine:plugins:migrate
-
-      - name: Show the runner environment
-        run: |
-          nproc
-          google-chrome --version || true
-          chromedriver --version || true
-
       - name: Run the tests
-        run: bin/rails test "plugins/$PLUGIN/test"
+        run: bash "plugins/$PLUGIN/.github/scripts/test.sh"
 
       - name: Upload the failure artifacts
         if: failure()
