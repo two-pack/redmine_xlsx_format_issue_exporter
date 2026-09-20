@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module RedmineXlsxFormatIssueExporter
+  # Adds the XLSX format to UsersController#index.
   module UsersControllerPatch
     include XlsxExportHelper
     include XlsxUsersHelper

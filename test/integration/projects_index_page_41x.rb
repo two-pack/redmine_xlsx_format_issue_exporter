@@ -26,7 +26,7 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
-    def test_that_the_page_has_XLSX_link
+    def test_that_the_page_has_xlsx_link
       assert has_selector?('p.other-formats span a.xlsx')
       assert has_link?('XLSX')
     end
@@ -44,7 +44,7 @@ module RedmineXlsxFormatIssueExporter
       assert find('div#xlsx-export-options', visible: false)
     end
 
-    def test_that_the_page_of_board_has_not_XLSX_link
+    def test_that_the_page_of_board_has_not_xlsx_link
       visit '/projects?display=board'
       assert_visit
 
@@ -54,7 +54,7 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
-    def test_that_default_board_view_has_not_XLSX_link
+    def test_that_default_board_view_has_not_xlsx_link
       visit '/projects'
       assert_visit
 

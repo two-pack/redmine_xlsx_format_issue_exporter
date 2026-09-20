@@ -31,14 +31,14 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
-    def test_that_the_page_has_XLSX_link_after_select
+    def test_that_the_page_has_xlsx_link_after_select
       select('Project', from: 'criterias')
 
       assert has_selector?('p.other-formats span a.xlsx')
       assert has_link?('XLSX')
     end
 
-    def test_that_the_page_has_XLSX_link_before_select
+    def test_that_the_page_has_xlsx_link_before_select
       short_wait_time do
         assert has_no_selector?('p.other-formats span a.xlsx')
         assert has_no_link?('XLSX')
@@ -87,7 +87,8 @@ module RedmineXlsxFormatIssueExporter
 
     def test_to_set_status_filter_without_value
       login_with_admin
-      visit '/projects/subproject1/time_entries/report?utf8=%E2%9C%93&set_filter=1&f%5B%5D=status_id&op%5Bstatus_id%5D=%3D'
+      visit '/projects/subproject1/time_entries/report?utf8=%E2%9C%93&set_filter=1' \
+            '&f%5B%5D=status_id&op%5Bstatus_id%5D=%3D'
 
       short_wait_time do
         assert has_no_selector?('p.other-formats span a.xlsx')
@@ -95,7 +96,7 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
-    def test_to_export_with_Project_Yearly
+    def test_to_export_with_project_yearly
       select('Year', from: 'columns')
       select('Project', from: 'criterias')
 
@@ -104,7 +105,7 @@ module RedmineXlsxFormatIssueExporter
       assert stay_timelog_report_page?
     end
 
-    def test_to_export_with_Project_and_Status_Monthly
+    def test_to_export_with_project_and_status_monthly
       select('Month', from: 'columns')
       select('Project', from: 'criterias')
       select('Status', from: 'criterias')
@@ -114,7 +115,7 @@ module RedmineXlsxFormatIssueExporter
       assert stay_timelog_report_page?
     end
 
-    def test_to_export_with_Project_and_Status_and_more_Weekly
+    def test_to_export_with_project_and_status_and_more_weekly
       select('Week', from: 'columns')
       select('Project', from: 'criterias')
       select('Status', from: 'criterias')
@@ -125,7 +126,7 @@ module RedmineXlsxFormatIssueExporter
       assert stay_timelog_report_page?
     end
 
-    def test_to_export_with_Project_and_Status_and_more_Daily
+    def test_to_export_with_project_and_status_and_more_daily
       select('Days', from: 'columns')
       select('Project', from: 'criterias')
       select('Status', from: 'criterias')

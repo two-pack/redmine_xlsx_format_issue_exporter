@@ -36,11 +36,11 @@ module RedmineXlsxFormatIssueExporter
       assert_equal 7 * 1.1 + 5 * 2.2, get_column_width('abcdefgあいうえお')
     end
 
-    def test_that_column_width_is_30_when_width_over_30
+    def test_that_column_width_is_30_when_width_over_30_limit
       assert_equal 30, get_column_width('0123456789012345678901234567')
     end
 
-    def test_that_column_width_is_calculated_when_width_less_than_30
+    def test_that_column_width_is_calculated_when_width_less_than_30_limit
       assert_equal 27 * 1.1, get_column_width('012345678901234567890123456')
     end
 
@@ -107,7 +107,11 @@ module RedmineXlsxFormatIssueExporter
     def test_write_item_for_value_started_http_and_too_long
       assert_nothing_raised do
         write_item(@worksheet,
-                   'http://example.com/01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345', 0, 0, @cell_format, false, 1, @hyperlink_format)
+                   'http://example.com/0123456789012345678901234567890123456789012345678901234567890' \
+                   '12345678901234567890123456789012345678901234567890123456789012345678901234567890' \
+                   '12345678901234567890123456789012345678901234567890123456789012345678901234567890' \
+                   '123456789012345',
+                   0, 0, @cell_format, false, 1, @hyperlink_format)
       end
 
       assert_equal false, @worksheet.instance_variable_defined?('@hyperlinks')
@@ -116,7 +120,11 @@ module RedmineXlsxFormatIssueExporter
     def test_write_item_for_value_started_http_and_too_long2
       assert_nothing_raised do
         write_item(@worksheet,
-                   'http://example.com/012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456', 0, 0, @cell_format, false, 1, @hyperlink_format)
+                   'http://example.com/0123456789012345678901234567890123456789012345678901234567890' \
+                   '12345678901234567890123456789012345678901234567890123456789012345678901234567890' \
+                   '12345678901234567890123456789012345678901234567890123456789012345678901234567890' \
+                   '1234567890123456',
+                   0, 0, @cell_format, false, 1, @hyperlink_format)
       end
 
       assert_equal false, @worksheet.instance_variable_defined?('@hyperlinks')
@@ -154,44 +162,44 @@ module RedmineXlsxFormatIssueExporter
       assert_nil crlf_to_lf(nil)
     end
 
-    def test_is_transformed_to_formula_with_leading_equal
-      assert_equal true, is_transformed_to_formula?('=SUM(A1:A2)')
+    def test_transformed_to_formula_with_leading_equal
+      assert_equal true, transformed_to_formula?('=SUM(A1:A2)')
     end
 
-    def test_is_transformed_to_formula_with_leading_brace_and_equal
-      assert_equal true, is_transformed_to_formula?('{=SUM(A1:A2)}')
+    def test_transformed_to_formula_with_leading_brace_and_equal
+      assert_equal true, transformed_to_formula?('{=SUM(A1:A2)}')
     end
 
-    def test_is_transformed_to_formula_with_plain_string
-      assert_equal false, is_transformed_to_formula?('test')
+    def test_transformed_to_formula_with_plain_string
+      assert_equal false, transformed_to_formula?('test')
     end
 
-    def test_is_transformed_to_formula_with_equal_not_at_line_start
-      assert_equal false, is_transformed_to_formula?('a = b')
+    def test_transformed_to_formula_with_equal_not_at_line_start
+      assert_equal false, transformed_to_formula?('a = b')
     end
 
-    def test_is_transformed_to_formula_with_lf_and_line_starting_with_equal
-      assert_equal true, is_transformed_to_formula?("test1\n=test2\ntest3")
+    def test_transformed_to_formula_with_lf_and_line_starting_with_equal
+      assert_equal true, transformed_to_formula?("test1\n=test2\ntest3")
     end
 
-    def test_is_transformed_to_formula_with_crlf_and_line_starting_with_equal
-      assert_equal true, is_transformed_to_formula?("test1\r\n=test2\r\ntest3")
+    def test_transformed_to_formula_with_crlf_and_line_starting_with_equal
+      assert_equal true, transformed_to_formula?("test1\r\n=test2\r\ntest3")
     end
 
-    def test_is_transformed_to_formula_with_cr_and_line_starting_with_equal
-      assert_equal true, is_transformed_to_formula?("test1\r=test2\rtest3")
+    def test_transformed_to_formula_with_cr_and_line_starting_with_equal
+      assert_equal true, transformed_to_formula?("test1\r=test2\rtest3")
     end
 
-    def test_is_transformed_to_formula_with_multiline_string_without_equal
-      assert_equal false, is_transformed_to_formula?("test1\r\ntest2\rtest3\ntest4")
+    def test_transformed_to_formula_with_multiline_string_without_equal
+      assert_equal false, transformed_to_formula?("test1\r\ntest2\rtest3\ntest4")
     end
 
-    def test_is_transformed_to_formula_with_float
-      assert_equal false, is_transformed_to_formula?(7.3)
+    def test_transformed_to_formula_with_float
+      assert_equal false, transformed_to_formula?(7.3)
     end
 
-    def test_is_transformed_to_formula_with_nil
-      assert_equal false, is_transformed_to_formula?(nil)
+    def test_transformed_to_formula_with_nil
+      assert_equal false, transformed_to_formula?(nil)
     end
   end
 end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module RedmineXlsxFormatIssueExporter
+  # Adds the XLSX format to TimelogController#index and TimelogController#report.
   module TimelogControllerPatch
     include XlsxExportHelper
     include XlsxReportHelper

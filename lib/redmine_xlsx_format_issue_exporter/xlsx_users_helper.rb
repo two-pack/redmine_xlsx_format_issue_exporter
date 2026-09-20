@@ -3,6 +3,7 @@
 require 'write_xlsx'
 
 module RedmineXlsxFormatIssueExporter
+  # Writes the users list as an XLSX file, for Redmine 5.0 and earlier.
   module XlsxUsersHelper
     include UsersHelper
     include XlsxExportHelper
@@ -30,9 +31,8 @@ module RedmineXlsxFormatIssueExporter
       worksheet.freeze_panes(1, 1) # Freeze header row and Login column.
 
       columns_width = []
-      write_header_row(workbook, worksheet, columns.map do |column|
-        l("field_#{column}")
-      end + user_custom_fields.pluck(:name), columns_width)
+      headers = columns.map { |column| l("field_#{column}") } + user_custom_fields.pluck(:name)
+      write_header_row(workbook, worksheet, headers, columns_width)
 
       hyperlink_format = create_hyperlink_format(workbook)
       cell_format = create_cell_format(workbook)
@@ -40,8 +40,7 @@ module RedmineXlsxFormatIssueExporter
       users.each_with_index do |user, item_index|
         (columns + user_custom_fields.pluck(:name)).each_with_index do |column, column_index|
           value = if columns.include?(column)
-                    xlsx_content_users(column,
-                                       user)
+                    xlsx_content_users(column, user)
                   else
                     user.custom_value_for(user_custom_fields[column_index - columns.length])
                   end

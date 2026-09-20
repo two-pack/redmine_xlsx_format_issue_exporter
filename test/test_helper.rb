@@ -7,7 +7,8 @@ group_method = SimpleCov.respond_to?(:group) ? :group : :add_group
 SimpleCov.start 'rails' do
   send(filter_method) do |source_file|
     # report this plugin only.
-    !source_file.filename.include?('plugins/redmine_xlsx_format_issue_exporter') || !source_file.filename.end_with?('.rb')
+    !source_file.filename.include?('plugins/redmine_xlsx_format_issue_exporter') ||
+      !source_file.filename.end_with?('.rb')
   end
 
   send(group_method, 'XLSX Exporter', 'plugins/redmine_xlsx_format_issue_exporter')
@@ -46,8 +47,8 @@ Capybara.javascript_driver = :selenium_chrome_headless
 Capybara.current_driver = :selenium_chrome_headless
 Capybara.default_max_wait_time = 10
 
-module RedmineXlsxFormatIssueExporter
-  class ActionDispatch::IntegrationTest
+module ActionDispatch
+  class IntegrationTest
     # Make the Capybara DSL available in all integration tests
     include Capybara::DSL
 
@@ -77,7 +78,7 @@ module RedmineXlsxFormatIssueExporter
       dir = Rails.root.join('tmp', 'capybara')
       FileUtils.mkdir_p(dir)
       base = dir.join("#{self.class.name}-#{name}".gsub(/\W+/, '_'))
-      page.save_screenshot("#{base}.png")
+      page.save_screenshot("#{base}.png") # rubocop:disable Lint/Debugger
       File.write("#{base}.html", page.html)
       File.write("#{base}.txt", [
         diagnostic('url') { page.current_url },
@@ -152,11 +153,13 @@ module RedmineXlsxFormatIssueExporter
       stay_page?('body.controller-projects')
     end
   end
+end
 
-  def make_action_controller_permitted_parameters(op, v)
+module RedmineXlsxFormatIssueExporter
+  def make_action_controller_permitted_parameters(operators, values)
     ActionController::Parameters.permit_all_parameters = true
-    op_param = ActionController::Parameters.new(op)
-    v_param = ActionController::Parameters.new(v)
+    op_param = ActionController::Parameters.new(operators)
+    v_param = ActionController::Parameters.new(values)
     ActionController::Parameters.permit_all_parameters = false
     [op_param, v_param]
   end

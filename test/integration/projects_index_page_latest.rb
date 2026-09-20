@@ -15,7 +15,7 @@ module RedmineXlsxFormatIssueExporter
       logout
     end
 
-    def test_that_default_list_view_has_XLSX_link
+    def test_that_default_list_view_has_xlsx_link
       Setting.project_list_display_type = 'list'
       visit '/projects'
       Setting.project_list_display_type = 'board'

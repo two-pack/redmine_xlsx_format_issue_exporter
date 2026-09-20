@@ -3,6 +3,7 @@
 require 'write_xlsx'
 
 module RedmineXlsxFormatIssueExporter
+  # Writes the time report as an XLSX file.
   module XlsxReportHelper
     include TimelogHelper
     include XlsxExportHelper
@@ -29,7 +30,8 @@ module RedmineXlsxFormatIssueExporter
       # Content
       row_index = 0
       row_index = report_criteria_to_xlsx(workbook, worksheet, row_index, start_period_index, columns_width,
-                                          report.available_criteria, report.columns, report.criteria, report.periods, report.hours)
+                                          report.available_criteria, report.columns, report.criteria,
+                                          report.periods, report.hours)
 
       # Total row
       str_total = l(:label_total_time)
@@ -71,10 +73,11 @@ module RedmineXlsxFormatIssueExporter
         # csv << row
         write_item_row(workbook, worksheet, row, row_index, start_period_index, columns_width)
         row_index += 1
-        if criteria.length > level + 1
-          row_index = report_criteria_to_xlsx(workbook, worksheet, row_index, start_period_index, columns_width,
-                                              available_criteria, columns, criteria, periods, hours_for_value, level + 1)
-        end
+        next unless criteria.length > level + 1
+
+        row_index = report_criteria_to_xlsx(workbook, worksheet, row_index, start_period_index, columns_width,
+                                            available_criteria, columns, criteria, periods, hours_for_value,
+                                            level + 1)
       end
       row_index
     end

@@ -194,7 +194,7 @@ class IssuesControllerTest < ActionController::TestCase
     assert_match %r{<c r="B\d+" s="\d+"><v>#{parent.id}</v></c>}, sheet
   end
 
-  def test_index_xlsx_big_5
+  def test_index_xlsx_big5
     with_settings default_language: 'zh-TW' do
       str_utf8 = "\xe4\xb8\x80\xe6\x9c\x88".dup.force_encoding('UTF-8')
       Issue.generate!(subject: str_utf8)
@@ -209,7 +209,7 @@ class IssuesControllerTest < ActionController::TestCase
     end
   end
 
-  def test_index_xlsx_cannot_convert_should_be_replaced_big_5
+  def test_index_xlsx_cannot_convert_should_be_replaced_big5
     with_settings default_language: 'zh-TW' do
       str_utf8 = "\xe4\xbb\xa5\xe5\x86\x85".dup.force_encoding('UTF-8')
       Issue.generate!(subject: str_utf8)

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module RedmineXlsxFormatIssueExporter
+  # Inserts the XLSX export dialog or link into the pages that can export.
   class ViewLayoutsBaseBodyBottomHook < Redmine::Hook::ViewListener
     def view_layouts_base_body_bottom(context = {})
       return unless context[:controller].status == 200

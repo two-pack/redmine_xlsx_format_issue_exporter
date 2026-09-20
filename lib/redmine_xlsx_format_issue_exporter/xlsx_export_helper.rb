@@ -3,6 +3,7 @@
 require 'write_xlsx'
 
 module RedmineXlsxFormatIssueExporter
+  # Writes the result of a query as an XLSX file, and holds the cell writing shared by the other exports.
   module XlsxExportHelper
     def query_to_xlsx(items, query, _options = {})
       columns = query.columns
@@ -59,7 +60,7 @@ module RedmineXlsxFormatIssueExporter
     end
 
     # Conditions from worksheet.rb in write_xlsx.
-    def is_transformed_to_hyperlink?(token)
+    def transformed_to_hyperlink?(token)
       return unless token.is_a?(String)
 
       # Match http, https or ftp URL
@@ -78,7 +79,7 @@ module RedmineXlsxFormatIssueExporter
     # Conditions from worksheet.rb in write_xlsx.
     # Note that ^ matches at the beginning of every line in Ruby, which is
     # exactly how write_xlsx misdetects multi-line text as a formula.
-    def is_transformed_to_formula?(token)
+    def transformed_to_formula?(token)
       return false unless token.is_a?(String)
 
       # Ruby's ^ does not treat a bare \r as a line break, so normalize
@@ -98,13 +99,13 @@ module RedmineXlsxFormatIssueExporter
         return
       end
 
-      if is_transformed_to_hyperlink?(value)
+      if transformed_to_hyperlink?(value)
         worksheet.write_string(row_index + 1, column_index, value, cell_format)
         return
       end
 
       value = crlf_to_lf(value)
-      if is_transformed_to_formula?(value)
+      if transformed_to_formula?(value)
         worksheet.write_string(row_index + 1, column_index, value, cell_format)
         return
       end

@@ -33,7 +33,7 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
-    def test_that_the_page_has_XLSX_link
+    def test_that_the_page_has_xlsx_link
       assert has_selector?('p.other-formats span a.xlsx')
       assert has_link?('XLSX')
     end
@@ -126,7 +126,7 @@ module RedmineXlsxFormatIssueExporter
       assert stay_issues_index_page?
     end
 
-    def test_to_export_private_issue_which_is_TrueClass
+    def test_to_export_private_issue_which_is_true_class
       login_with_admin
       visit '/projects/subproject1/issues'
       click_link('XLSX')
