@@ -1,0 +1,3 @@
+AllCops:
+  NewCops: disable
+  TargetRubyVersion: 2.5
