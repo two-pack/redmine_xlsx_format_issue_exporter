@@ -62,10 +62,10 @@ class IssuesControllerTest < ActionController::TestCase
 
   def test_index_should_include_query_params_as_hidden_fields_in_xlsx_export_form
     get :index, :params => { :project_id => 1,
-                             :set_filter => "1",
-                             :tracker_id => "2",
+                             :set_filter => '1',
+                             :tracker_id => '2',
                              :sort => 'status',
-                             :c => ["status", "priority"] }
+                             :c => ['status', 'priority'] }
 
     assert_select '#xlsx-export-form[action=?]', '/projects/ecookbook/issues.xlsx'
     assert_select '#xlsx-export-form[method=?]', 'get'
@@ -117,7 +117,7 @@ class IssuesControllerTest < ActionController::TestCase
     Issue.generate!(:subject => 'formula misdetection test',
                     :description => "first line\n=line starting with equal sign\nlast line")
     Issue.generate!(:subject => 'formula misdetection test 2',
-                    :description => "=starts with equal sign")
+                    :description => '=starts with equal sign')
 
     with_settings :default_language => 'en' do
       get :index, :params => { :format => 'xlsx', :set_filter => '1', :c => %w(subject description) }
@@ -195,7 +195,7 @@ class IssuesControllerTest < ActionController::TestCase
   end
 
   def test_index_xlsx_big_5
-    with_settings :default_language => "zh-TW" do
+    with_settings :default_language => 'zh-TW' do
       str_utf8 = "\xe4\xb8\x80\xe6\x9c\x88".dup.force_encoding('UTF-8')
       Issue.generate!(:subject => str_utf8)
       op, v = make_action_controller_permitted_parameters({ 'subject' => '=' }, { 'subject' => [str_utf8] })
@@ -210,7 +210,7 @@ class IssuesControllerTest < ActionController::TestCase
   end
 
   def test_index_xlsx_cannot_convert_should_be_replaced_big_5
-    with_settings :default_language => "zh-TW" do
+    with_settings :default_language => 'zh-TW' do
       str_utf8 = "\xe4\xbb\xa5\xe5\x86\x85".dup.force_encoding('UTF-8')
       Issue.generate!(:subject => str_utf8)
       op, v = make_action_controller_permitted_parameters({ 'subject' => '=' }, { 'subject' => [str_utf8] })
@@ -227,8 +227,8 @@ class IssuesControllerTest < ActionController::TestCase
   end
 
   def test_index_xlsx_tw
-    with_settings :default_language => "zh-TW" do
-      str1 = "test_index_xlsx_tw"
+    with_settings :default_language => 'zh-TW' do
+      str1 = 'test_index_xlsx_tw'
       Issue.generate!(:subject => str1, :estimated_hours => '1234.5')
       op, v = make_action_controller_permitted_parameters({ 'subject' => '=' }, { 'subject' => [str1] })
 
@@ -244,8 +244,8 @@ class IssuesControllerTest < ActionController::TestCase
   end
 
   def test_index_xlsx_fr
-    with_settings :default_language => "fr" do
-      str1 = "test_index_xlsx_fr"
+    with_settings :default_language => 'fr' do
+      str1 = 'test_index_xlsx_fr'
       Issue.generate!(:subject => str1, :estimated_hours => '1234.5')
       op, v = make_action_controller_permitted_parameters({ 'subject' => '=' }, { 'subject' => [str1] })
 
@@ -271,15 +271,15 @@ class IssuesControllerTest < ActionController::TestCase
   def test_index_xlsx_should_not_change_selected_columns
     get :index, :params => {
       :set_filter => 1,
-      :c => ["subject", "due_date"],
-      :project_id => "ecookbook"
+      :c => ['subject', 'due_date'],
+      :project_id => 'ecookbook'
     }
     assert_response :success
     assert_equal [:subject, :due_date], column_names
     get :index, :params => {
       :set_filter => 1,
-      :c => ["all_inline"],
-      :project_id => "ecookbook",
+      :c => ['all_inline'],
+      :project_id => 'ecookbook',
       :format => 'xlsx'
     }
     assert_response :success

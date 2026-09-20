@@ -12,7 +12,7 @@ class TimelogControllerTest < ActionController::TestCase
   include RedmineXlsxFormatIssueExporter
 
   def setup
-    Setting.default_language = "en"
+    Setting.default_language = 'en'
   end
 
   def test_index_at_project_level_should_include_xlsx_export_dialog
@@ -77,10 +77,10 @@ class TimelogControllerTest < ActionController::TestCase
   def test_report_all_projects_xlsx_export
     get :report,
         :params => { :columns => 'month',
-                     :from => "2007-01-01",
-                     :to => "2007-06-30",
-                     :criteria => ["project", "user", "activity"],
-                     :format => "xlsx" }
+                     :from => '2007-01-01',
+                     :to => '2007-06-30',
+                     :criteria => ['project', 'user', 'activity'],
+                     :format => 'xlsx' }
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
@@ -89,10 +89,10 @@ class TimelogControllerTest < ActionController::TestCase
     get :report,
         :params => { :project_id => 1,
                      :columns => 'month',
-                     :from => "2007-01-01",
-                     :to => "2007-06-30",
-                     :criteria => ["project", "user", "activity"],
-                     :format => "xlsx" }
+                     :from => '2007-01-01',
+                     :to => '2007-06-30',
+                     :criteria => ['project', 'user', 'activity'],
+                     :format => 'xlsx' }
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
@@ -101,9 +101,9 @@ class TimelogControllerTest < ActionController::TestCase
     str_utf8 = "\xe4\xb8\x80\xe6\x9c\x88".dup.force_encoding('UTF-8')
     user = User.find_by_id(3)
     user.firstname = str_utf8
-    user.lastname  = "test-lastname"
+    user.lastname  = 'test-lastname'
     assert user.save
-    comments = "test_xlsx_big_5"
+    comments = 'test_xlsx_big_5'
     TimeEntry.create(
       :spent_on => '2011-11-11',
       :hours => 7.3,
@@ -119,14 +119,14 @@ class TimelogControllerTest < ActionController::TestCase
     assert_equal 7.3, te2.hours
     assert_equal 3, te2.user_id
 
-    with_settings :default_language => "zh-TW" do
+    with_settings :default_language => 'zh-TW' do
       get :report,
           :params => { :project_id => 1,
                        :columns => 'day',
-                       :from => "2011-11-11",
-                       :to => "2011-11-11",
-                       :criteria => ["user"],
-                       :format => "xlsx" }
+                       :from => '2011-11-11',
+                       :to => '2011-11-11',
+                       :criteria => ['user'],
+                       :format => 'xlsx' }
     end
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
@@ -136,9 +136,9 @@ class TimelogControllerTest < ActionController::TestCase
     str_utf8 = "\xe4\xbb\xa5\xe5\x86\x85".dup.force_encoding('UTF-8')
     user = User.find_by_id(3)
     user.firstname = str_utf8
-    user.lastname  = "test-lastname"
+    user.lastname  = 'test-lastname'
     assert user.save
-    comments = "test_replaced"
+    comments = 'test_replaced'
     TimeEntry.create(
       :spent_on => '2011-11-11',
       :hours => 7.3,
@@ -154,22 +154,22 @@ class TimelogControllerTest < ActionController::TestCase
     assert_equal 7.3, te2.hours
     assert_equal 3, te2.user_id
 
-    with_settings :default_language => "zh-TW" do
+    with_settings :default_language => 'zh-TW' do
       get :report,
           :params => { :project_id => 1,
                        :columns => 'day',
-                       :from => "2011-11-11",
-                       :to => "2011-11-11",
-                       :criteria => ["user"],
-                       :format => "xlsx" }
+                       :from => '2011-11-11',
+                       :to => '2011-11-11',
+                       :criteria => ['user'],
+                       :format => 'xlsx' }
     end
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_xlsx_fr
-    with_settings :default_language => "fr" do
-      str1 = "test_xlsx_fr"
+    with_settings :default_language => 'fr' do
+      str1 = 'test_xlsx_fr'
       user = User.find_by_id(3)
       TimeEntry.create(
         :spent_on => '2011-11-11',
@@ -189,10 +189,10 @@ class TimelogControllerTest < ActionController::TestCase
       get :report,
           :params => { :project_id => 1,
                        :columns => 'day',
-                       :from => "2011-11-11",
-                       :to => "2011-11-11",
-                       :criteria => ["user"],
-                       :format => "xlsx" }
+                       :from => '2011-11-11',
+                       :to => '2011-11-11',
+                       :criteria => ['user'],
+                       :format => 'xlsx' }
       assert_response :success
       assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
     end

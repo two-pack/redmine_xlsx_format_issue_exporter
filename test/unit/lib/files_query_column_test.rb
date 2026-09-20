@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + "/../../test_helper")
+require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 module RedmineXlsxFormatIssueExporter
   class FilesQueryColumnTest < ActiveSupport::TestCase
@@ -21,7 +21,7 @@ module RedmineXlsxFormatIssueExporter
     def test_that_issue_has_a_file_without_description
       issue_with_a_file = Issue.find(2)
       expected = "source.rb\n" +
-                 "picture.jpg"
+                 'picture.jpg'
 
       assert_equal expected, @sut.value(issue_with_a_file)
       assert_equal expected, @sut.value_object(issue_with_a_file)
@@ -32,7 +32,7 @@ module RedmineXlsxFormatIssueExporter
       expected = "error281.txt\n" +
                  "changeset_iso8859-1.diff\n" +
                  "archive.zip\n" +
-                 "changeset_utf8.diff"
+                 'changeset_utf8.diff'
 
       assert_equal expected, @sut.value(issue_with_a_file)
       assert_equal expected, @sut.value_object(issue_with_a_file)

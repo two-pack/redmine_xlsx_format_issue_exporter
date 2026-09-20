@@ -19,27 +19,27 @@ module RedmineXlsxFormatIssueExporter
 
       short_wait_time do
         assert_raises(Capybara::ElementNotFound) {
-          assert find("Projects", :visible => true)
+          assert find('Projects', :visible => true)
         }
       end
     end
 
     def test_that_the_page_has_XLSX_link
-      assert has_selector?("p.other-formats span a.xlsx")
-      assert has_link?("XLSX")
+      assert has_selector?('p.other-formats span a.xlsx')
+      assert has_link?('XLSX')
     end
 
     def test_that_dialog_is_shown_when_the_link_is_clicked
-      click_link("XLSX")
+      click_link('XLSX')
 
-      assert find("div#xlsx-export-options", :visible => true)
+      assert find('div#xlsx-export-options', :visible => true)
     end
 
     def test_that_dialog_is_closed_when_cancel_is_clicked
-      click_link("XLSX")
-      find("div#xlsx-export-options").click_link("Cancel")
+      click_link('XLSX')
+      find('div#xlsx-export-options').click_link('Cancel')
 
-      assert find("div#xlsx-export-options", :visible => false)
+      assert find('div#xlsx-export-options', :visible => false)
     end
 
     def test_that_the_page_of_board_has_not_XLSX_link
@@ -47,8 +47,8 @@ module RedmineXlsxFormatIssueExporter
       assert_visit
 
       short_wait_time do
-        assert has_no_selector?("p.other-formats span a.xlsx")
-        assert has_no_link?("XLSX")
+        assert has_no_selector?('p.other-formats span a.xlsx')
+        assert has_no_link?('XLSX')
       end
     end
 
@@ -57,33 +57,33 @@ module RedmineXlsxFormatIssueExporter
       assert_visit
 
       short_wait_time do
-        assert has_no_selector?("p.other-formats span a.xlsx")
-        assert has_no_link?("XLSX")
+        assert has_no_selector?('p.other-formats span a.xlsx')
+        assert has_no_link?('XLSX')
       end
     end
 
     def test_that_export_with_selected_columns
-      click_link("XLSX")
-      find("div#xlsx-export-options").click_button("Export")
+      click_link('XLSX')
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_projects_index_page?
     end
 
     def test_to_export_with_all_columns
-      click_link("XLSX")
-      find("div#xlsx-export-options").choose("All Columns")
+      click_link('XLSX')
+      find('div#xlsx-export-options').choose('All Columns')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_projects_index_page?
     end
 
     def test_to_export_all_projects
       visit '/projects?display_type=list'
-      click_link("XLSX")
-      find("div#xlsx-export-options").choose("All Columns")
+      click_link('XLSX')
+      find('div#xlsx-export-options').choose('All Columns')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_projects_index_page?
     end
@@ -91,33 +91,33 @@ module RedmineXlsxFormatIssueExporter
     def test_to_export_small_project
       login_with_user
       visit '/projects?display_type=list'
-      click_link("XLSX")
-      find("div#xlsx-export-options").choose("All Columns")
+      click_link('XLSX')
+      find('div#xlsx-export-options').choose('All Columns')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_projects_index_page?
     end
 
     def test_to_export_with_query
-      page.select("is")
-      page.select("closed")
-      click_link("Apply")
-      click_link("XLSX")
+      page.select('is')
+      page.select('closed')
+      click_link('Apply')
+      click_link('XLSX')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_projects_index_page?
     end
 
     def test_to_export_all_projects_with_query
       visit '/projects?display_type=list'
-      uncheck("Status")
-      click_link("Apply")
-      click_link("XLSX")
-      find("div#xlsx-export-options").choose("All Columns")
+      uncheck('Status')
+      click_link('Apply')
+      click_link('XLSX')
+      find('div#xlsx-export-options').choose('All Columns')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_projects_index_page?
     end
@@ -125,9 +125,9 @@ module RedmineXlsxFormatIssueExporter
     def test_to_set_status_filter_without_value
       login_with_admin
       visit '/projects?utf8=✓&set_filter=1&f%5B%5D=status&op%5Bstatus%5D=%3D&display_type=list'
-      click_link("XLSX")
+      click_link('XLSX')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_projects_index_page?
     end
@@ -136,8 +136,8 @@ module RedmineXlsxFormatIssueExporter
       login_with_admin
       visit '/projects?display_type=list&sort=name'
 
-      click_link("XLSX")
-      find("div#xlsx-export-options").click_button("Export")
+      click_link('XLSX')
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_projects_index_page?
     end
