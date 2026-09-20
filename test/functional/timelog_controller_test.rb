@@ -11,13 +11,6 @@ class TimelogControllerTest < ActionController::TestCase
   include Redmine::I18n
   include RedmineXlsxFormatIssueExporter
 
-  def params_for_create(attributes = nil)
-    if (Redmine::VERSION::MAJOR <= 3) or (Redmine::VERSION::MAJOR == 4) then
-      attributes.delete(:author)
-    end
-    attributes
-  end
-
   def setup
     Setting.default_language = "en"
   end
@@ -112,14 +105,14 @@ class TimelogControllerTest < ActionController::TestCase
     user.lastname  = "test-lastname"
     assert user.save
     comments = "test_xlsx_big_5"
-    te1 = TimeEntry.create(params_for_create(
+    te1 = TimeEntry.create(
                            :spent_on => '2011-11-11',
                            :hours    => 7.3,
                            :project  => Project.find(1),
                            :author   => user,
                            :user     => user,
                            :activity => TimeEntryActivity.find_by_name('Design'),
-                           :comments => comments))
+                           :comments => comments)
 
     te2 = TimeEntry.find_by_comments(comments)
     assert_not_nil te2
@@ -146,14 +139,14 @@ class TimelogControllerTest < ActionController::TestCase
     user.lastname  = "test-lastname"
     assert user.save
     comments = "test_replaced"
-    te1 = TimeEntry.create(params_for_create(
+    te1 = TimeEntry.create(
                            :spent_on => '2011-11-11',
                            :hours    => 7.3,
                            :project  => Project.find(1),
                            :author   => user,
                            :user     => user,
                            :activity => TimeEntryActivity.find_by_name('Design'),
-                           :comments => comments))
+                           :comments => comments)
 
     te2 = TimeEntry.find_by_comments(comments)
     assert_not_nil te2
@@ -177,14 +170,14 @@ class TimelogControllerTest < ActionController::TestCase
     with_settings :default_language => "fr" do
       str1  = "test_xlsx_fr"
       user = User.find_by_id(3)
-      te1 = TimeEntry.create(params_for_create(
+      te1 = TimeEntry.create(
                              :spent_on => '2011-11-11',
                              :hours    => 7.3,
                              :project  => Project.find(1),
                              :author   => user,
                              :user     => user,
                              :activity => TimeEntryActivity.find_by_name('Design'),
-                             :comments => str1))
+                             :comments => str1)
 
       te2 = TimeEntry.find_by_comments(str1)
       assert_not_nil te2
