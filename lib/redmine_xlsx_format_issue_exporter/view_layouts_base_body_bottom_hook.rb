@@ -22,7 +22,7 @@ module RedmineXlsxFormatIssueExporter
         return
       end
 
-      context[:hook_caller].send(:render, { :locals => context }.merge(:partial => layout))
+      context[:hook_caller].send(:render, { locals: context }.merge(partial: layout))
     end
   end
 end

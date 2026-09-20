@@ -124,9 +124,9 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def stay_page?(selector)
-      assert has_selector?(selector, :visible => true)
+      assert has_selector?(selector, visible: true)
       short_wait_time do
-        assert has_no_selector?('div#xlsx-export-options', :visible => true)
+        assert has_no_selector?('div#xlsx-export-options', visible: true)
       end
     end
 

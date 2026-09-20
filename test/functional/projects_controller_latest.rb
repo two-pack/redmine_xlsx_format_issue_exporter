@@ -19,26 +19,26 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   def test_index_xlsx
-    get :index, :params => { :format => 'xlsx' }
+    get :index, params: { format: 'xlsx' }
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_index_xlsx_with_project
-    get :index, :params => { :project_id => 1, :format => 'xlsx' }
+    get :index, params: { project_id: 1, format: 'xlsx' }
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_index_xlsx_with_all_columns
-    get :index, :params => { :format => 'xlsx', :xlsx => { :columns => 'all' } }
+    get :index, params: { format: 'xlsx', xlsx: { columns: 'all' } }
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_index_xlsx_when_specified_unknown_format
     begin
-      get :index, :params => { :format => 'unknownformat' }
+      get :index, params: { format: 'unknownformat' }
     rescue ActionController::UnknownFormat
       pass
     end

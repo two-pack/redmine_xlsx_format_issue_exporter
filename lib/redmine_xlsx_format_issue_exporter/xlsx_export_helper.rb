@@ -90,7 +90,7 @@ module RedmineXlsxFormatIssueExporter
 
     def write_item(worksheet, value, row_index, column_index, cell_format, is_id_column, id, hyperlink_format)
       if is_id_column
-        issue_url = url_for(:controller => 'issues', :action => 'show', :id => id)
+        issue_url = url_for(controller: 'issues', action: 'show', id: id)
         worksheet.write(row_index + 1, column_index, issue_url, hyperlink_format, value)
         return
       end
@@ -116,26 +116,26 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def create_header_format(workbook)
-      workbook.add_format(:bold => 1,
-                          :border => 1,
-                          :color => 'white',
-                          :bg_color => 'gray',
-                          :text_wrap => 1,
-                          :valign => 'top')
+      workbook.add_format(bold: 1,
+                          border: 1,
+                          color: 'white',
+                          bg_color: 'gray',
+                          text_wrap: 1,
+                          valign: 'top')
     end
 
     def create_cell_format(workbook)
-      workbook.add_format(:border => 1,
-                          :text_wrap => 1,
-                          :valign => 'top')
+      workbook.add_format(border: 1,
+                          text_wrap: 1,
+                          valign: 'top')
     end
 
     def create_hyperlink_format(workbook)
-      workbook.add_format(:border => 1,
-                          :text_wrap => 1,
-                          :valign => 'top',
-                          :color => 'blue',
-                          :underline => 1)
+      workbook.add_format(border: 1,
+                          text_wrap: 1,
+                          valign: 'top',
+                          color: 'blue',
+                          underline: 1)
     end
   end
 end

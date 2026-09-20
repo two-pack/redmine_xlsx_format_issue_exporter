@@ -26,7 +26,7 @@ module RedmineXlsxFormatIssueExporter
 
       short_wait_time do
         assert_raises(Capybara::ElementNotFound) {
-          assert find('Issues', :visible => true)
+          assert find('Issues', visible: true)
         }
       end
     end
@@ -39,7 +39,7 @@ module RedmineXlsxFormatIssueExporter
     def test_that_dialog_is_shown_when_the_link_is_clicked
       click_link('XLSX')
 
-      assert find('div#xlsx-export-options', :visible => true)
+      assert find('div#xlsx-export-options', visible: true)
     end
 
     def test_that_export_with_selected_columns

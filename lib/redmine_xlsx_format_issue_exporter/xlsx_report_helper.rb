@@ -96,10 +96,10 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def create_period_format(workbook)
-      workbook.add_format(:border => 1,
-                          :text_wrap => 1,
-                          :valign => 'top',
-                          :num_format => '0.00')
+      workbook.add_format(border: 1,
+                          text_wrap: 1,
+                          valign: 'top',
+                          num_format: '0.00')
     end
 
     def format_criteria_value_str(criteria_options, value)

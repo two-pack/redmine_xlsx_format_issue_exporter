@@ -61,7 +61,7 @@ module RedmineXlsxFormatIssueExporter
       click_link('XLSX')
       find('div#xlsx-export-options').click_link('Cancel')
 
-      assert find('div#xlsx-export-options', :visible => false)
+      assert find('div#xlsx-export-options', visible: false)
     end
   end
 end

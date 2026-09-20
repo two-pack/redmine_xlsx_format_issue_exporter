@@ -24,13 +24,13 @@ module RedmineXlsxFormatIssueExporter
 
       short_wait_time do
         assert_raises(Capybara::ElementNotFound) {
-          assert find('Spent time', :visible => true)
+          assert find('Spent time', visible: true)
         }
       end
     end
 
     def test_that_the_page_has_XLSX_link_after_select
-      select('Project', :from => 'criterias')
+      select('Project', from: 'criterias')
 
       assert has_selector?('p.other-formats span a.xlsx')
       assert has_link?('XLSX')
@@ -44,18 +44,18 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_that_dialog_is_not_shown_when_the_link_is_clicked
-      select('Project', :from => 'criterias')
+      select('Project', from: 'criterias')
 
       click_link('XLSX')
 
       assert_raises(Capybara::ElementNotFound) {
-        assert find('div#xlsx-export-options', :visible => true)
+        assert find('div#xlsx-export-options', visible: true)
       }
     end
 
     def test_to_export_all_projects
       visit '/time_entries/report'
-      select('Project', :from => 'criterias')
+      select('Project', from: 'criterias')
 
       click_link('XLSX')
 
@@ -65,7 +65,7 @@ module RedmineXlsxFormatIssueExporter
     def test_to_export_small_project
       login_with_user
       visit '/projects/ecookbook/time_entries/report'
-      select('Project', :from => 'criterias')
+      select('Project', from: 'criterias')
 
       click_link('XLSX')
 
@@ -73,10 +73,10 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_to_export_with_filter
-      select('User', :from => 'add_filter_select')
-      select('John Smith', :from => 'values_user_id_1')
+      select('User', from: 'add_filter_select')
+      select('John Smith', from: 'values_user_id_1')
       click_link('Apply')
-      select('Status', :from => 'criterias')
+      select('Status', from: 'criterias')
 
       click_link('XLSX')
 
@@ -94,8 +94,8 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_to_export_with_Project_Yearly
-      select('Year', :from => 'columns')
-      select('Project', :from => 'criterias')
+      select('Year', from: 'columns')
+      select('Project', from: 'criterias')
 
       click_link('XLSX')
 
@@ -103,9 +103,9 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_to_export_with_Project_and_Status_Monthly
-      select('Month', :from => 'columns')
-      select('Project', :from => 'criterias')
-      select('Status', :from => 'criterias')
+      select('Month', from: 'columns')
+      select('Project', from: 'criterias')
+      select('Status', from: 'criterias')
 
       click_link('XLSX')
 
@@ -113,10 +113,10 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_to_export_with_Project_and_Status_and_more_Weekly
-      select('Week', :from => 'columns')
-      select('Project', :from => 'criterias')
-      select('Status', :from => 'criterias')
-      select('Version', :from => 'criterias')
+      select('Week', from: 'columns')
+      select('Project', from: 'criterias')
+      select('Status', from: 'criterias')
+      select('Version', from: 'criterias')
 
       click_link('XLSX')
 
@@ -124,10 +124,10 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_to_export_with_Project_and_Status_and_more_Daily
-      select('Days', :from => 'columns')
-      select('Project', :from => 'criterias')
-      select('Status', :from => 'criterias')
-      select('Category', :from => 'criterias')
+      select('Days', from: 'columns')
+      select('Project', from: 'criterias')
+      select('Status', from: 'criterias')
+      select('Category', from: 'criterias')
 
       click_link('XLSX')
 

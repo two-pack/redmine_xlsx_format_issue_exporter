@@ -24,7 +24,7 @@ module RedmineXlsxFormatIssueExporter
 
       short_wait_time do
         assert_raises(Capybara::ElementNotFound) {
-          assert find('Users', :visible => true)
+          assert find('Users', visible: true)
         }
       end
     end
@@ -36,7 +36,7 @@ module RedmineXlsxFormatIssueExporter
         click_link('XLSX')
 
         assert_raises(Capybara::ElementNotFound) {
-          assert find('div#xlsx-export-options', :visible => true)
+          assert find('div#xlsx-export-options', visible: true)
         }
       end
 
@@ -53,7 +53,7 @@ module RedmineXlsxFormatIssueExporter
 
         click_link('XLSX')
 
-        assert find('div#xlsx-export-options', :visible => true)
+        assert find('div#xlsx-export-options', visible: true)
       end
 
       def test_to_export
@@ -71,7 +71,7 @@ module RedmineXlsxFormatIssueExporter
 
       visit '/users.test'
 
-      assert page.has_css?('body > header > h1', :text => 'ActionController::UnknownFormat in UsersController#index')
+      assert page.has_css?('body > header > h1', text: 'ActionController::UnknownFormat in UsersController#index')
     end
   end
 end
