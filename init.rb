@@ -18,19 +18,19 @@ Dir[File.dirname(__FILE__) + '/lib/redmine_xlsx_format_issue_exporter/*.rb'].sor
 
 def prepend_xlsx_format_issue_exporter_patches
   unless IssuesController.included_modules.include? RedmineXlsxFormatIssueExporter::IssuesControllerPatch
-    IssuesController.send(:prepend, RedmineXlsxFormatIssueExporter::IssuesControllerPatch)
+    IssuesController.prepend RedmineXlsxFormatIssueExporter::IssuesControllerPatch
   end
 
   unless TimelogController.included_modules.include?(RedmineXlsxFormatIssueExporter::TimelogControllerPatch)
-    TimelogController.send(:prepend, RedmineXlsxFormatIssueExporter::TimelogControllerPatch)
+    TimelogController.prepend RedmineXlsxFormatIssueExporter::TimelogControllerPatch
   end
 
   unless UsersController.included_modules.include?(RedmineXlsxFormatIssueExporter::UsersControllerPatch)
-    UsersController.send(:prepend, RedmineXlsxFormatIssueExporter::UsersControllerPatch)
+    UsersController.prepend RedmineXlsxFormatIssueExporter::UsersControllerPatch
   end
 
   unless ProjectsController.included_modules.include?(RedmineXlsxFormatIssueExporter::ProjectsControllerPatch)
-    ProjectsController.send(:prepend, RedmineXlsxFormatIssueExporter::ProjectsControllerPatch)
+    ProjectsController.prepend RedmineXlsxFormatIssueExporter::ProjectsControllerPatch
   end
 end
 

@@ -39,7 +39,6 @@ module RedmineXlsxFormatIssueExporter
       end
       row << total
       write_item_row(workbook, worksheet, row, row_index, start_period_index, columns_width)
-      row_index += 1
 
       headers.size.times do |index|
         worksheet.set_column(index, index, columns_width[index])

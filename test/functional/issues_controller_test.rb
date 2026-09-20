@@ -164,7 +164,7 @@ class IssuesControllerTest < ActionController::TestCase
 
   def test_index_xlsx_should_format_float_custom_fields_with_xlsx_decimal_separator
     field = IssueCustomField.create!(:name => 'Float', :is_for_all => true, :tracker_ids => [1], :field_format => 'float')
-    issue = Issue.generate!(:project_id => 1, :tracker_id => 1, :custom_field_values => {field.id => '185.6'})
+    Issue.generate!(:project_id => 1, :tracker_id => 1, :custom_field_values => {field.id => '185.6'})
 
     with_settings :default_language => 'fr' do
       get :index, :params => {:format => 'xlsx', :xlsx => {:columns => 'all'}}
@@ -180,7 +180,7 @@ class IssuesControllerTest < ActionController::TestCase
   def test_index_xlsx_should_fill_parent_column_with_parent_id
     Issue.delete_all
     parent = Issue.generate!
-    child = Issue.generate!(:parent_issue_id => parent.id)
+    Issue.generate!(:parent_issue_id => parent.id)
 
     with_settings :default_language => 'en' do
       get :index, :params => {:format => 'xlsx', :c => %w(parent)}
@@ -194,8 +194,7 @@ class IssuesControllerTest < ActionController::TestCase
   def test_index_xlsx_big_5
     with_settings :default_language => "zh-TW" do
       str_utf8  = "\xe4\xb8\x80\xe6\x9c\x88".dup.force_encoding('UTF-8')
-      str_big5  = "\xa4@\xa4\xeb".dup.force_encoding('Big5')
-      issue = Issue.generate!(:subject => str_utf8)
+      Issue.generate!(:subject => str_utf8)
       op, v = make_action_controller_permitted_parameters({'subject' => '='}, {'subject' => [str_utf8]})
 
       get :index, :params => {:project_id => 1,
@@ -210,7 +209,7 @@ class IssuesControllerTest < ActionController::TestCase
   def test_index_xlsx_cannot_convert_should_be_replaced_big_5
     with_settings :default_language => "zh-TW" do
       str_utf8  = "\xe4\xbb\xa5\xe5\x86\x85".dup.force_encoding('UTF-8')
-      issue = Issue.generate!(:subject => str_utf8)
+      Issue.generate!(:subject => str_utf8)
       op, v = make_action_controller_permitted_parameters({'subject' => '='}, {'subject' => [str_utf8]})
 
       get :index, :params => {:project_id => 1,
@@ -227,7 +226,7 @@ class IssuesControllerTest < ActionController::TestCase
   def test_index_xlsx_tw
     with_settings :default_language => "zh-TW" do
       str1  = "test_index_xlsx_tw"
-      issue = Issue.generate!(:subject => str1, :estimated_hours => '1234.5')
+      Issue.generate!(:subject => str1, :estimated_hours => '1234.5')
       op, v = make_action_controller_permitted_parameters({'subject' => '='}, {'subject' => [str1]})
 
       get :index, :params => {:project_id => 1,
@@ -244,7 +243,7 @@ class IssuesControllerTest < ActionController::TestCase
   def test_index_xlsx_fr
     with_settings :default_language => "fr" do
       str1  = "test_index_xlsx_fr"
-      issue = Issue.generate!(:subject => str1, :estimated_hours => '1234.5')
+      Issue.generate!(:subject => str1, :estimated_hours => '1234.5')
       op, v = make_action_controller_permitted_parameters({'subject' => '='}, {'subject' => [str1]})
 
       get :index, :params => {:project_id => 1,
@@ -261,7 +260,7 @@ class IssuesControllerTest < ActionController::TestCase
   def test_index_xlsx_when_specified_unknown_format
     begin
       get :index, :params => {:format => 'unknownformat'}
-    rescue ActionController::UnknownFormat => e
+    rescue ActionController::UnknownFormat
       pass
     end
   end

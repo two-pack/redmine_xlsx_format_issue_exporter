@@ -39,7 +39,7 @@ class ProjectsControllerTest < ActionController::TestCase
   def test_index_xlsx_when_specified_unknown_format
     begin
       get :index, :params => {:format => 'unknownformat'}
-    rescue ActionController::UnknownFormat => e
+    rescue ActionController::UnknownFormat
       pass
     end
   end

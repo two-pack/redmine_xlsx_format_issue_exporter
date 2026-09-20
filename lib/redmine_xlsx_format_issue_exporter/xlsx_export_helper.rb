@@ -3,7 +3,7 @@ require 'write_xlsx'
 module RedmineXlsxFormatIssueExporter
   module XlsxExportHelper
 
-    def query_to_xlsx(items, query, options={})
+    def query_to_xlsx(items, query, _options={})
       columns = query.columns
 
       stream = StringIO.new(+'')
