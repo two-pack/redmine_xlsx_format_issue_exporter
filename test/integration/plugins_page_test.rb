@@ -1,4 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+# frozen_string_literal: true
+
+require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
 module RedmineXlsxFormatIssueExporter
   class PluginsPageTest < ActionDispatch::IntegrationTest
@@ -20,8 +22,8 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def test_that_the_page_has_valid_plguin_name
-      assert page.has_css?('tr#plugin-redmine_xlsx_format_issue_exporter td.name span.name', text: 'Redmine XLSX format issue exporter')
+      assert page.has_css?('tr#plugin-redmine_xlsx_format_issue_exporter td.name span.name',
+                           text: 'Redmine XLSX format issue exporter')
     end
-
   end
 end

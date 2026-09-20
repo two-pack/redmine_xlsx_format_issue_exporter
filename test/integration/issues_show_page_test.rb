@@ -1,4 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+# frozen_string_literal: true
+
+require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
 module RedmineXlsxFormatIssueExporter
   class IssuesShowTest < ActionDispatch::IntegrationTest
@@ -10,19 +12,14 @@ module RedmineXlsxFormatIssueExporter
              :custom_values, :custom_fields, :custom_fields_projects, :custom_fields_trackers,
              :versions, :time_entries
 
-    def setup
+    def setup; end
 
-    end
-
-    def teardown
-
-    end
+    def teardown; end
 
     def test_that_not_affect_show_page
       visit '/issues/1'
 
       assert stay_issues_index_page?
     end
-
   end
 end

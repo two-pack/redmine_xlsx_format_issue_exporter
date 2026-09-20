@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 require 'write_xlsx'
 
 module RedmineXlsxFormatIssueExporter
+  # Writes the result of a query as an XLSX file, and holds the cell writing shared by the other exports.
   module XlsxExportHelper
-
-    def query_to_xlsx(items, query, options={})
+    def query_to_xlsx(items, query, _options = {})
       columns = query.columns
 
       stream = StringIO.new(+'')
       workbook = WriteXLSX.new(stream)
       worksheet = workbook.add_worksheet
 
-      worksheet.freeze_panes(1, 1)  # Freeze header row and # column.
+      worksheet.freeze_panes(1, 1) # Freeze header row and # column.
 
       columns_width = []
       write_header_row(workbook, worksheet, columns, columns_width)
@@ -27,11 +29,11 @@ module RedmineXlsxFormatIssueExporter
     def write_header_row(workbook, worksheet, columns, columns_width)
       header_format = create_header_format(workbook)
       columns.each_with_index do |c, index|
-        if c.class.name == 'String'
-            value = c
-        else
-            value = c.caption.to_s
-        end
+        value = if c.instance_of?(::String)
+                  c
+                else
+                  c.caption.to_s
+                end
 
         worksheet.write(0, index, value, header_format)
         columns_width << get_column_width(value)
@@ -44,7 +46,8 @@ module RedmineXlsxFormatIssueExporter
       items.each_with_index do |item, item_index|
         columns.each_with_index do |c, column_index|
           value = xlsx_content(c, item)
-          write_item(worksheet, value, item_index, column_index, cell_format, (c.name == :id), item.id, hyperlink_format)
+          write_item(worksheet, value, item_index, column_index, cell_format, c.name == :id, item.id,
+                     hyperlink_format)
 
           width = get_column_width(value)
           columns_width[column_index] = width if columns_width[column_index] < width
@@ -57,16 +60,18 @@ module RedmineXlsxFormatIssueExporter
     end
 
     # Conditions from worksheet.rb in write_xlsx.
-    def is_transformed_to_hyperlink?(token)
-      return if not token.is_a?(String)
+    def transformed_to_hyperlink?(token)
+      return unless token.is_a?(String)
+
       # Match http, https or ftp URL
-      if token =~ %r|\A[fh]tt?ps?://|
+      case token
+      when %r{\A[fh]tt?ps?://}
         true
         # Match mailto:
-      elsif token =~ %r|\Amailto:|
+      when /\Amailto:/
         true
         # Match internal or external sheet link
-      elsif token =~ %r!\A(?:in|ex)ternal:!
+      when /\A(?:in|ex)ternal:/
         true
       end
     end
@@ -74,8 +79,8 @@ module RedmineXlsxFormatIssueExporter
     # Conditions from worksheet.rb in write_xlsx.
     # Note that ^ matches at the beginning of every line in Ruby, which is
     # exactly how write_xlsx misdetects multi-line text as a formula.
-    def is_transformed_to_formula?(token)
-      return false if not token.is_a?(String)
+    def transformed_to_formula?(token)
+      return false unless token.is_a?(String)
 
       # Ruby's ^ does not treat a bare \r as a line break, so normalize
       # line endings here rather than relying on callers to do it.
@@ -89,18 +94,18 @@ module RedmineXlsxFormatIssueExporter
 
     def write_item(worksheet, value, row_index, column_index, cell_format, is_id_column, id, hyperlink_format)
       if is_id_column
-        issue_url = url_for(:controller => 'issues', :action => 'show', :id => id)
+        issue_url = url_for(controller: 'issues', action: 'show', id: id)
         worksheet.write(row_index + 1, column_index, issue_url, hyperlink_format, value)
         return
       end
 
-      if is_transformed_to_hyperlink?(value)
+      if transformed_to_hyperlink?(value)
         worksheet.write_string(row_index + 1, column_index, value, cell_format)
         return
       end
 
       value = crlf_to_lf(value)
-      if is_transformed_to_formula?(value)
+      if transformed_to_formula?(value)
         worksheet.write_string(row_index + 1, column_index, value, cell_format)
         return
       end
@@ -110,32 +115,31 @@ module RedmineXlsxFormatIssueExporter
 
     def get_column_width(value)
       value_str = value.to_s
-      width = (value_str.length + value_str.chars.reject(&:ascii_only?).length) * 1.1  # 1.1: margin
-      width > 30 ? 30 : width  # 30: max width
+      width = (value_str.length + value_str.chars.reject(&:ascii_only?).length) * 1.1 # 1.1: margin
+      width > 30 ? 30 : width # 30: max width
     end
 
     def create_header_format(workbook)
-      workbook.add_format(:bold => 1,
-                          :border => 1,
-                          :color => 'white',
-                          :bg_color => 'gray',
-                          :text_wrap => 1,
-                          :valign => 'top')
+      workbook.add_format(bold: 1,
+                          border: 1,
+                          color: 'white',
+                          bg_color: 'gray',
+                          text_wrap: 1,
+                          valign: 'top')
     end
 
     def create_cell_format(workbook)
-      workbook.add_format(:border => 1,
-                          :text_wrap => 1,
-                          :valign => 'top')
+      workbook.add_format(border: 1,
+                          text_wrap: 1,
+                          valign: 'top')
     end
 
     def create_hyperlink_format(workbook)
-      workbook.add_format(:border => 1,
-                          :text_wrap => 1,
-                          :valign => 'top',
-                          :color => 'blue',
-                          :underline => 1)
+      workbook.add_format(border: 1,
+                          text_wrap: 1,
+                          valign: 'top',
+                          color: 'blue',
+                          underline: 1)
     end
-
   end
 end

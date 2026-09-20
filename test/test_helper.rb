@@ -1,17 +1,20 @@
-require "simplecov"
+# frozen_string_literal: true
+
+require 'simplecov'
 SimpleCov.coverage_dir('coverage/redmine_xlsx_format_issue_exporter_test')
 filter_method = SimpleCov.respond_to?(:skip) ? :skip : :add_filter
 group_method = SimpleCov.respond_to?(:group) ? :group : :add_group
-SimpleCov.start "rails" do
+SimpleCov.start 'rails' do
   send(filter_method) do |source_file|
     # report this plugin only.
-    !source_file.filename.include?('plugins/redmine_xlsx_format_issue_exporter') || !source_file.filename.end_with?('.rb')
+    !source_file.filename.include?('plugins/redmine_xlsx_format_issue_exporter') ||
+      !source_file.filename.end_with?('.rb')
   end
 
-  send(group_method, "XLSX Exporter", "plugins/redmine_xlsx_format_issue_exporter")
+  send(group_method, 'XLSX Exporter', 'plugins/redmine_xlsx_format_issue_exporter')
 end
 
-require File.expand_path(File.dirname(__FILE__) + "/../../../test/test_helper")
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test/test_helper")
 
 require 'capybara/rails'
 require 'selenium-webdriver'
@@ -26,9 +29,9 @@ Capybara.register_driver :chrome_headless do |app|
   options.add_argument('--ignore-certificate-errors')
   options.add_argument('--window-size=1280,800')
   Capybara::Selenium::Driver.new(
-      app,
-      browser: :chrome,
-      capabilities: options
+    app,
+    browser: :chrome,
+    capabilities: options
   )
 end
 
@@ -44,8 +47,8 @@ Capybara.javascript_driver = :selenium_chrome_headless
 Capybara.current_driver = :selenium_chrome_headless
 Capybara.default_max_wait_time = 10
 
-module RedmineXlsxFormatIssueExporter
-  class ActionDispatch::IntegrationTest
+module ActionDispatch
+  class IntegrationTest
     # Make the Capybara DSL available in all integration tests
     include Capybara::DSL
 
@@ -59,11 +62,11 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def logout
-      visit "/"
-      if has_css?("a.logout", wait: 0)
-        find("a.logout").click
-        assert find('a.login', visible: :all)
-      end
+      visit '/'
+      return unless has_css?('a.logout', wait: 0)
+
+      find('a.logout').click
+      assert find('a.login', visible: :all)
     end
 
     def before_teardown
@@ -75,7 +78,7 @@ module RedmineXlsxFormatIssueExporter
       dir = Rails.root.join('tmp', 'capybara')
       FileUtils.mkdir_p(dir)
       base = dir.join("#{self.class.name}-#{name}".gsub(/\W+/, '_'))
-      page.save_screenshot("#{base}.png")
+      page.save_screenshot("#{base}.png") # rubocop:disable Lint/Debugger
       File.write("#{base}.html", page.html)
       File.write("#{base}.txt", [
         diagnostic('url') { page.current_url },
@@ -96,7 +99,7 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def login_with_admin
-      login "admin", "admin"
+      login 'admin', 'admin'
     end
 
     def login_with_user
@@ -120,42 +123,44 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def assert_visit
-      assert has_selector?("div#content")
+      assert has_selector?('div#content')
     end
 
     def stay_page?(selector)
-      assert has_selector?(selector, :visible => true)
+      assert has_selector?(selector, visible: true)
       short_wait_time do
-        assert has_no_selector?("div#xlsx-export-options", :visible => true)
+        assert has_no_selector?('div#xlsx-export-options', visible: true)
       end
     end
 
     def stay_issues_index_page?
-      stay_page?("body.controller-issues")
+      stay_page?('body.controller-issues')
     end
 
     def stay_timelog_index_page?
-      stay_page?("body.controller-timelog")
+      stay_page?('body.controller-timelog')
     end
 
     def stay_timelog_report_page?
-      stay_page?("body.controller-timelog.action-report")
+      stay_page?('body.controller-timelog.action-report')
     end
 
     def stay_users_index_page?
-      stay_page?("body.controller-users")
+      stay_page?('body.controller-users')
     end
 
     def stay_projects_index_page?
-      stay_page?("body.controller-projects")
+      stay_page?('body.controller-projects')
     end
   end
+end
 
-  def make_action_controller_permitted_parameters(op, v)
+module RedmineXlsxFormatIssueExporter
+  def make_action_controller_permitted_parameters(operators, values)
     ActionController::Parameters.permit_all_parameters = true
-    op_param = ActionController::Parameters.new(op)
-    v_param = ActionController::Parameters.new(v)
+    op_param = ActionController::Parameters.new(operators)
+    v_param = ActionController::Parameters.new(values)
     ActionController::Parameters.permit_all_parameters = false
-    return op_param, v_param
+    [op_param, v_param]
   end
 end

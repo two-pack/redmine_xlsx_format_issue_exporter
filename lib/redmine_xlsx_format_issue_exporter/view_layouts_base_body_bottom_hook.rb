@@ -1,29 +1,32 @@
-module RedmineXlsxFormatIssueExporter
-  class ViewLayoutsBaseBodyBottomHook < Redmine::Hook::ViewListener
+# frozen_string_literal: true
 
-    def view_layouts_base_body_bottom(context={})
+module RedmineXlsxFormatIssueExporter
+  # Inserts the XLSX export dialog or link into the pages that can export.
+  class ViewLayoutsBaseBodyBottomHook < Redmine::Hook::ViewListener
+    def view_layouts_base_body_bottom(context = {})
       return unless context[:controller].status == 200
 
       call_from = [context[:controller].controller_name, context[:controller].action_name]
-      if call_from == ["issues", "index"]
+      case call_from
+      when %w[issues index]
         layout = 'hooks/xlsx_export_dialog_on_issues_index'
-      elsif call_from == ["timelog", "index"]
-        layout ='hooks/xlsx_export_dialog_on_timelog_index'
-      elsif (call_from == ["timelog", "report"])
-        layout ='hooks/insert_xlsx_link_for_download'
-      elsif (call_from == ["projects", "index"])
-        layout ='hooks/xlsx_export_dialog_on_projects_index'
-      elsif (call_from == ["users", "index"])
-        if (Redmine::VERSION::MAJOR == 5) && (Redmine::VERSION::MINOR == 0)
-          layout ='hooks/insert_xlsx_link_for_download'
-        else
-          layout ='hooks/xlsx_export_dialog_on_users_index'
-        end
+      when %w[timelog index]
+        layout = 'hooks/xlsx_export_dialog_on_timelog_index'
+      when %w[timelog report]
+        layout = 'hooks/insert_xlsx_link_for_download'
+      when %w[projects index]
+        layout = 'hooks/xlsx_export_dialog_on_projects_index'
+      when %w[users index]
+        layout = if (Redmine::VERSION::MAJOR == 5) && Redmine::VERSION::MINOR.zero?
+                   'hooks/insert_xlsx_link_for_download'
+                 else
+                   'hooks/xlsx_export_dialog_on_users_index'
+                 end
       else
         return
       end
 
-      context[:hook_caller].send(:render, {:locals => context}.merge(:partial => layout))
+      context[:hook_caller].send(:render, { locals: context }.merge(partial: layout))
     end
   end
 end

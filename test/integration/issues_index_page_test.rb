@@ -1,4 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+# frozen_string_literal: true
+
+require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
 module RedmineXlsxFormatIssueExporter
   class IssuesIndexPageTest < ActionDispatch::IntegrationTest
@@ -25,65 +27,65 @@ module RedmineXlsxFormatIssueExporter
       visit '/projects/ecookbook/issues'
 
       short_wait_time do
-        assert_raises(Capybara::ElementNotFound) {
-          assert find("Issues", :visible => true)
-        }
+        assert_raises(Capybara::ElementNotFound) do
+          assert find('Issues', visible: true)
+        end
       end
     end
 
-    def test_that_the_page_has_XLSX_link
-      assert has_selector?("p.other-formats span a.xlsx")
-      assert has_link?("XLSX")
+    def test_that_the_page_has_xlsx_link
+      assert has_selector?('p.other-formats span a.xlsx')
+      assert has_link?('XLSX')
     end
 
     def test_that_dialog_is_shown_when_the_link_is_clicked
-      click_link("XLSX")
+      click_link('XLSX')
 
-      assert find("div#xlsx-export-options", :visible => true)
+      assert find('div#xlsx-export-options', visible: true)
     end
 
     def test_that_export_with_selected_columns
-      click_link("XLSX")
-      find("div#xlsx-export-options").click_button("Export")
+      click_link('XLSX')
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_issues_index_page?
     end
 
     def test_to_export_with_all_columns
-      click_link("XLSX")
-      find("div#xlsx-export-options").choose("All Columns")
+      click_link('XLSX')
+      find('div#xlsx-export-options').choose('All Columns')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_issues_index_page?
     end
 
     def test_to_export_with_description
-      click_link("XLSX")
-      find("div#xlsx-export-options").check("Description")
+      click_link('XLSX')
+      find('div#xlsx-export-options').check('Description')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_issues_index_page?
     end
 
     def test_to_export_with_description_and_all_columns
-      click_link("XLSX")
-      find("div#xlsx-export-options").choose("All Columns")
-      find("div#xlsx-export-options").check("Description")
+      click_link('XLSX')
+      find('div#xlsx-export-options').choose('All Columns')
+      find('div#xlsx-export-options').check('Description')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_issues_index_page?
     end
 
     def test_to_export_all_projects
       visit '/issues'
-      click_link("XLSX")
-      find("div#xlsx-export-options").choose("All Columns")
-      find("div#xlsx-export-options").check("Description")
+      click_link('XLSX')
+      find('div#xlsx-export-options').choose('All Columns')
+      find('div#xlsx-export-options').check('Description')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_issues_index_page?
     end
@@ -91,46 +93,46 @@ module RedmineXlsxFormatIssueExporter
     def test_to_export_small_project
       login_with_user
       visit '/projects/onlinestore/issues'
-      click_link("XLSX")
-      find("div#xlsx-export-options").choose("All Columns")
-      find("div#xlsx-export-options").check("Description")
+      click_link('XLSX')
+      find('div#xlsx-export-options').choose('All Columns')
+      find('div#xlsx-export-options').check('Description')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_issues_index_page?
     end
 
     def test_to_export_with_query
-      page.select("is")
-      page.select("Assigned")
-      click_link("Apply")
-      click_link("XLSX")
+      page.select('is')
+      page.select('Assigned')
+      click_link('Apply')
+      click_link('XLSX')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_issues_index_page?
     end
 
     def test_to_export_all_projects_with_query
       visit '/issues'
-      uncheck("Status")
-      click_link("Apply")
-      click_link("XLSX")
-      find("div#xlsx-export-options").choose("All Columns")
-      find("div#xlsx-export-options").check("Description")
+      uncheck('Status')
+      click_link('Apply')
+      click_link('XLSX')
+      find('div#xlsx-export-options').choose('All Columns')
+      find('div#xlsx-export-options').check('Description')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_issues_index_page?
     end
 
-    def test_to_export_private_issue_which_is_TrueClass
+    def test_to_export_private_issue_which_is_true_class
       login_with_admin
       visit '/projects/subproject1/issues'
-      click_link("XLSX")
-      find("div#xlsx-export-options").choose("All Columns")
+      click_link('XLSX')
+      find('div#xlsx-export-options').choose('All Columns')
 
-      find("div#xlsx-export-options").click_button("Export")
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_issues_index_page?
     end
@@ -140,8 +142,8 @@ module RedmineXlsxFormatIssueExporter
       visit '/projects/subproject1/issues?utf8=%E2%9C%93&set_filter=1&f%5B%5D=status_id&op%5Bstatus_id%5D=%3D'
 
       short_wait_time do
-        assert has_no_selector?("p.other-formats span a.xlsx")
-        assert has_no_link?("XLSX")
+        assert has_no_selector?('p.other-formats span a.xlsx')
+        assert has_no_link?('XLSX')
       end
     end
 
@@ -150,12 +152,12 @@ module RedmineXlsxFormatIssueExporter
 
       visit '/projects/subproject1/issues?sort=id'
 
-      click_link("XLSX")
-      find("div#xlsx-export-options").click_button("Export")
+      click_link('XLSX')
+      find('div#xlsx-export-options').click_button('Export')
 
       assert stay_issues_index_page?
     end
   end
 end
 
-require File.expand_path(File.dirname(__FILE__) + '/issues_index_page_latest')
+require File.expand_path("#{File.dirname(__FILE__)}/issues_index_page_latest")
