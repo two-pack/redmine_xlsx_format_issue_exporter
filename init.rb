@@ -29,9 +29,9 @@ def prepend_xlsx_format_issue_exporter_patches
     UsersController.prepend RedmineXlsxFormatIssueExporter::UsersControllerPatch
   end
 
-  unless ProjectsController.included_modules.include?(RedmineXlsxFormatIssueExporter::ProjectsControllerPatch)
-    ProjectsController.prepend RedmineXlsxFormatIssueExporter::ProjectsControllerPatch
-  end
+  return if ProjectsController.included_modules.include?(RedmineXlsxFormatIssueExporter::ProjectsControllerPatch)
+
+  ProjectsController.prepend RedmineXlsxFormatIssueExporter::ProjectsControllerPatch
 end
 
 prepend_xlsx_format_issue_exporter_patches

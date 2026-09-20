@@ -8,8 +8,7 @@ module RedmineXlsxFormatIssueExporter
       @sut = FilesQueryColumn.new(:files)
     end
 
-    def teardown
-    end
+    def teardown; end
 
     def test_that_issue_has_no_files
       issue_without_files = Issue.find(1)

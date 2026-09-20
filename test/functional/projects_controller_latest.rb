@@ -9,8 +9,6 @@ class ProjectsControllerTest < ActionController::TestCase
       session[:issue_query][:column_names]
     elsif session[:query].present?
       session[:query][:column_names]
-    else
-      nil
     end
   end
 
@@ -37,10 +35,8 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   def test_index_xlsx_when_specified_unknown_format
-    begin
-      get :index, params: { format: 'unknownformat' }
-    rescue ActionController::UnknownFormat
-      pass
-    end
+    get :index, params: { format: 'unknownformat' }
+  rescue ActionController::UnknownFormat
+    pass
   end
 end

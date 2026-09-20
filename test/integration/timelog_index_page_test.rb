@@ -21,9 +21,9 @@ module RedmineXlsxFormatIssueExporter
       visit '/projects/ecookbook/time_entries'
 
       short_wait_time do
-        assert_raises(Capybara::ElementNotFound) {
+        assert_raises(Capybara::ElementNotFound) do
           assert find('Spent time', visible: true)
-        }
+        end
       end
     end
 

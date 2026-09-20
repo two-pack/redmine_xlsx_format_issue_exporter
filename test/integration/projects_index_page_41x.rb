@@ -18,9 +18,9 @@ module RedmineXlsxFormatIssueExporter
       visit '/projects?display_type=list'
 
       short_wait_time do
-        assert_raises(Capybara::ElementNotFound) {
+        assert_raises(Capybara::ElementNotFound) do
           assert find('Projects', visible: true)
-        }
+        end
       end
     end
 

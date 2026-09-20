@@ -26,11 +26,11 @@ module RedmineXlsxFormatIssueExporter
     def write_header_row(workbook, worksheet, columns, columns_width)
       header_format = create_header_format(workbook)
       columns.each_with_index do |c, index|
-        if c.class.name == 'String'
-          value = c
-        else
-          value = c.caption.to_s
-        end
+        value = if c.class.name == 'String'
+                  c
+                else
+                  c.caption.to_s
+                end
 
         worksheet.write(0, index, value, header_format)
         columns_width << get_column_width(value)
@@ -43,7 +43,7 @@ module RedmineXlsxFormatIssueExporter
       items.each_with_index do |item, item_index|
         columns.each_with_index do |c, column_index|
           value = xlsx_content(c, item)
-          write_item(worksheet, value, item_index, column_index, cell_format, (c.name == :id), item.id,
+          write_item(worksheet, value, item_index, column_index, cell_format, c.name == :id, item.id,
                      hyperlink_format)
 
           width = get_column_width(value)
@@ -58,16 +58,16 @@ module RedmineXlsxFormatIssueExporter
 
     # Conditions from worksheet.rb in write_xlsx.
     def is_transformed_to_hyperlink?(token)
-      return if not token.is_a?(String)
+      return unless token.is_a?(String)
 
       # Match http, https or ftp URL
-      if token =~ %r|\A[fh]tt?ps?://|
+      if token =~ %r{\A[fh]tt?ps?://}
         true
         # Match mailto:
-      elsif token =~ %r|\Amailto:|
+      elsif token =~ /\Amailto:/
         true
         # Match internal or external sheet link
-      elsif token =~ %r!\A(?:in|ex)ternal:!
+      elsif token =~ /\A(?:in|ex)ternal:/
         true
       end
     end
@@ -76,7 +76,7 @@ module RedmineXlsxFormatIssueExporter
     # Note that ^ matches at the beginning of every line in Ruby, which is
     # exactly how write_xlsx misdetects multi-line text as a formula.
     def is_transformed_to_formula?(token)
-      return false if not token.is_a?(String)
+      return false unless token.is_a?(String)
 
       # Ruby's ^ does not treat a bare \r as a line break, so normalize
       # line endings here rather than relying on callers to do it.

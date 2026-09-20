@@ -10,11 +10,9 @@ module RedmineXlsxFormatIssueExporter
              :custom_values, :custom_fields, :custom_fields_projects, :custom_fields_trackers,
              :versions, :time_entries
 
-    def setup
-    end
+    def setup; end
 
-    def teardown
-    end
+    def teardown; end
 
     def test_that_not_affect_show_page
       visit '/issues/1'

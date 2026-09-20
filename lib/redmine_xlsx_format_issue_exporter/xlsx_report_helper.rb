@@ -82,11 +82,11 @@ module RedmineXlsxFormatIssueExporter
       info_format = create_cell_format(workbook)
       period_format = create_period_format(workbook)
       row.each_with_index do |value, column_index|
-        if column_index < start_period_index
-          cell_format = info_format
-        else
-          cell_format = period_format
-        end
+        cell_format = if column_index < start_period_index
+                        info_format
+                      else
+                        period_format
+                      end
 
         write_item(worksheet, value, row_index, column_index, cell_format, false, nil, hyperlink_format)
 
@@ -103,7 +103,7 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def format_criteria_value_str(criteria_options, value)
-      if method(:format_criteria_value).parameters.include?([:opt, :html])
+      if method(:format_criteria_value).parameters.include?(%i[opt html])
         format_criteria_value(criteria_options, value, false).to_s
       else
         format_criteria_value(criteria_options, value).to_s

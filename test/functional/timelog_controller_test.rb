@@ -23,7 +23,7 @@ class TimelogControllerTest < ActionController::TestCase
                   f: ['spent_on'],
                   op: op,
                   v: v,
-                  c: ['spent_on', 'user'] }
+                  c: %w[spent_on user] }
     assert_response :success
 
     assert_select '#xlsx-export-options' do
@@ -67,11 +67,9 @@ class TimelogControllerTest < ActionController::TestCase
   end
 
   def test_index_xlsx_when_specified_unknown_format
-    begin
-      get :index, params: { format: 'unknownformat' }
-    rescue ActionController::UnknownFormat
-      pass
-    end
+    get :index, params: { format: 'unknownformat' }
+  rescue ActionController::UnknownFormat
+    pass
   end
 
   def test_report_all_projects_xlsx_export
@@ -79,7 +77,7 @@ class TimelogControllerTest < ActionController::TestCase
         params: { columns: 'month',
                   from: '2007-01-01',
                   to: '2007-06-30',
-                  criteria: ['project', 'user', 'activity'],
+                  criteria: %w[project user activity],
                   format: 'xlsx' }
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
@@ -91,7 +89,7 @@ class TimelogControllerTest < ActionController::TestCase
                   columns: 'month',
                   from: '2007-01-01',
                   to: '2007-06-30',
-                  criteria: ['project', 'user', 'activity'],
+                  criteria: %w[project user activity],
                   format: 'xlsx' }
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
@@ -199,10 +197,8 @@ class TimelogControllerTest < ActionController::TestCase
   end
 
   def test_report_xlsx_when_specified_unknown_format
-    begin
-      get :report, params: { format: 'unknownformat' }
-    rescue ActionController::UnknownFormat
-      pass
-    end
+    get :report, params: { format: 'unknownformat' }
+  rescue ActionController::UnknownFormat
+    pass
   end
 end

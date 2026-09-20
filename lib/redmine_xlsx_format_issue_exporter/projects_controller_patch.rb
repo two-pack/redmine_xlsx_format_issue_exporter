@@ -6,9 +6,7 @@ module RedmineXlsxFormatIssueExporter
       begin
         return super
       rescue ActionController::UnknownFormat => e
-        if params[:format] != 'xlsx'
-          raise e
-        end
+        raise e if params[:format] != 'xlsx'
       end
 
       @entries = project_scope.to_a

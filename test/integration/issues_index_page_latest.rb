@@ -15,8 +15,7 @@ module RedmineXlsxFormatIssueExporter
       assert_visit
     end
 
-    def teardown
-    end
+    def teardown; end
 
     def test_to_export_with_last_notes
       click_link('XLSX')
@@ -41,9 +40,9 @@ module RedmineXlsxFormatIssueExporter
       click_link('XLSX')
 
       short_wait_time do
-        assert_raises(Capybara::ElementNotFound) {
+        assert_raises(Capybara::ElementNotFound) do
           find('input#files')
-        }
+        end
       end
     end
 

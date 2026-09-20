@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 module RedmineXlsxFormatIssueExporter
@@ -7,19 +5,19 @@ module RedmineXlsxFormatIssueExporter
     include XlsxExportHelper
 
     def setup
-      if @NAME.start_with?('test_write_item_')
-        @stream = StringIO.new(+'')
-        @workbook = WriteXLSX.new(@stream)
-        @worksheet = @workbook.add_worksheet
-        @hyperlink_format = create_hyperlink_format(@workbook)
-        @cell_format = create_cell_format(@workbook)
-      end
+      return unless @NAME.start_with?('test_write_item_')
+
+      @stream = StringIO.new(+'')
+      @workbook = WriteXLSX.new(@stream)
+      @worksheet = @workbook.add_worksheet
+      @hyperlink_format = create_hyperlink_format(@workbook)
+      @cell_format = create_cell_format(@workbook)
     end
 
     def teardown
-      if @NAME.start_with?('test_write_item_')
-        @workbook.close
-      end
+      return unless @NAME.start_with?('test_write_item_')
+
+      @workbook.close
     end
 
     def test_to_get_column_width_when_value_length_is_ascii

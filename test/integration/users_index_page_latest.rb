@@ -23,9 +23,9 @@ module RedmineXlsxFormatIssueExporter
       visit '/users'
 
       short_wait_time do
-        assert_raises(Capybara::ElementNotFound) {
+        assert_raises(Capybara::ElementNotFound) do
           assert find('Users', visible: true)
-        }
+        end
       end
     end
 
@@ -35,9 +35,9 @@ module RedmineXlsxFormatIssueExporter
 
         click_link('XLSX')
 
-        assert_raises(Capybara::ElementNotFound) {
+        assert_raises(Capybara::ElementNotFound) do
           assert find('div#xlsx-export-options', visible: true)
-        }
+        end
       end
 
       def test_to_export

@@ -25,9 +25,9 @@ module RedmineXlsxFormatIssueExporter
       visit '/projects/ecookbook/issues'
 
       short_wait_time do
-        assert_raises(Capybara::ElementNotFound) {
+        assert_raises(Capybara::ElementNotFound) do
           assert find('Issues', visible: true)
-        }
+        end
       end
     end
 

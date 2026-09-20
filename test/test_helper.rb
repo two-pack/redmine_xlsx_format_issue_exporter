@@ -60,10 +60,10 @@ module RedmineXlsxFormatIssueExporter
 
     def logout
       visit '/'
-      if has_css?('a.logout', wait: 0)
-        find('a.logout').click
-        assert find('a.login', visible: :all)
-      end
+      return unless has_css?('a.logout', wait: 0)
+
+      find('a.logout').click
+      assert find('a.login', visible: :all)
     end
 
     def before_teardown
@@ -156,6 +156,6 @@ module RedmineXlsxFormatIssueExporter
     op_param = ActionController::Parameters.new(op)
     v_param = ActionController::Parameters.new(v)
     ActionController::Parameters.permit_all_parameters = false
-    return op_param, v_param
+    [op_param, v_param]
   end
 end
