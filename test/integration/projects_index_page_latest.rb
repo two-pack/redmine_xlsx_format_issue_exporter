@@ -22,6 +22,5 @@ module RedmineXlsxFormatIssueExporter
       assert has_selector?("p.other-formats span a.xlsx")
       assert has_link?("XLSX")
     end
-
   end
 end

@@ -11,11 +11,9 @@ module RedmineXlsxFormatIssueExporter
              :versions, :time_entries
 
     def setup
-
     end
 
     def teardown
-
     end
 
     def test_that_not_affect_show_page
@@ -23,6 +21,5 @@ module RedmineXlsxFormatIssueExporter
 
       assert stay_issues_index_page?
     end
-
   end
 end

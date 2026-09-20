@@ -16,7 +16,6 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def teardown
-
     end
 
     def test_to_export_with_last_notes

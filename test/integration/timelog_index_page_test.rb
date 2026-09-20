@@ -124,6 +124,5 @@ module RedmineXlsxFormatIssueExporter
 
       assert stay_timelog_index_page?
     end
-
   end
 end

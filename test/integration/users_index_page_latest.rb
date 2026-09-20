@@ -31,20 +31,20 @@ module RedmineXlsxFormatIssueExporter
 
     if (Redmine::VERSION::MAJOR == 5) && (Redmine::VERSION::MINOR == 0)
       def test_that_dialog_is_not_shown_when_the_link_is_clicked
-          visit_users_page_with_admin
+        visit_users_page_with_admin
 
-          click_link("XLSX")
+        click_link("XLSX")
 
-          assert_raises(Capybara::ElementNotFound) {
-            assert find("div#xlsx-export-options", :visible => true)
-          }
+        assert_raises(Capybara::ElementNotFound) {
+          assert find("div#xlsx-export-options", :visible => true)
+        }
       end
 
       def test_to_export
         visit_users_page_with_admin
-  
+
         click_link("XLSX")
-  
+
         assert stay_users_index_page?
       end
     else
@@ -52,16 +52,16 @@ module RedmineXlsxFormatIssueExporter
         visit_users_page_with_admin
 
         click_link("XLSX")
-  
+
         assert find("div#xlsx-export-options", :visible => true)
       end
 
       def test_to_export
         visit_users_page_with_admin
-  
+
         click_link("XLSX")
         find("div#xlsx-export-options").click_button("Export")
-  
+
         assert stay_users_index_page?
       end
     end

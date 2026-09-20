@@ -18,7 +18,6 @@ module RedmineXlsxFormatIssueExporter
       logout
     end
 
-
     def test_not_permitted_report_page
       login_with_no_permitted_user
       visit '/projects/ecookbook/time_entries/report'
@@ -134,6 +133,5 @@ module RedmineXlsxFormatIssueExporter
 
       assert stay_timelog_report_page?
     end
-
   end
 end

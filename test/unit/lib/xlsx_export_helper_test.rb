@@ -4,7 +4,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 module RedmineXlsxFormatIssueExporter
   class XlsxExportHelperTest < ActiveSupport::TestCase
-
     include XlsxExportHelper
 
     def setup
@@ -107,7 +106,8 @@ module RedmineXlsxFormatIssueExporter
 
     def test_write_item_for_value_started_http_and_too_long
       assert_nothing_raised do
-        write_item(@worksheet, "http://example.com/01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345", 0, 0, @cell_format, false, 1, @hyperlink_format)
+        write_item(@worksheet,
+                   "http://example.com/01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345", 0, 0, @cell_format, false, 1, @hyperlink_format)
       end
 
       assert_equal false, @worksheet.instance_variable_defined?('@hyperlinks')
@@ -115,7 +115,8 @@ module RedmineXlsxFormatIssueExporter
 
     def test_write_item_for_value_started_http_and_too_long2
       assert_nothing_raised do
-        write_item(@worksheet, "http://example.com/012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456", 0, 0, @cell_format, false, 1, @hyperlink_format)
+        write_item(@worksheet,
+                   "http://example.com/012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456", 0, 0, @cell_format, false, 1, @hyperlink_format)
       end
 
       assert_equal false, @worksheet.instance_variable_defined?('@hyperlinks')
@@ -192,6 +193,5 @@ module RedmineXlsxFormatIssueExporter
     def test_is_transformed_to_formula_with_nil
       assert_equal false, is_transformed_to_formula?(nil)
     end
-
   end
 end

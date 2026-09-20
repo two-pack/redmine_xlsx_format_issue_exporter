@@ -9,7 +9,6 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def teardown
-
     end
 
     def test_that_issue_has_no_files
@@ -44,6 +43,5 @@ module RedmineXlsxFormatIssueExporter
 
       assert_equal 'Files', @sut.caption
     end
-
   end
 end

@@ -61,11 +61,11 @@ class IssuesControllerTest < ActionController::TestCase
   end
 
   def test_index_should_include_query_params_as_hidden_fields_in_xlsx_export_form
-    get :index, :params => {:project_id => 1,
-                            :set_filter => "1",
-                            :tracker_id => "2",
-                            :sort => 'status',
-                            :c => ["status", "priority"]}
+    get :index, :params => { :project_id => 1,
+                             :set_filter => "1",
+                             :tracker_id => "2",
+                             :sort => 'status',
+                             :c => ["status", "priority"] }
 
     assert_select '#xlsx-export-form[action=?]', '/projects/ecookbook/issues.xlsx'
     assert_select '#xlsx-export-form[method=?]', 'get'
@@ -85,19 +85,19 @@ class IssuesControllerTest < ActionController::TestCase
   end
 
   def test_index_xlsx
-    get :index, :params => {:format => 'xlsx'}
+    get :index, :params => { :format => 'xlsx' }
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_index_xlsx_with_project
-    get :index, :params => {:project_id => 1, :format => 'xlsx'}
+    get :index, :params => { :project_id => 1, :format => 'xlsx' }
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_index_xlsx_with_group_by
-    get :index, :params => {:project_id => 1, :format => 'xlsx', :group_by => 'tracker'}
+    get :index, :params => { :project_id => 1, :format => 'xlsx', :group_by => 'tracker' }
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
@@ -106,7 +106,7 @@ class IssuesControllerTest < ActionController::TestCase
     Issue.generate!(:description => 'test_index_xlsx_with_description')
 
     with_settings :default_language => 'en' do
-      get :index, :params => {:format => 'xlsx', :xlsx => {:description => '1'}}
+      get :index, :params => { :format => 'xlsx', :xlsx => { :description => '1' } }
       assert_response :success
     end
 
@@ -120,7 +120,7 @@ class IssuesControllerTest < ActionController::TestCase
                     :description => "=starts with equal sign")
 
     with_settings :default_language => 'en' do
-      get :index, :params => {:format => 'xlsx', :set_filter => '1', :c => %w(subject description)}
+      get :index, :params => { :format => 'xlsx', :set_filter => '1', :c => %w(subject description) }
       assert_response :success
     end
 
@@ -138,16 +138,18 @@ class IssuesControllerTest < ActionController::TestCase
   end
 
   def test_index_xlsx_with_spent_time_column
-    issue = Issue.create!(:project_id => 1, :tracker_id => 1, :subject => 'test_index_xlsx_with_spent_time_column', :author_id => 2)
-    TimeEntry.create!(:project => issue.project, :issue => issue, :hours => 7.33, :user => User.find(2), :spent_on => Date.today)
+    issue = Issue.create!(:project_id => 1, :tracker_id => 1, :subject => 'test_index_xlsx_with_spent_time_column',
+                          :author_id => 2)
+    TimeEntry.create!(:project => issue.project, :issue => issue, :hours => 7.33, :user => User.find(2),
+                      :spent_on => Date.today)
 
-    get :index, :params => {:format => 'xlsx', :set_filter => '1', :c => %w(subject spent_hours)}
+    get :index, :params => { :format => 'xlsx', :set_filter => '1', :c => %w(subject spent_hours) }
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
 
   def test_index_xlsx_with_all_columns
-    get :index, :params => {:format => 'xlsx', :xlsx => {:columns => 'all'}}
+    get :index, :params => { :format => 'xlsx', :xlsx => { :columns => 'all' } }
     assert_response :success
     assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
   end
@@ -155,24 +157,25 @@ class IssuesControllerTest < ActionController::TestCase
   def test_index_xlsx_with_multi_column_field
     CustomField.find(1).update_attribute :multiple, true
     issue = Issue.find(1)
-    issue.custom_field_values = {1 => ['MySQL', 'Oracle']}
+    issue.custom_field_values = { 1 => ['MySQL', 'Oracle'] }
     issue.save!
 
-    get :index, :params => {:format => 'xlsx', :xlsx => {:columns => 'all'}}
+    get :index, :params => { :format => 'xlsx', :xlsx => { :columns => 'all' } }
     assert_response :success
   end
 
   def test_index_xlsx_should_format_float_custom_fields_with_xlsx_decimal_separator
-    field = IssueCustomField.create!(:name => 'Float', :is_for_all => true, :tracker_ids => [1], :field_format => 'float')
-    Issue.generate!(:project_id => 1, :tracker_id => 1, :custom_field_values => {field.id => '185.6'})
+    field = IssueCustomField.create!(:name => 'Float', :is_for_all => true, :tracker_ids => [1],
+                                     :field_format => 'float')
+    Issue.generate!(:project_id => 1, :tracker_id => 1, :custom_field_values => { field.id => '185.6' })
 
     with_settings :default_language => 'fr' do
-      get :index, :params => {:format => 'xlsx', :xlsx => {:columns => 'all'}}
+      get :index, :params => { :format => 'xlsx', :xlsx => { :columns => 'all' } }
       assert_response :success
     end
 
     with_settings :default_language => 'en' do
-      get :index, :params => {:format => 'xlsx', :xlsx => {:columns => 'all'}}
+      get :index, :params => { :format => 'xlsx', :xlsx => { :columns => 'all' } }
       assert_response :success
     end
   end
@@ -183,7 +186,7 @@ class IssuesControllerTest < ActionController::TestCase
     Issue.generate!(:parent_issue_id => parent.id)
 
     with_settings :default_language => 'en' do
-      get :index, :params => {:format => 'xlsx', :c => %w(parent)}
+      get :index, :params => { :format => 'xlsx', :c => %w(parent) }
       assert_response :success
     end
 
@@ -193,73 +196,73 @@ class IssuesControllerTest < ActionController::TestCase
 
   def test_index_xlsx_big_5
     with_settings :default_language => "zh-TW" do
-      str_utf8  = "\xe4\xb8\x80\xe6\x9c\x88".dup.force_encoding('UTF-8')
+      str_utf8 = "\xe4\xb8\x80\xe6\x9c\x88".dup.force_encoding('UTF-8')
       Issue.generate!(:subject => str_utf8)
-      op, v = make_action_controller_permitted_parameters({'subject' => '='}, {'subject' => [str_utf8]})
+      op, v = make_action_controller_permitted_parameters({ 'subject' => '=' }, { 'subject' => [str_utf8] })
 
-      get :index, :params => {:project_id => 1,
-                              :f => ['subject'],
-                              :op => op,
-                              :v => v,
-                              :format => 'xlsx'}
+      get :index, :params => { :project_id => 1,
+                               :f => ['subject'],
+                               :op => op,
+                               :v => v,
+                               :format => 'xlsx' }
       assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
     end
   end
 
   def test_index_xlsx_cannot_convert_should_be_replaced_big_5
     with_settings :default_language => "zh-TW" do
-      str_utf8  = "\xe4\xbb\xa5\xe5\x86\x85".dup.force_encoding('UTF-8')
+      str_utf8 = "\xe4\xbb\xa5\xe5\x86\x85".dup.force_encoding('UTF-8')
       Issue.generate!(:subject => str_utf8)
-      op, v = make_action_controller_permitted_parameters({'subject' => '='}, {'subject' => [str_utf8]})
+      op, v = make_action_controller_permitted_parameters({ 'subject' => '=' }, { 'subject' => [str_utf8] })
 
-      get :index, :params => {:project_id => 1,
-                              :f => ['subject'],
-                              :op => op,
-                              :v => v,
-                              :c => ['status', 'subject'],
-                              :format => 'xlsx',
-                              :set_filter => 1}
+      get :index, :params => { :project_id => 1,
+                               :f => ['subject'],
+                               :op => op,
+                               :v => v,
+                               :c => ['status', 'subject'],
+                               :format => 'xlsx',
+                               :set_filter => 1 }
       assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
     end
   end
 
   def test_index_xlsx_tw
     with_settings :default_language => "zh-TW" do
-      str1  = "test_index_xlsx_tw"
+      str1 = "test_index_xlsx_tw"
       Issue.generate!(:subject => str1, :estimated_hours => '1234.5')
-      op, v = make_action_controller_permitted_parameters({'subject' => '='}, {'subject' => [str1]})
+      op, v = make_action_controller_permitted_parameters({ 'subject' => '=' }, { 'subject' => [str1] })
 
-      get :index, :params => {:project_id => 1,
-                              :f => ['subject'],
-                              :op => op,
-                              :v => v,
-                              :c => ['estimated_hours', 'subject'],
-                              :format => 'xlsx',
-                              :set_filter => 1}
+      get :index, :params => { :project_id => 1,
+                               :f => ['subject'],
+                               :op => op,
+                               :v => v,
+                               :c => ['estimated_hours', 'subject'],
+                               :format => 'xlsx',
+                               :set_filter => 1 }
       assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
     end
   end
 
   def test_index_xlsx_fr
     with_settings :default_language => "fr" do
-      str1  = "test_index_xlsx_fr"
+      str1 = "test_index_xlsx_fr"
       Issue.generate!(:subject => str1, :estimated_hours => '1234.5')
-      op, v = make_action_controller_permitted_parameters({'subject' => '='}, {'subject' => [str1]})
+      op, v = make_action_controller_permitted_parameters({ 'subject' => '=' }, { 'subject' => [str1] })
 
-      get :index, :params => {:project_id => 1,
-                              :f => ['subject'],
-                              :op => op,
-                              :v => v,
-                              :c => ['estimated_hours', 'subject'],
-                              :format => 'xlsx',
-                              :set_filter => 1}
+      get :index, :params => { :project_id => 1,
+                               :f => ['subject'],
+                               :op => op,
+                               :v => v,
+                               :c => ['estimated_hours', 'subject'],
+                               :format => 'xlsx',
+                               :set_filter => 1 }
       assert_equal 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', @response.content_type
     end
   end
 
   def test_index_xlsx_when_specified_unknown_format
     begin
-      get :index, :params => {:format => 'unknownformat'}
+      get :index, :params => { :format => 'unknownformat' }
     rescue ActionController::UnknownFormat
       pass
     end
@@ -267,17 +270,17 @@ class IssuesControllerTest < ActionController::TestCase
 
   def test_index_xlsx_should_not_change_selected_columns
     get :index, :params => {
-        :set_filter => 1,
-        :c => ["subject", "due_date"],
-        :project_id => "ecookbook"
+      :set_filter => 1,
+      :c => ["subject", "due_date"],
+      :project_id => "ecookbook"
     }
     assert_response :success
     assert_equal [:subject, :due_date], column_names
     get :index, :params => {
-        :set_filter => 1,
-        :c =>["all_inline"],
-        :project_id => "ecookbook",
-        :format => 'xlsx'
+      :set_filter => 1,
+      :c => ["all_inline"],
+      :project_id => "ecookbook",
+      :format => 'xlsx'
     }
     assert_response :success
     assert_equal [:subject, :due_date], column_names

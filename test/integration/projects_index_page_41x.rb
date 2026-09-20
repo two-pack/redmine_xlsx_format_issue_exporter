@@ -141,6 +141,5 @@ module RedmineXlsxFormatIssueExporter
 
       assert stay_projects_index_page?
     end
-
   end
 end

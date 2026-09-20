@@ -2,15 +2,14 @@ require 'write_xlsx'
 
 module RedmineXlsxFormatIssueExporter
   module XlsxExportHelper
-
-    def query_to_xlsx(items, query, _options={})
+    def query_to_xlsx(items, query, _options = {})
       columns = query.columns
 
       stream = StringIO.new(+'')
       workbook = WriteXLSX.new(stream)
       worksheet = workbook.add_worksheet
 
-      worksheet.freeze_panes(1, 1)  # Freeze header row and # column.
+      worksheet.freeze_panes(1, 1) # Freeze header row and # column.
 
       columns_width = []
       write_header_row(workbook, worksheet, columns, columns_width)
@@ -28,9 +27,9 @@ module RedmineXlsxFormatIssueExporter
       header_format = create_header_format(workbook)
       columns.each_with_index do |c, index|
         if c.class.name == 'String'
-            value = c
+          value = c
         else
-            value = c.caption.to_s
+          value = c.caption.to_s
         end
 
         worksheet.write(0, index, value, header_format)
@@ -44,7 +43,8 @@ module RedmineXlsxFormatIssueExporter
       items.each_with_index do |item, item_index|
         columns.each_with_index do |c, column_index|
           value = xlsx_content(c, item)
-          write_item(worksheet, value, item_index, column_index, cell_format, (c.name == :id), item.id, hyperlink_format)
+          write_item(worksheet, value, item_index, column_index, cell_format, (c.name == :id), item.id,
+                     hyperlink_format)
 
           width = get_column_width(value)
           columns_width[column_index] = width if columns_width[column_index] < width
@@ -59,6 +59,7 @@ module RedmineXlsxFormatIssueExporter
     # Conditions from worksheet.rb in write_xlsx.
     def is_transformed_to_hyperlink?(token)
       return if not token.is_a?(String)
+
       # Match http, https or ftp URL
       if token =~ %r|\A[fh]tt?ps?://|
         true
@@ -110,8 +111,8 @@ module RedmineXlsxFormatIssueExporter
 
     def get_column_width(value)
       value_str = value.to_s
-      width = (value_str.length + value_str.chars.reject(&:ascii_only?).length) * 1.1  # 1.1: margin
-      width > 30 ? 30 : width  # 30: max width
+      width = (value_str.length + value_str.chars.reject(&:ascii_only?).length) * 1.1 # 1.1: margin
+      width > 30 ? 30 : width # 30: max width
     end
 
     def create_header_format(workbook)
@@ -136,6 +137,5 @@ module RedmineXlsxFormatIssueExporter
                           :color => 'blue',
                           :underline => 1)
     end
-
   end
 end
