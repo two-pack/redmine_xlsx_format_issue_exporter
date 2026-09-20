@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
 module RedmineXlsxFormatIssueExporter
   class IssuesIndexPageTest < ActionDispatch::IntegrationTest
@@ -160,4 +160,4 @@ module RedmineXlsxFormatIssueExporter
   end
 end
 
-require File.expand_path(File.dirname(__FILE__) + '/issues_index_page_latest')
+require File.expand_path("#{File.dirname(__FILE__)}/issues_index_page_latest")

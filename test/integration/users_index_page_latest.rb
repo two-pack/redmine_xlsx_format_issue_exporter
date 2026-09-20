@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+require File.expand_path("#{File.dirname(__FILE__)}/../test_helper")
 
 module RedmineXlsxFormatIssueExporter
   class UsersIndexPageTest < ActionDispatch::IntegrationTest
@@ -31,7 +31,7 @@ module RedmineXlsxFormatIssueExporter
       end
     end
 
-    if (Redmine::VERSION::MAJOR == 5) && (Redmine::VERSION::MINOR == 0)
+    if (Redmine::VERSION::MAJOR == 5) && Redmine::VERSION::MINOR.zero?
       def test_that_dialog_is_not_shown_when_the_link_is_clicked
         visit_users_page_with_admin
 

@@ -7,11 +7,11 @@ module RedmineXlsxFormatIssueExporter
     end
 
     def value(issue)
-      issue.attachments.map { |a| a.filename }.join("\n")
+      issue.attachments.map(&:filename).join("\n")
     end
 
     def value_object(issue)
-      issue.attachments.map { |a| a.filename }.join("\n")
+      issue.attachments.map(&:filename).join("\n")
     end
   end
 end

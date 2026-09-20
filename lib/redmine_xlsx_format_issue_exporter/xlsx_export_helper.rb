@@ -28,7 +28,7 @@ module RedmineXlsxFormatIssueExporter
     def write_header_row(workbook, worksheet, columns, columns_width)
       header_format = create_header_format(workbook)
       columns.each_with_index do |c, index|
-        value = if c.class.name == 'String'
+        value = if c.instance_of?(::String)
                   c
                 else
                   c.caption.to_s
@@ -63,13 +63,14 @@ module RedmineXlsxFormatIssueExporter
       return unless token.is_a?(String)
 
       # Match http, https or ftp URL
-      if token =~ %r{\A[fh]tt?ps?://}
+      case token
+      when %r{\A[fh]tt?ps?://}
         true
         # Match mailto:
-      elsif token =~ /\Amailto:/
+      when /\Amailto:/
         true
         # Match internal or external sheet link
-      elsif token =~ /\A(?:in|ex)ternal:/
+      when /\A(?:in|ex)ternal:/
         true
       end
     end

@@ -31,7 +31,7 @@ module RedmineXlsxFormatIssueExporter
 
       columns_width = []
       write_header_row(workbook, worksheet, columns.map do |column|
-        l('field_' + column)
+        l("field_#{column}")
       end + user_custom_fields.pluck(:name), columns_width)
 
       hyperlink_format = create_hyperlink_format(workbook)

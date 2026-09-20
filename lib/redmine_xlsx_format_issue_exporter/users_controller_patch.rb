@@ -16,7 +16,7 @@ module RedmineXlsxFormatIssueExporter
       scope = scope.like(params[:name]) if params[:name].present?
       scope = scope.in_group(params[:group_id]) if params[:group_id].present?
 
-      data = if (Redmine::VERSION::MAJOR == 5) && (Redmine::VERSION::MINOR == 0)
+      data = if (Redmine::VERSION::MAJOR == 5) && Redmine::VERSION::MINOR.zero?
                users_to_xlsx(scope.order(sort_clause))
              else
                query_to_xlsx(@query.results_scope.to_a, @query, params)

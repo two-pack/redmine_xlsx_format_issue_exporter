@@ -16,7 +16,7 @@ require_dependency 'issues_controller'
 require_dependency 'timelog_controller'
 require_dependency 'users_controller'
 require_dependency 'projects_controller'
-Dir[File.dirname(__FILE__) + '/lib/redmine_xlsx_format_issue_exporter/*.rb'].sort.each { |file| require file }
+Dir["#{File.dirname(__FILE__)}/lib/redmine_xlsx_format_issue_exporter/*.rb"].sort.each { |file| require file }
 
 def prepend_xlsx_format_issue_exporter_patches
   unless IssuesController.included_modules.include? RedmineXlsxFormatIssueExporter::IssuesControllerPatch

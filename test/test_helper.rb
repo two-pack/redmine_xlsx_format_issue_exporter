@@ -13,7 +13,7 @@ SimpleCov.start 'rails' do
   send(group_method, 'XLSX Exporter', 'plugins/redmine_xlsx_format_issue_exporter')
 end
 
-require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
+require File.expand_path("#{File.dirname(__FILE__)}/../../../test/test_helper")
 
 require 'capybara/rails'
 require 'selenium-webdriver'

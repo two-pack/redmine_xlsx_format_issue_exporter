@@ -38,7 +38,7 @@ module RedmineXlsxFormatIssueExporter
       report.periods.each do |period|
         sum = sum_hours(select_hours(report.hours, report.columns, period.to_s))
         total += sum
-        row << (sum > 0 ? sum : '')
+        row << (sum.positive? ? sum : '')
       end
       row << total
       write_item_row(workbook, worksheet, row, row_index, start_period_index, columns_width)
@@ -65,7 +65,7 @@ module RedmineXlsxFormatIssueExporter
         periods.each do |period|
           sum = sum_hours(select_hours(hours_for_value, columns, period.to_s))
           total += sum
-          row << (sum > 0 ? sum : '')
+          row << (sum.positive? ? sum : '')
         end
         row << total
         # csv << row
