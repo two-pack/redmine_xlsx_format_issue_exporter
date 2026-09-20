@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   NewCops: disable
   TargetRubyVersion: 2.5
