@@ -8,7 +8,7 @@ This is Redmine plugin which exports issue list to XLSX format file.
 
 # Requirements
 
-- Redmine 4.2.x or higher.
+- Redmine 5.0.x or higher.
 
 # Installation
 

@@ -5,7 +5,7 @@ Redmine::Plugin.register :redmine_xlsx_format_issue_exporter do
   version '0.2.1'
   url 'https://github.com/two-pack/redmine_xlsx_format_issue_exporter'
   author_url 'mailto:twopackas@gmail.com'
-  requires_redmine :version_or_higher => '4.2'
+  requires_redmine :version_or_higher => '5.0'
 end
 
 require_dependency 'queries_helper'
@@ -34,10 +34,4 @@ def prepend_xlsx_format_issue_exporter_patches
   end
 end
 
-if Rails.version > '6.0' && Rails.autoloaders.zeitwerk_enabled?
-  prepend_xlsx_format_issue_exporter_patches
-else
-  Rails.configuration.to_prepare do
-    prepend_xlsx_format_issue_exporter_patches
-  end
-end
+prepend_xlsx_format_issue_exporter_patches

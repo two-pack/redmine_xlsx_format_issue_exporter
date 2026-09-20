@@ -21,13 +21,8 @@ module RedmineXlsxFormatIssueExporter
 
     def test_that_issue_has_a_file_without_description
       issue_with_a_file = Issue.find(2)
-      expected = ""
-      if Redmine::VERSION::MAJOR <= 2 then
-        expected = "picture.jpg"
-      else
-        expected = "source.rb\n" +
-                   "picture.jpg"
-      end
+      expected = "source.rb\n" +
+                 "picture.jpg"
 
       assert_equal expected, @sut.value(issue_with_a_file)
       assert_equal expected, @sut.value_object(issue_with_a_file)
@@ -35,25 +30,10 @@ module RedmineXlsxFormatIssueExporter
 
     def test_that_issue_has_files_with_description
       issue_with_a_file = Issue.find(3)
-      expected = ""
-      if Redmine::VERSION::MAJOR <= 2 then
-        expected = "error281.txt\n" +
-                   "source.rb\n" +
-                   "changeset_iso8859-1.diff\n" +
-                   "archive.zip\n" +
-                   "changeset_utf8.diff"
-      elsif (Redmine::VERSION::MAJOR == 3) and (Redmine::VERSION::MINOR <= 1) then
-        expected = "error281.txt\n" +
-                   "changeset_iso8859-1.diff\n" +
-                   "archive.zip\n" +
-                   "changeset_utf8.diff"
-      elsif ((Redmine::VERSION::MAJOR == 3) and (Redmine::VERSION::MINOR >= 2)) or
-            (Redmine::VERSION::MAJOR >= 4) then
-        expected = "error281.txt\n" +
-                   "changeset_iso8859-1.diff\n" +
-                   "archive.zip\n" +
-                   "changeset_utf8.diff"
-      end
+      expected = "error281.txt\n" +
+                 "changeset_iso8859-1.diff\n" +
+                 "archive.zip\n" +
+                 "changeset_utf8.diff"
 
       assert_equal expected, @sut.value(issue_with_a_file)
       assert_equal expected, @sut.value_object(issue_with_a_file)

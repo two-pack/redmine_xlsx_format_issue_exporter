@@ -159,8 +159,3 @@ module RedmineXlsxFormatIssueExporter
     return op_param, v_param
   end
 end
-
-if ((Rails::VERSION::MAJOR < 5)) or
-   ((Rails::VERSION::MAJOR == 5) and (Rails::VERSION::MINOR < 1))
-  require File.expand_path(File.dirname(__FILE__) + '/rails4/action_controller/test_case')
-end

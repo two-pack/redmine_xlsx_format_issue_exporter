@@ -158,10 +158,4 @@ module RedmineXlsxFormatIssueExporter
   end
 end
 
-if (Redmine::VERSION::MAJOR >= 4) then
-  require File.expand_path(File.dirname(__FILE__) + '/issues_index_page_latest')
-elsif (Redmine::VERSION::MAJOR == 3) && (Redmine::VERSION::MINOR == 4) then
-  require File.expand_path(File.dirname(__FILE__) + '/issues_index_page_34x')
-else
-  require File.expand_path(File.dirname(__FILE__) + '/issues_index_page_33x')
-end
+require File.expand_path(File.dirname(__FILE__) + '/issues_index_page_latest')

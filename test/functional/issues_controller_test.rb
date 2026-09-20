@@ -61,11 +61,6 @@ class IssuesControllerTest < ActionController::TestCase
   end
 
   def test_index_should_include_query_params_as_hidden_fields_in_xlsx_export_form
-    if Redmine::VERSION::MAJOR < 3 or Redmine::VERSION::MINOR < 2
-      assert "Ignore this test on old Redmine version,", true
-      return
-    end
-
     get :index, :params => {:project_id => 1,
                             :set_filter => "1",
                             :tracker_id => "2",
