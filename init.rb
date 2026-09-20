@@ -34,10 +34,4 @@ def prepend_xlsx_format_issue_exporter_patches
   end
 end
 
-if Rails.version > '6.0' && Rails.autoloaders.zeitwerk_enabled?
-  prepend_xlsx_format_issue_exporter_patches
-else
-  Rails.configuration.to_prepare do
-    prepend_xlsx_format_issue_exporter_patches
-  end
-end
+prepend_xlsx_format_issue_exporter_patches
